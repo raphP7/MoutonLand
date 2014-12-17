@@ -1,14 +1,20 @@
-
-public class Mouton extends Animal{
+public class Mouton extends Animal {
 
 	
-	Mouton(int x , int y){
-		super(x,y);
+	public Mouton(int x, int y, boolean femelle, int esperenceDeVie,
+			int nbToursPourDevenirPuber, int maxReproduction,
+			int esperenceSansManger, int champDeVision, int force, int vitesse) {
+		super(x, y, femelle, esperenceDeVie, nbToursPourDevenirPuber, maxReproduction,
+				esperenceSansManger, champDeVision, force, vitesse);
 	}
-	
-	public void manger(){
-		
-		super.manger();
+
+	public Mouton bebe(Animal b) {
+
+		if (super.reproduction(b) && b instanceof Mouton) {
+			return null;
+		}
+		return null;
 	}
+
 
 }

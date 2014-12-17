@@ -3,7 +3,13 @@ public class Start {
 	public static void main(String[] args) {
 		
 		
-		Animal un = new Mouton(6,3);
+		for (Emotion a : Emotion.values()){
+			System.out.println(a.toString());
+		}
+		
+		
+		
+		Animal un = new Mouton(6,3, false, 0, 0, 0, 0, 0, 0, 0);
 		
 		un.manger();
 		
@@ -18,7 +24,9 @@ public class Start {
 		//terrain.map[5][2].setObstacle(true);
 		
 		
-			Case[][] tab=un.possible(terrain.map);;
+		
+		
+			Case[][] tab=un.miseAjourVision(terrain.map);;
 			
 			for (int i =0; i<tab.length ; i++){
 				

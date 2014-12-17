@@ -1,38 +1,70 @@
+
 public abstract class Animal extends EtreVivant implements FonctionsDeBase {
 	
 	int force;
 	int vitesse;
-	
+	FileDeSouvenirs mouvements;
 	Case[][] visionActuel;
 	
-	private int [] choix = new int [7];
-	//0 = faim
-	//1 = peur
-	//2 = reproduction
-	//3 = deplacement oisif
+	private Envie [] lesEnvies;// voir enum Emotion
 	
-	public Animal(int x, int y){
-		int nombreCases = 1+ champDeVision*2;
+	public Animal(int x, int y, boolean femelle, int esperenceDeVie,
+			int nbToursPourDevenirPuber, int maxReproduction,
+			int esperenceSansManger, int champDeVision, int force, int vitesse) {
+		
+		super(x, y, femelle, esperenceDeVie, nbToursPourDevenirPuber,
+				maxReproduction, esperenceSansManger, champDeVision);
+		
+		this.force=force;
+		this.vitesse=vitesse;
+		//this.deplacements = new <Point>();
+		int nombreCases = 1+ this.getChampDeVision()*2;
 		this.visionActuel= new Case[nombreCases][nombreCases];
-		this.positionX=x;
-		this.positionY=y;
-		this.toursEnVie=0;
+		
 		this.toursSansManger=0;
 		this.immobile=0;
-		this.nombreDeReproduction=0;
+		this.nombreDeReproduction=0;		
+		
+		//initialisation du tableau lesEnvies avec des objects Envie qui sont listé par la Enum Emotion
+		
+		this.lesEnvies=new Envie[Emotion.values().length];
+		int i=0;
+		for (Emotion a : Emotion.values()){
+			this.lesEnvies[i]=new Envie(a,0);
+			i++;
+		}
+		//initialisation de la file de souvenir avec la position actuel
+		this.mouvements=new FileDeSouvenirs(10, x , y , visionActuel) {
+		};
+		
 	}
 	
-	public void actualiserChoix(){
+	public void actualiserVariables(){
+		this.incrementeToursEnVie();
 		
 	}
+
+	public boolean reproduction(Animal b){
+		if (b.isFemelle() == this.isFemelle()){// les animaux sont de meme sexe
+			if(this.maxReproduction>this.nombreDeReproduction && b.maxReproduction>this.maxReproduction){// les animaux peuvent se reproduire
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+		
+	}
+	
 	public void action(Case [][] map){
 		
-		actualiserChoix();
+		this.miseAjourVision(map);
+		
+		actualiserVariables();
 		
 	}
 	
 	public void manger() {
-		super.toursSansManger=0;
+		toursSansManger=0;
 	}
 	public void champObstacle( Case [][] cases){
 		boolean changement=false;
@@ -101,7 +133,7 @@ public abstract class Animal extends EtreVivant implements FonctionsDeBase {
 	}
 	public void ligneObstacle( int x ,int  y){
 
-		int centre = champDeVision;
+		int centre = getChampDeVision();
 
 		if (x == centre && y > centre) {// a droite 180degres
 			for (int j = y + 1; j < visionActuel[0].length; j++) {
@@ -177,7 +209,7 @@ public abstract class Animal extends EtreVivant implements FonctionsDeBase {
 			
 		
 	}
-	public  Case[][] possible(Case [][] map){
+	public  Case[][] miseAjourVision(Case [][] map){
 		
 		for (int i = 0; i < visionActuel.length; i++) {
 			for (int j = 0; j < visionActuel[0].length; j++) {
@@ -186,29 +218,28 @@ public abstract class Animal extends EtreVivant implements FonctionsDeBase {
 		}
 		int parcour=0;
 		while(parcour<2){
-			for (int i=positionX-champDeVision ; i<=positionX+champDeVision ;i++){
-				for (int j=positionY-champDeVision ; j<=positionY+champDeVision ;j++){
+			for (int i=positionX-getChampDeVision() ; i<=positionX+getChampDeVision() ;i++){
+				for (int j=positionY-getChampDeVision() ; j<=positionY+getChampDeVision() ;j++){
 					
 					
 					//if (cases[i+champDeVision-positionX][j+champDeVision-positionY].getModif()==2){ // la case n'a pas encore été invalidé
 					
 					if (i<0 || j<0 || i>=map.length || j>=map[0].length){//hors du tableau
 							
-							visionActuel[i+champDeVision-positionX][j+champDeVision-positionY].setObstacle(true);
-							
+							visionActuel[i+getChampDeVision()-positionX][j+getChampDeVision()-positionY].setObstacle(true);
 					}
 					
 					else if(parcour !=0 && map[i][j].isObstacle()){//obstacle de visibilité dans le terrain
 						
-						visionActuel[i+champDeVision-positionX][j+champDeVision-positionY].setObstacle(true);
+						visionActuel[i+getChampDeVision()-positionX][j+getChampDeVision()-positionY].setObstacle(true);
 							
-						ligneObstacle(i+champDeVision-positionX ,j+champDeVision-positionY);
+						ligneObstacle(i+getChampDeVision()-positionX ,j+getChampDeVision()-positionY);
 							
 						}
 						// juste pour test
 					else if (parcour !=0 && !map[i][j].isVisible()){
-							visionActuel[i+champDeVision-positionX][j+champDeVision-positionY].setVisible(false);
-							ligneObstacle(i+champDeVision-positionX ,j+champDeVision-positionY);
+							visionActuel[i+getChampDeVision()-positionX][j+getChampDeVision()-positionY].setVisible(false);
+							ligneObstacle(i+getChampDeVision()-positionX ,j+getChampDeVision()-positionY);
 						}
 						}
 					}
