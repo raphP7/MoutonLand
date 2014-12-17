@@ -6,16 +6,9 @@ public class Mouton extends Animal{
 		super(x,y);
 	}
 	
-	
-	@Override
-	public boolean mourir() {
+	public void manger(){
 		
-		return false;
+		super.manger();
 	}
 
-	@Override
-	public boolean manger() {
-		
-		return false;
-	}
 }

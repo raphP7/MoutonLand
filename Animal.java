@@ -1,7 +1,9 @@
-public abstract class Animal extends EtreVivant{
+public abstract class Animal extends EtreVivant implements FonctionsDeBase {
 	
 	int force;
 	int vitesse;
+	
+	Case[][] visionActuel;
 	
 	private int [] choix = new int [7];
 	//0 = faim
@@ -10,12 +12,27 @@ public abstract class Animal extends EtreVivant{
 	//3 = deplacement oisif
 	
 	public Animal(int x, int y){
+		int nombreCases = 1+ champDeVision*2;
+		this.visionActuel= new Case[nombreCases][nombreCases];
 		this.positionX=x;
 		this.positionY=y;
 		this.toursEnVie=0;
 		this.toursSansManger=0;
 		this.immobile=0;
 		this.nombreDeReproduction=0;
+	}
+	
+	public void actualiserChoix(){
+		
+	}
+	public void action(Case [][] map){
+		
+		actualiserChoix();
+		
+	}
+	
+	public void manger() {
+		super.toursSansManger=0;
 	}
 	public void champObstacle( Case [][] cases){
 		boolean changement=false;
@@ -82,31 +99,31 @@ public abstract class Animal extends EtreVivant{
 			champObstacle(cases);}
 		
 	}
-	public void ligneObstacle( Case [][] cases , int x ,int  y){
+	public void ligneObstacle( int x ,int  y){
 
 		int centre = champDeVision;
 
 		if (x == centre && y > centre) {// a droite 180degres
-			for (int j = y + 1; j < cases[0].length; j++) {
-					cases[centre][j].setObstacle(true);
+			for (int j = y + 1; j < visionActuel[0].length; j++) {
+					visionActuel[centre][j].setVisible(false);
 			}
 		}
 
 		else if (x == centre && y < centre) {// a gauche 0 degres
 			for (int j = 0; j < y; j++) {
-				cases[centre][j].setObstacle(true);
+				visionActuel[centre][j].setVisible(false);
 			}
 		}
 		else if (y == centre && x < centre) {// en haut 90 degres
 			
 				for (int i= 0; i < x; i++) {
-						cases[i][centre].setObstacle(true);
+						visionActuel[i][centre].setVisible(false);
 					}
 				}
 		else if (y == centre && x >centre) {// en bas 270 degres
 			
-			for (int i= x + 1; i < cases[0].length; i++) {
-					cases[i][centre].setObstacle(true);
+			for (int i= x + 1; i < visionActuel[0].length; i++) {
+					visionActuel[i][centre].setVisible(false);
 				}
 			}
 		else{// en diagonal
@@ -114,27 +131,29 @@ public abstract class Animal extends EtreVivant{
 			 if (x<centre && y<centre){ // de 0 a 90 degres
 					for (int i=x-1 ; i>=0 ; i--){
 						for(int j=y-1; j>=0;j--){
-							if (cases[i+1][j+1].isObstacle()){
-								cases[i][j].setObstacle(true);;
+							if (visionActuel[i+1][j+1].isObstacle() || !visionActuel[i+1][j+1].isVisible()){
+								visionActuel[i][j].setVisible(false);
 							}
 						}
 					}
 				}
 			 
 			 else  if (x>centre && y>centre){ // de 180 a 270 degres
-					for (int i=x+1; i<cases.length ; i++){
-						for(int j=y+1; j<cases[0].length; j++){
-							if (cases[i-1][j-1].isObstacle()){
-								cases[i][j].setObstacle(true);;
+					for (int i=x+1; i<visionActuel.length ; i++){
+						for(int j=y+1; j<visionActuel[0].length; j++){
+							
+							if (visionActuel[i-1][j-1].isObstacle() || !visionActuel[i-1][j-1].isVisible() ){
+									visionActuel[i][j].setVisible(false);
+								
 							}
 						}
 					}
 				}
 			 else if (x<centre && y>centre){ // de 90 a 180 degres
 				 for( int i =x-1 ; i>=0 ; i--){
-					 for(int j=y+1 ;j<cases[0].length  ;j++ ){
-						 if (cases[i+1][j-1].isObstacle()){
-							 cases[i][j].setObstacle(true);
+					 for(int j=y+1 ;j<visionActuel[0].length  ;j++ ){
+						 if (visionActuel[i+1][j-1].isObstacle() || !visionActuel[i+1][j-1].isVisible()){
+							 visionActuel[i][j].setVisible(false);
 						 }
 					 }
 				 }
@@ -142,11 +161,11 @@ public abstract class Animal extends EtreVivant{
 			 
 
 			 else if (x>centre && y<centre){ // de 270 a 0 degres
-				 for( int i =x+1 ; i<cases[0].length ; i++){
+				 for( int i =x+1 ; i<visionActuel[0].length ; i++){
 					 
 					 for(int j=y-1 ; j>=0; j-- ){
-						 if (cases[i-1][j+1].isObstacle()){
-							 cases[i][j].setObstacle(true);;
+						 if (visionActuel[i-1][j+1].isObstacle() || !visionActuel[i-1][j+1].isVisible()){
+							 visionActuel[i][j].setVisible(false);
 						 }
 					 }
 				 }
@@ -160,49 +179,46 @@ public abstract class Animal extends EtreVivant{
 	}
 	public  Case[][] possible(Case [][] map){
 		
-		int nombreCases = 1+ champDeVision*2;
-		
-		Case[][] cases = new Case[nombreCases][nombreCases];
-		 
-		//0 innaccesible
-		//1 accessible
-		
-		for (int i = 0; i < cases.length; i++) {
-
-			for (int j = 0; j < cases[0].length; j++) {
-				cases[i][j]=new Case(false); // accessible
+		for (int i = 0; i < visionActuel.length; i++) {
+			for (int j = 0; j < visionActuel[0].length; j++) {
+				visionActuel[i][j]=new Case(); // cases remise par default (sans obstacles et visible)
 			}
 		}
-		
-		for (int i=positionX-champDeVision ; i<=positionX+champDeVision ;i++){
-			for (int j=positionY-champDeVision ; j<=positionY+champDeVision ;j++){
-				
-				if (cases[i+champDeVision-positionX][j+champDeVision-positionY].getModif()==1){ // la case n'a pas encore été invalidé
+		int parcour=0;
+		while(parcour<2){
+			for (int i=positionX-champDeVision ; i<=positionX+champDeVision ;i++){
+				for (int j=positionY-champDeVision ; j<=positionY+champDeVision ;j++){
+					
+					
+					//if (cases[i+champDeVision-positionX][j+champDeVision-positionY].getModif()==2){ // la case n'a pas encore été invalidé
 					
 					if (i<0 || j<0 || i>=map.length || j>=map[0].length){//hors du tableau
-
-						cases[i+champDeVision-positionX][j+champDeVision-positionY].setObstacle(true);
+							
+							visionActuel[i+champDeVision-positionX][j+champDeVision-positionY].setObstacle(true);
+							
 					}
 					
-					else if(map[i][j].isObstacle()){//obstacle de visibilité dans le terrain
+					else if(parcour !=0 && map[i][j].isObstacle()){//obstacle de visibilité dans le terrain
 						
-						cases[i+champDeVision-positionX][j+champDeVision-positionY] = new Case(true);
-						
-						ligneObstacle(cases,i+champDeVision-positionX ,j+champDeVision-positionY);
-						
+						visionActuel[i+champDeVision-positionX][j+champDeVision-positionY].setObstacle(true);
+							
+						ligneObstacle(i+champDeVision-positionX ,j+champDeVision-positionY);
+							
+						}
+						// juste pour test
+					else if (parcour !=0 && !map[i][j].isVisible()){
+							visionActuel[i+champDeVision-positionX][j+champDeVision-positionY].setVisible(false);
+							ligneObstacle(i+champDeVision-positionX ,j+champDeVision-positionY);
+						}
+						}
 					}
-					
+			parcour++;
 				}
-				
-			}
 			
-		}
 		//champObstacle(cases);
 		
-		return cases;
+		return visionActuel;
 		
 	}
-		
-	
-	
+
 }

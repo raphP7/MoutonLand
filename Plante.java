@@ -8,14 +8,10 @@ public class Plante extends EtreVivant {
 	}
 
 	@Override
-	public boolean mourir() {
+	public void manger() {
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
 
-	@Override
-	public boolean manger() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 }

@@ -4,13 +4,17 @@ public abstract class EtreVivant {
 	protected int positionX;
 	protected int positionY;
 	protected boolean femelle;// true =femelle , false=male
-	protected int champDeVision=4;
+	protected int champDeVision=5;
 	protected int immobile;
+	protected int esperenceDeVie;
 	protected int toursEnVie;
 	protected int nombreDeReproduction;
+	protected int esperenceSansManger;
 	protected int toursSansManger;
 	
-	public abstract boolean mourir();
-	public abstract boolean manger();
+	public boolean mortNaturel(){
+		return this.toursEnVie>this.esperenceDeVie || this.toursSansManger>this.esperenceSansManger;
+	}
+	public abstract void manger();
 	
 }

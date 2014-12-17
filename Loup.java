@@ -5,16 +5,5 @@ public class Loup extends Animal{
 		super(x, y);
 	}
 
-	@Override
-	public boolean mourir() {
-
-		return false;
-	}
-
-	@Override
-	public boolean manger() {
-		
-		return false;
-	}
 
 }

@@ -10,10 +10,12 @@ public class Case {
 	private int modif=0;
 	
 	private boolean obstacle; // impossible d'acceder , impossible de voir a travers
-	private boolean accessible; // true = accessible , else = inaccessible
+	private boolean visible; // true = accessible , else = inaccessible
 	
-	public Case(boolean b){
-		this.setObstacle(b);
+	
+	public Case(){
+		this.setObstacle(false);
+		this.setVisible(true);
 	}
 
 	public boolean isObstacle() {
@@ -23,16 +25,16 @@ public class Case {
 	public void setObstacle(boolean obstacle) {
 		this.modif++;
 		this.obstacle = obstacle;
-		if (obstacle){this.accessible=false;}
+		if (obstacle){this.visible=false;}
 	}
 
-	public boolean isAccessible() {
-		return accessible;
+	public boolean isVisible() {
+		return visible;
 	}
 
-	public void setAccessible(boolean accessible) {
+	public void setVisible(boolean accessible) {
 		this.modif++;
-		this.accessible = accessible;
+		this.visible = accessible;
 		if (accessible){this.obstacle=false;}
 	}
 	
