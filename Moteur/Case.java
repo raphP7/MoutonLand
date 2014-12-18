@@ -1,10 +1,10 @@
 package Moteur;
 
-class Case {
+public class Case {
 
-	protected Plante plante;
+	public Plante plante;
 	
-	protected Animal animalPresent;
+	public Animal animalPresent;
 	
 	private int modif=0;
 	

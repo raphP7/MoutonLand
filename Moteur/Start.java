@@ -1,11 +1,12 @@
 package Moteur;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
 
 class Start {
 	
-	public static void toot(Class b){
+	public static void toot(Class<?> b){
 		System.out.println(b.getName());
 		
 		System.out.println(b.toString().contains("Animal"));
@@ -13,6 +14,28 @@ class Start {
 		
 	}
 	public static void main(String[] args) {
+		
+		List<Etre> listAjout =new ArrayList<Etre>();
+		Etre aa =new Plante(0,0,false,100,100,100,1000);
+		Etre aaa =new Mouton(0,0,false,100,100,100,1000, 0, 0, 0);
+		listAjout.add(aa);
+		listAjout.add(aaa);
+
+		
+		
+		
+		if (listAjout.get(0) instanceof Plante){
+			System.out.println("une plante");
+		}
+		Etre temporaire=listAjout.get(0);
+		boolean different=false;
+		
+		for(Etre etre : listAjout){
+			if (!temporaire.getClass().equals(etre.getClass())){
+				different=true;
+			}
+		}
+		System.out.println("different ? " +different);
 		
 		toot(Mouton.class);
 		
@@ -70,16 +93,6 @@ class Start {
 					}
 				}
 			}
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			
 		}
 }

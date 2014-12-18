@@ -4,7 +4,6 @@ class EtreMort extends Etre {
 	int valeurEnSel;
 	int decompostion;
 	
-	
 	public EtreMort (EtreVivant a){
 		
 		super(a.positionX , a.positionY);

@@ -1,5 +1,5 @@
 package Moteur;
-class Mouton extends Animal {
+public class Mouton extends Animal {
 	
 	public Mouton(int x, int y, boolean femelle, int esperenceDeVie,
 			int nbToursPourDevenirPuber, int maxReproduction,

@@ -1,6 +1,6 @@
 package Moteur;
 
-class Loup extends Animal{
+public class Loup extends Animal{
 
 
 

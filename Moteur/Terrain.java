@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class Terrain {
+public class Terrain {
 	
 	int x;
 	int y;
@@ -22,14 +22,42 @@ class Terrain {
 			}
 		}
 	}
-	public List<Etre> ajouterAnimalALeatoire(List<Etre> listAjout){
+	public List<Etre> ajouterEtreALeatoire(List<Etre> listAjout) throws Exception{
+		
+		if (listAjout ==null){
+			return null;
+		}
+		if (listAjout.size()==0){
+			return null;
+		}
+		boolean different=false;
+		Etre temporaire=listAjout.get(0);
+		
+		for(Etre etre : listAjout){
+			if (!temporaire.getClass().equals(etre.getClass())){
+				different=true;
+			}
+		}
+		if(different){
+			throw new Exception("Attention la list doit contenir uniquement des object de la meme instance");
+		}
 		
 		List<Point> casesVides = new ArrayList<Point>();
 		
 		for (int i =0 ; i<map.length ; i++){
 			for (int j=0 ; j<map[0].length ; j++){
-				if (map[i][j].animalPresent==null && !map[i][j].isObstacle()){
-					casesVides.add(new Point(i,j));
+				
+				if (listAjout.get(0) instanceof Plante){
+					
+					if (map[i][j].plante==null && !map[i][j].isObstacle()){
+						casesVides.add(new Point(i,j));
+					}
+				}
+				else if(listAjout.get(0) instanceof Animal){
+					
+					if (map[i][j].animalPresent==null && !map[i][j].isObstacle()){
+						casesVides.add(new Point(i,j));
+					}
 				}
 			}
 		}
@@ -40,17 +68,22 @@ class Terrain {
 			
 			if (conteur<casesVides.size()){
 				
-				//positionement de l'animal
+				//positionement de l'Etre
 				Point tmp=casesVides.get(conteur);
 				
-				Etre animalTmp=listAjout.get(i);
+				Etre EtreTmp=listAjout.get(i);
 				
-				animalTmp.positionX=tmp.x;
-				animalTmp.positionY=tmp.y;
+				EtreTmp.positionX=tmp.x;
+				EtreTmp.positionY=tmp.y;
 				
-				//placement sur la map
-				map[tmp.x][tmp.y].animalPresent=(Animal) animalTmp;
+				//placement sur la map de l'Etre
 				
+				if (listAjout.get(0) instanceof Plante){
+					map[tmp.x][tmp.y].plante=(Plante) EtreTmp;
+				}
+				else if(listAjout.get(0) instanceof Animal){
+					map[tmp.x][tmp.y].animalPresent=(Animal) EtreTmp;
+				}
 				conteur++;
 			}
 			else{
@@ -60,6 +93,8 @@ class Terrain {
 		}
 		return listAjout;
 	}
+	
+
 	public List<Etre> unTour(){
 		List<Etre> nouvellesPlantes = new ArrayList<Etre>();
 		
