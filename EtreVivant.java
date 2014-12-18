@@ -1,9 +1,7 @@
 
-public abstract class EtreVivant {
+public abstract class EtreVivant extends Etre {
 	//private boolean bloqueChangement=false;
 	
-	protected int positionX;
-	protected int positionY;
 	private boolean femelle;// true =femelle , false=male
 	protected int immobile;
 	private int esperenceDeVie;
@@ -17,11 +15,10 @@ public abstract class EtreVivant {
 	
 	private int champDeVision=5;
 	
+	boolean mort=false;
 	
 	public EtreVivant(int x , int y ,boolean femelle , int esperenceDeVie , int nbToursPourDevenirPuber, int  maxReproduction , int esperenceSansManger, int champDeVision){
-		
-		this.positionX=x;
-		this.positionY=y;
+		super(x,y);
 		this.femelle=femelle;
 		this.esperenceDeVie=esperenceDeVie;
 		this.nbToursPourDevenirPuber=nbToursPourDevenirPuber;
@@ -31,8 +28,8 @@ public abstract class EtreVivant {
 		//this.bloqueChangement=true;
 	}
 	
-	public boolean mortNaturel(){
-		return this.toursEnVie>this.esperenceDeVie || this.toursSansManger>this.esperenceSansManger;
+	public boolean mort(){
+		return this.toursEnVie>this.esperenceDeVie || this.toursSansManger>this.esperenceSansManger || mort;
 	}
 	public abstract void manger();
 	
@@ -82,4 +79,5 @@ public abstract class EtreVivant {
 			this.champDeVision = champDeVision;
 		}
 	}
+	
 }

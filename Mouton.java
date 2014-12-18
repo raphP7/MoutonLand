@@ -1,5 +1,4 @@
 public class Mouton extends Animal {
-
 	
 	public Mouton(int x, int y, boolean femelle, int esperenceDeVie,
 			int nbToursPourDevenirPuber, int maxReproduction,
@@ -14,6 +13,20 @@ public class Mouton extends Animal {
 			return null;
 		}
 		return null;
+	}
+
+	public boolean mort(){
+		if(super.mort()){
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+	}
+	public void manger() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

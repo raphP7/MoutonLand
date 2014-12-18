@@ -55,16 +55,26 @@ public abstract class Animal extends EtreVivant implements FonctionsDeBase {
 		
 	}
 	
-	public void action(Case [][] map){
+	public boolean action(Case [][] map){
 		
+		if (this.mort()){
+			return false;
+		}
 		this.miseAjourVision(map);
+		
 		
 		actualiserVariables();
 		
+		this.manger(map);
+		return true;
 	}
 	
-	public void manger() {
+	public void manger(Case[][] map) {
+		
+		map[positionX][positionY].plante.getValeur();
+		
 		toursSansManger=0;
+		
 	}
 	public void champObstacle( Case [][] cases){
 		boolean changement=false;

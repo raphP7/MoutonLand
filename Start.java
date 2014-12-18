@@ -13,6 +13,7 @@ public class Start {
 		
 		un.manger();
 		
+		
 		Terrain terrain = new Terrain(10,10);
 		
 		//terrain.map[2][2].setVisible(false);
@@ -54,5 +55,16 @@ public class Start {
 					}
 				}
 			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 		}
 }

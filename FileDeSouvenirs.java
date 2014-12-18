@@ -1,8 +1,8 @@
 
 public class FileDeSouvenirs {
 	
-	Emplacement tete;
-	int taille;
+	private Emplacement tete;
+	private int taille;
 	
 	class Emplacement{
 
@@ -20,8 +20,8 @@ public class FileDeSouvenirs {
 	}
 	
 	public FileDeSouvenirs(int taille , int x , int y ,Case[][] visionSouvenir){
-		
-		this.taille=taille;
+	
+		this.setTaille(taille);
 		this.ajouter(x,y,visionSouvenir);
 	}
 	void ajouter(int x , int y ,Case[][] visionSouvenir){
@@ -31,5 +31,20 @@ public class FileDeSouvenirs {
 	}
 	public Emplacement creerEmplacement( int x , int y ,Case[][] visionSouvenir){
 		return new Emplacement(x,y,visionSouvenir);
+	}
+	public int getTaille() {
+		return taille;
+	}
+	public void setTaille(int taille) {
+		if (taille<1){
+			this.taille = 1;
+		}
+		else{
+			this.taille = taille;
+		}
+	}
+	
+	public Emplacement getTete() {
+		return tete;
 	}
 }

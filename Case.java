@@ -3,11 +3,13 @@ public class Case {
 
 	protected Plante plante;
 	
-	protected EtreMort sel;
+	protected EtreMort nourriture;
 	
 	protected Animal a;
 	
 	private int modif=0;
+	
+	protected int valeurSel;
 	
 	private boolean obstacle; // impossible d'acceder , impossible de voir a travers
 	private boolean visible; // true = accessible , else = inaccessible
