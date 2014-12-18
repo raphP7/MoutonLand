@@ -1,5 +1,6 @@
+package Moteur;
 
-public interface FonctionsDeBase {
+interface FonctionsDeBase {
 	
 	public void manger();
 	public Animal bebe(Animal b);

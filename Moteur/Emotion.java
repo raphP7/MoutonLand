@@ -1,5 +1,6 @@
+package Moteur;
 
-public enum Emotion {
+enum Emotion {
 
 	FAIM ("faim"),
 	PEUR ("peur"),

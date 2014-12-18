@@ -1,5 +1,6 @@
+package Moteur;
 
-public abstract class Etre {
+abstract class Etre {
 	
 
 	protected int positionX;

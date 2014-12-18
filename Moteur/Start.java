@@ -1,5 +1,6 @@
+package Moteur;
 
-public class Start {
+class Start {
 	public static void main(String[] args) {
 		
 		

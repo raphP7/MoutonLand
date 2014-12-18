@@ -1,5 +1,6 @@
+package Moteur;
 
-public class EtreMort extends Etre {
+class EtreMort extends Etre {
 	int valeurEnSel;
 	int decompostion;
 	

@@ -1,5 +1,6 @@
+package Moteur;
 
-public class FileDeSouvenirs {
+class FileDeSouvenirs {
 	
 	private Emplacement tete;
 	private int taille;

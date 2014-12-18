@@ -1,5 +1,6 @@
+package Moteur;
 
-public class Envie {
+class Envie {
 	private Emotion emotion;
 	private int valeur;
 

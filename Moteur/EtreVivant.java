@@ -1,5 +1,6 @@
+package Moteur;
 
-public abstract class EtreVivant extends Etre {
+abstract class EtreVivant extends Etre {
 	//private boolean bloqueChangement=false;
 	
 	private boolean femelle;// true =femelle , false=male

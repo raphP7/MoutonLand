@@ -1,5 +1,6 @@
+package Moteur;
 
-public abstract class Animal extends EtreVivant implements FonctionsDeBase {
+abstract class Animal extends EtreVivant implements FonctionsDeBase {
 	
 	int force;
 	int vitesse;

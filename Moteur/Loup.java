@@ -1,29 +1,25 @@
-public class Mouton extends Animal {
-	
-	public Mouton(int x, int y, boolean femelle, int esperenceDeVie,
+package Moteur;
+
+class Loup extends Animal{
+
+
+
+	public Loup(int x, int y, boolean femelle, int esperenceDeVie,
 			int nbToursPourDevenirPuber, int maxReproduction,
 			int esperenceSansManger, int champDeVision, int force, int vitesse) {
 		super(x, y, femelle, esperenceDeVie, nbToursPourDevenirPuber, maxReproduction,
 				esperenceSansManger, champDeVision, force, vitesse);
+
 	}
 
-	public Mouton bebe(Animal b) {
 
-		if (super.reproduction(b) && b instanceof Mouton) {
-			return null;
-		}
+	public Loup bebe(Animal b) {
+		
 		return null;
 	}
 
-	public boolean mort(){
-		if(super.mort()){
-			return true;
-		}
-		else {
-			return false;
-		}
-		
-	}
+
+	@Override
 	public void manger() {
 		// TODO Auto-generated method stub
 		

@@ -1,23 +1,24 @@
+package Moteur;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Moteur {
-	
+	public int vitesse;
 	public boolean play;
 	
-	Terrain terrain;
+	public Terrain terrain;
 	List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
 	List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
 	
 	List<Etre> lesEtres;
-
-	
 	public Moteur(){
 		this.lesEtres=new ArrayList<Etre>();
 		
 		this.lesnouveauxVivans= new ArrayList<Etre>();
 		this.etreMortDecomposer=new ArrayList<Etre>();
+	}
+	public void Creer(String a){
+		
 	}
 
 	public void simulation() {
@@ -60,10 +61,9 @@ public class Moteur {
 			
 		}
 	}
-	
+
 	
 	public EtreMort mourir(EtreVivant a){
-		
 		return new EtreMort(a);
 		
 	}

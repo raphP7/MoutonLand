@@ -1,5 +1,6 @@
+package Moteur;
 
-public class Case {
+class Case {
 
 	protected Plante plante;
 	

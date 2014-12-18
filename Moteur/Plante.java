@@ -1,5 +1,6 @@
+package Moteur;
 
-public class Plante extends EtreVivant {
+class Plante extends EtreVivant {
 
 	public Plante(int x, int y, boolean femelle, int esperenceDeVie,
 			int nbToursPourDevenirPuber, int maxReproduction,

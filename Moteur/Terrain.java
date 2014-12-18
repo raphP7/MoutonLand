@@ -1,8 +1,8 @@
+package Moteur;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class Terrain {
+class Terrain {
 	
 	int x;
 	int y;
