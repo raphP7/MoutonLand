@@ -1,9 +1,9 @@
 package Moteur;
 
 public enum Vivant {
-	LOUP ("loup"),
-	MOUTON ("mouton"),
-	PLANTE ("plante");
+	Loup ("Loup"),
+	Mouton ("Mouton"),
+	Plante ("Plante");
 	
 	private String vivant;
 	

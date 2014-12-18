@@ -6,60 +6,28 @@ public class tets {
 
 	public static void main(String[] args) throws Exception {
 		Moteur a = new Moteur();
-		a.CreerAlea("LOUP", 10);
-		a.CreerAlea("MOUTON", 3);
-		a.CreerAlea("PLANTE", 50);
+		
+		
+		a.creerAlea("Loup", 10);
+		a.creerAlea("Mouton", 3);
+		a.creerAlea("Plante", 1);
 		//a.simulation();
 		
-		Case[][] tab = a.leTerrain.map;
 		
+		a.leTerrain.afficheShell();
+		//a.leTerrain.map[0][0].animalPresent=null;
 		
-		for (int i =0; i<tab.length ; i++){
-			
-			System.out.println();
-			for( int j=0 ; j<tab[0].length; j++){
-				
-				if(!tab[i][j].isObstacle()){ // pas obstacle
-
-					
-					if (!(tab[i][j].animalPresent==null)){
-						
-						if (tab[i][j].animalPresent instanceof Mouton){
-							if (!(tab[i][j].plante==null)){ 
-								System.out.print(" M");
-							}
-							else{
-								System.out.print(" m");		
-							}
-							
-						}
-						if (tab[i][j].animalPresent instanceof Loup){
-							if (!(tab[i][j].plante==null)){ 
-								System.out.print(" L");
-							}
-							else{
-								System.out.print(" l");
-							}
-								
-						}
-						
-					}
-					
-					else {
-						if (!(tab[i][j].plante==null)){ 
-							System.out.print(" §");
-						}
-						else{System.out.print(" |");} // accessible et visible
-					}
-					
-				}
-				else{
-					System.out.print(" -");// obstacle (pas accessible , pas visible)
-				}
-			}
-		}
+		a.supprimerAle("Loup",7);
 		
+		a.leTerrain.afficheShell();
+		
+	}
+	
+	
+	public static void afficher(Case[][] tab){
+	
 		
 		
 	}
+	
 }

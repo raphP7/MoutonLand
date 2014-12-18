@@ -8,7 +8,7 @@ public class Terrain {
 	
 	int x;
 	int y;
-	int caseVide;
+	private int caseVide;
 	
 	public Case [][] map;
 	
@@ -22,6 +22,12 @@ public class Terrain {
 			}
 		}
 	}
+	
+	public Terrain(int x , int y , int obstacles){
+		this(x,y);
+		
+	}
+	
 	public List<Etre> ajouterEtreALeatoire(List<Etre> listAjout) throws Exception{
 		
 		if (listAjout ==null){
@@ -93,8 +99,32 @@ public class Terrain {
 		}
 		return listAjout;
 	}
+	public void supprimer(List<Etre> listAsupprimer){
+		
+		boolean trouver;
+		
+		for (Etre a : listAsupprimer){
+			trouver=false;
+			
+			for (int i =0 ; i<map.length ; i++){
+				if (trouver){
+					break;
+				}
+				for (int j=0 ; j<map[0].length ; j++){
+					
+					if (a == map[i][j].animalPresent){
+						map[i][j].animalPresent=null;
+						trouver=true;
+						break;
+					}
+					else if( a ==map[i][j].plante){
+						map[i][j].plante=null;
+					}
+				}
+			}
+		}
+	}
 	
-
 	public List<Etre> unTour(){
 		List<Etre> nouvellesPlantes = new ArrayList<Etre>();
 		
@@ -109,7 +139,60 @@ public class Terrain {
 				}
 			}
 		}
-		
 		return nouvellesPlantes;
+	}
+
+	public int getCaseVide() {
+		return caseVide;
+	}
+
+	public void setCaseVide(int caseVide) {
+		this.caseVide = caseVide;
+	}
+	
+	public void afficheShell(){
+		System.out.println();
+		for (int i =0; i<map.length ; i++){
+				
+				System.out.println();
+				for( int j=0 ; j<map[0].length; j++){
+					
+					if(!map[i][j].isObstacle()){ // pas obstacle
+
+						
+						if (!(map[i][j].animalPresent==null)){
+							
+							if (map[i][j].animalPresent instanceof Mouton){
+								if (!(map[i][j].plante==null)){ 
+									System.out.print(" M");
+								}
+								else{
+									System.out.print(" m");		
+								}
+								
+							}
+							if (map[i][j].animalPresent instanceof Loup){
+								if (!(map[i][j].plante==null)){ 
+									System.out.print(" L");
+								}
+								else{
+									System.out.print(" l");
+								}
+									
+							}
+						}
+						else {
+							if (!(map[i][j].plante==null)){ 
+								System.out.print(" §");
+							}
+							else{System.out.print(" |");} // accessible et visible
+						}
+						
+					}
+					else{
+						System.out.print(" -");// obstacle (pas accessible , pas visible)
+					}
+				}
+			}
 	}
 }

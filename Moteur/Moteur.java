@@ -1,5 +1,7 @@
 package Moteur;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -13,6 +15,7 @@ public class Moteur {
 	List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
 	List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
 	List<Etre> lesEtres;
+	Random random = new Random();
 	
 	public int getMaxReproduction() {
 		return maxReproduction;
@@ -49,31 +52,67 @@ public class Moteur {
 		this.lesnouveauxVivans= new ArrayList<Etre>();
 		this.etreMortDecomposer=new ArrayList<Etre>();
 	}
-	public void CreerAlea(String type,int quantite) throws Exception{
+
+	public boolean VerifierArgument(String type,int quantite){
 		
 		if (quantite<1){
-			return ;
+			return false;
 		}
-		List<Etre> temp = new ArrayList<Etre>();
 		boolean aEstUnEtreVivant=false;
 		
 		for (Vivant vivantTemp : Vivant.values()){
 			
 			if (type.equals(vivantTemp.toString())){
-				
-				
 				aEstUnEtreVivant=true;}
 		}
-		if(aEstUnEtreVivant){
-			Random random = new Random();
+		return aEstUnEtreVivant;
+	}
+	public List<Etre> copieListPrincipalMelanger(){
+		
+		List<Etre> temp = new ArrayList<Etre>();
+		for (Etre a : lesEtres) {
+			temp.add(a);
+		}
+		Collections.shuffle(temp);
+		return temp;
+	}
+	
+	public void supprimerAle(String type,int quantite) throws Exception{
+		
+		if(!	VerifierArgument(type,quantite)){
+			throw new Exception("Attention type d'ETRE inconnu ou quantité nul");
+		}
+		
+		List<Etre> temp = new ArrayList<Etre>();// la list qui va contenir les Etre a supprimer
+		List<Etre> melange =copieListPrincipalMelanger(); // rendre aleatoire la selection des etre
+		
+		int i=0;
+		for (Etre a : melange){ // parcourir la list Melanger
 			
+			if (i>=quantite){break;}
+			
+			if (a.getClass().toString().contains(type.toString())){// recuperer un object du type voulut
+				temp.add(a);
+			}
+			i++;
+		}
+		suprimer(temp);// suppresion de la liste d'object trouve
+	}
+	
+	public void creerAlea(String type,int quantite) throws Exception{
+		
+		if(!	VerifierArgument(type,quantite)){
+			throw new Exception("Attention type d'ETRE inconnu ou quantite nul");
+		}
+		List<Etre> temp = new ArrayList<Etre>();
+		
 			int definirEsperanceVie;
 			int definirPuberter;
 			boolean femelle=random.nextBoolean();
 			
 				for (int i=0 ; i<quantite ; i++){
 					
-					if(type.equals("PLANTE")){
+					if(type.equals("Plante")){
 						
 						definirEsperanceVie=this.esperenceDeVieMoyenne*20/100;
 						definirPuberter=(definirEsperanceVie*this.puberte/100);
@@ -81,10 +120,16 @@ public class Moteur {
 						Etre a =new Plante(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000);
 						temp.add(a);
 						
+					/*	Etre.class.asSubclass(Mouton.class).getConstructor(Integer.class,Integer.class,Boolean.class,
+								Integer.class,Integer.class,Integer.class,Integer.class ).newInstance(0,0,femelle,definirEsperanceVie,
+										definirPuberter,this.maxReproduction,1000);
+						*/		
+							
+						
 						//appel methode pour mettree dans terrain les plantes
 					}
 					
-					if(type.equals("LOUP")){
+					if(type.equals("Loup")){
 						
 						definirEsperanceVie=(this.esperenceDeVieMoyenne*20/100)+this.esperenceDeVieMoyenne;
 						definirPuberter=(definirEsperanceVie*this.puberte/100);
@@ -93,7 +138,7 @@ public class Moteur {
 						
 						temp.add(a);
 					}
-					else if (type.equals("MOUTON")){
+					else if (type.equals("Mouton")){
 						
 						definirEsperanceVie=this.esperenceDeVieMoyenne-(this.esperenceDeVieMoyenne*20/100);
 						definirPuberter=(definirEsperanceVie*this.puberte/100);
@@ -103,13 +148,7 @@ public class Moteur {
 					}
 					
 				}
-				temp=leTerrain.ajouterEtreALeatoire(temp);
-			
-		}
-		else {
-			throw new Exception("Attention type d'ETRE inconnu");
-		}
-		
+		temp=leTerrain.ajouterEtreALeatoire(temp);
 		this.ajouter(temp);
 	}
 
@@ -160,6 +199,15 @@ public class Moteur {
 			lesEtres.add(c);
 		}
 	}
+	
+	private void suprimer(List<Etre> aSupprimer){
+		
+		for (Etre d : aSupprimer){
+			lesEtres.remove(d);
+		}
+		this.leTerrain.supprimer(aSupprimer);
+	}
+	
 	public EtreMort mourir(EtreVivant a){
 		return new EtreMort(a);
 		
