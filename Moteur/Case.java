@@ -4,6 +4,8 @@ public class Case {
 
 	public Plante plante;
 	
+	//protected EtreMort nourriture;
+	
 	public Animal animalPresent;
 	
 	private int modif=0;
