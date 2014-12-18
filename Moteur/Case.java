@@ -4,8 +4,6 @@ class Case {
 
 	protected Plante plante;
 	
-	protected EtreMort nourriture;
-	
 	protected Animal animalPresent;
 	
 	private int modif=0;

@@ -1,8 +1,30 @@
 package Moteur;
 
+import java.util.HashSet;
+import java.util.Set;
+
 class Start {
-	public static void main(String[] args) {
 	
+	public static void toot(Class b){
+		System.out.println(b.getName());
+		
+		System.out.println(b.toString().contains("Animal"));
+		
+		
+	}
+	public static void main(String[] args) {
+		
+		toot(Mouton.class);
+		
+		String a ="LOUP";
+
+		boolean aEstUnEtreVivant=false;
+		
+		for (Vivant vivantTemp : Vivant.values()){
+			if (a.equals(vivantTemp.toString())){aEstUnEtreVivant=true;}
+		}
+		System.out.println(aEstUnEtreVivant);
+		
 		
 		Animal un = new Mouton(6,6, false, 0, 0, 0, 0, 3, 0, 0);
 		un.manger();

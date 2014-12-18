@@ -1,45 +1,118 @@
 package Moteur;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Moteur {
 	public int vitesse;
 	public boolean play;
-	
+	private int esperenceDeVieMoyenne; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
+	private int puberte; // pourcentage entre 0 et 30 de l'esperenceDeVieMoyenne
+	private int maxReproduction;
 	public Terrain terrain;
 	List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
 	List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
-	
 	List<Etre> lesEtres;
+	
+	
+	public int getMaxReproduction() {
+		return maxReproduction;
+	}
+	public void setMaxReproduction(int maxReproduction) {
+		if (maxReproduction<0){
+			maxReproduction=0;
+		}
+		this.maxReproduction = maxReproduction;
+	}
+	public int getEsperenceDeVieMoyenne() {
+		return esperenceDeVieMoyenne;
+	}
+	public void setEsperenceDeVieMoyenne(int esperenceDeVieMoyenne) {
+		if (esperenceDeVieMoyenne<0){
+			esperenceDeVieMoyenne=2000;
+		}
+		this.esperenceDeVieMoyenne = esperenceDeVieMoyenne;
+	}
+	public int getPuberte() {
+		return puberte;
+	}
+	public void setPuberte(int puberte) {
+		
+		if(puberte<0 || puberte>30){
+			this.puberte=20;
+		}else{
+			this.puberte = puberte;
+		}
+	}
 	public Moteur(){
 		this.lesEtres=new ArrayList<Etre>();
 		
 		this.lesnouveauxVivans= new ArrayList<Etre>();
 		this.etreMortDecomposer=new ArrayList<Etre>();
 	}
-	public void Creer(String a,int quantite) throws Exception{
+	public List<Etre> CreerAlea(String type,int quantite) throws Exception{
 		
-		if (a.equals("mouton")){
-			for( int i=0; i<=quantite ; i++){
+		if (quantite<1){
+			return null;
+		}
+		
+		List<Etre> temp = new ArrayList<Etre>();
+		boolean aEstUnEtreVivant=false;
+		
+		for (Vivant vivantTemp : Vivant.values()){
+			if (type.equals(vivantTemp.toString())){
 				
-				lesEtres.add(new Mouton(0,0,true,100,10,3,10,3,2,2));
-			}
+				aEstUnEtreVivant=true;}
 		}
-		else if (a.equals("loup")){
-			for( int i=0; i<=quantite ; i++){
-				lesEtres.add(new Loup(0,0,true,100,10,3,10,3,2,2));
+		
+		if(aEstUnEtreVivant){
+			Random random = new Random();
+			
+			int definirEsperanceVie;
+			int definirPuberter;
+			boolean femelle=random.nextBoolean();
+			
+			if(type.equals("plante")){
+				
+				definirEsperanceVie=this.esperenceDeVieMoyenne*20/100;
+				definirPuberter=(definirEsperanceVie*this.puberte/100);
+				
+				Etre a =new Plante(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000);
+				temp.add(a);
+				
+				//appel methode pour mettree dans terrain les plantes
 			}
+			else{
+				for (int i=0 ; i<=quantite ; i++){
+					
+					if(type.equals("loup")){
+						
+						definirEsperanceVie=(this.esperenceDeVieMoyenne*20/100)+this.esperenceDeVieMoyenne;
+						definirPuberter=(definirEsperanceVie*this.puberte/100);
+						
+						Etre a =new Loup(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,4,3,2);
+						temp.add(a);
+					}
+					else if (type.equals("mouton")){
+						
+						definirEsperanceVie=this.esperenceDeVieMoyenne-(this.esperenceDeVieMoyenne*20/100);
+						definirPuberter=(definirEsperanceVie*this.puberte/100);
+						
+						Etre a =new Mouton(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,4,3,2);
+						temp.add(a);
+					}
+					
+				}
+				
+				terrain.ajouterAnimalALeatoire(temp);
 			
-			
-		}
-		else if (a.equals("plante")){
-			for( int i=0; i<=quantite ; i++){
-				lesEtres.add(new Plante(0,0,true,100,5,3,80));
 			}
 		}
 		else {
 			throw new Exception("Attention type d'ETRE inconnu");
 		}
+		
+		return temp;
 	}
 
 	public void simulation() {

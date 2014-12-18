@@ -1,6 +1,7 @@
 package Moteur;
+import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 class Terrain {
@@ -21,17 +22,43 @@ class Terrain {
 			}
 		}
 	}
-	public boolean ajouterUnAnimal(){
-		int cmp=0;
+	public List<Etre> ajouterAnimalALeatoire(List<Etre> listAjout){
+		
+		List<Point> casesVides = new ArrayList<Point>();
+		
 		for (int i =0 ; i<map.length ; i++){
 			for (int j=0 ; j<map[0].length ; j++){
 				if (map[i][j].animalPresent==null && !map[i][j].isObstacle()){
-					cmp++;
+					casesVides.add(new Point(i,j));
 				}
 			}
 		}
-		this.caseVide=cmp;
-		return cmp>0;
+		
+		Collections.shuffle(casesVides);
+		int conteur=0;
+		for (int i=0; i<listAjout.size() ; i++ ){
+			
+			if (conteur<casesVides.size()){
+				
+				//positionement de l'animal
+				Point tmp=casesVides.get(conteur);
+				
+				Etre animalTmp=listAjout.get(i);
+				
+				animalTmp.positionX=tmp.x;
+				animalTmp.positionY=tmp.y;
+				
+				//placement sur la map
+				map[tmp.x][tmp.y].animalPresent=(Animal) animalTmp;
+				
+				conteur++;
+			}
+			else{
+				break;
+			}
+			
+		}
+		return listAjout;
 	}
 	public List<Etre> unTour(){
 		List<Etre> nouvellesPlantes = new ArrayList<Etre>();
