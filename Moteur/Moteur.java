@@ -17,8 +17,29 @@ public class Moteur {
 		this.lesnouveauxVivans= new ArrayList<Etre>();
 		this.etreMortDecomposer=new ArrayList<Etre>();
 	}
-	public void Creer(String a){
+	public void Creer(String a,int quantite) throws Exception{
 		
+		if (a.equals("mouton")){
+			for( int i=0; i<=quantite ; i++){
+				
+				lesEtres.add(new Mouton(0,0,true,100,10,3,10,3,2,2));
+			}
+		}
+		else if (a.equals("loup")){
+			for( int i=0; i<=quantite ; i++){
+				lesEtres.add(new Loup(0,0,true,100,10,3,10,3,2,2));
+			}
+			
+			
+		}
+		else if (a.equals("plante")){
+			for( int i=0; i<=quantite ; i++){
+				lesEtres.add(new Plante(0,0,true,100,5,3,80));
+			}
+		}
+		else {
+			throw new Exception("Attention type d'ETRE inconnu");
+		}
 	}
 
 	public void simulation() {

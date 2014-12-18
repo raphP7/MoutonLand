@@ -19,7 +19,7 @@ abstract class Animal extends EtreVivant implements FonctionsDeBase {
 		this.force=force;
 		this.vitesse=vitesse;
 		//this.deplacements = new <Point>();
-		int nombreCases = 1+ this.getChampDeVision()*2;
+		int nombreCases = calculTailleVision();
 		this.visionActuel= new Case[nombreCases][nombreCases];
 		
 		this.toursSansManger=0;
@@ -39,7 +39,9 @@ abstract class Animal extends EtreVivant implements FonctionsDeBase {
 		};
 		
 	}
-	
+	public int calculTailleVision(){
+		return 1+ this.getChampDeVision()*2;
+	}
 	public void actualiserVariables(){
 		this.incrementeToursEnVie();
 		
@@ -62,7 +64,6 @@ abstract class Animal extends EtreVivant implements FonctionsDeBase {
 			return false;
 		}
 		this.miseAjourVision(map);
-		
 		
 		actualiserVariables();
 		
@@ -222,6 +223,8 @@ abstract class Animal extends EtreVivant implements FonctionsDeBase {
 	}
 	public  Case[][] miseAjourVision(Case [][] map){
 		
+		visionActuel = new Case[calculTailleVision()][calculTailleVision()]; // redefinition de la taille de la visionActuel
+		
 		for (int i = 0; i < visionActuel.length; i++) {
 			for (int j = 0; j < visionActuel[0].length; j++) {
 				visionActuel[i][j]=new Case(); // cases remise par default (sans obstacles et visible)
@@ -236,7 +239,7 @@ abstract class Animal extends EtreVivant implements FonctionsDeBase {
 					//if (cases[i+champDeVision-positionX][j+champDeVision-positionY].getModif()==2){ // la case n'a pas encore été invalidé
 					
 					if (i<0 || j<0 || i>=map.length || j>=map[0].length){//hors du tableau
-							
+
 							visionActuel[i+getChampDeVision()-positionX][j+getChampDeVision()-positionY].setObstacle(true);
 					}
 					
@@ -247,7 +250,8 @@ abstract class Animal extends EtreVivant implements FonctionsDeBase {
 						ligneObstacle(i+getChampDeVision()-positionX ,j+getChampDeVision()-positionY);
 							
 						}
-						// juste pour test
+					
+						// juste pour tester les cases non visible
 					else if (parcour !=0 && !map[i][j].isVisible()){
 							visionActuel[i+getChampDeVision()-positionX][j+getChampDeVision()-positionY].setVisible(false);
 							ligneObstacle(i+getChampDeVision()-positionX ,j+getChampDeVision()-positionY);

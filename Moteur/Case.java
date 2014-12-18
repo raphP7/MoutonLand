@@ -6,14 +6,14 @@ class Case {
 	
 	protected EtreMort nourriture;
 	
-	protected Animal a;
+	protected Animal animalPresent;
 	
 	private int modif=0;
 	
 	protected int valeurSel;
 	
 	private boolean obstacle; // impossible d'acceder , impossible de voir a travers
-	private boolean visible; // true = accessible , else = inaccessible
+	private boolean visible; // true = visible , else = contenu invisible depuis la position x , y de l'Animal
 	
 	
 	public Case(){

@@ -2,28 +2,20 @@ package Moteur;
 
 class Start {
 	public static void main(String[] args) {
+	
 		
-		
-		for (Emotion a : Emotion.values()){
-			System.out.println(a.toString());
-		}
-		
-		
-		
-		Animal un = new Mouton(6,3, false, 0, 0, 0, 0, 0, 0, 0);
-		
+		Animal un = new Mouton(6,6, false, 0, 0, 0, 0, 3, 0, 0);
 		un.manger();
-		
 		
 		Terrain terrain = new Terrain(10,10);
 		
 		//terrain.map[2][2].setVisible(false);
 		
 		terrain.map[7][2].setObstacle(true);
-		//terrain.map[6][5].setObstacle(true);
-		//terrain.map[5][4].setObstacle(true);
-		//terrain.map[7][7].setObstacle(true);
-		//terrain.map[5][2].setObstacle(true);
+		terrain.map[6][5].setObstacle(true);
+		terrain.map[5][4].setObstacle(true);
+		terrain.map[7][7].setObstacle(true);
+		terrain.map[5][2].setObstacle(true);
 		
 		
 		
@@ -34,7 +26,7 @@ class Start {
 				
 				System.out.println();
 				for( int j=0 ; j<tab[0].length; j++){
-					
+
 					
 					if(!tab[i][j].isObstacle()){ // pas obstacle
 						
