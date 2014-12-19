@@ -1,6 +1,6 @@
 package Moteur;
 
-abstract class EtreVivant extends Etre {
+abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	//private boolean bloqueChangement=false;
 	
 	private boolean femelle;// true =femelle , false=male
@@ -13,7 +13,6 @@ abstract class EtreVivant extends Etre {
 	protected int maxReproduction;
 	private int esperenceSansManger;
 	protected int toursSansManger;
-	
 	private int champDeVision=5;
 	
 	//boolean mort=false;
@@ -29,7 +28,7 @@ abstract class EtreVivant extends Etre {
 		//this.bloqueChangement=true;
 	}
 	
-	public boolean mort(){
+	public boolean toujourEnVie(){
 		return this.toursEnVie>this.esperenceDeVie || this.toursSansManger>this.esperenceSansManger ;//|| mort;
 	}
 	public abstract void manger();

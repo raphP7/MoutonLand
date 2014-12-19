@@ -1,4 +1,4 @@
-package Moteur.Emotion;
+package Moteur.Intelligence;
 
 public class Envie {
 	private Emotion emotion;

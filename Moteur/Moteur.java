@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import Moteur.Terrain.Terrain;
+
 public class Moteur {
 	public int vitesse;
 	private int esperenceDeVieMoyenne=100; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
@@ -121,13 +123,13 @@ public class Moteur {
 					/*	Etre.class.asSubclass(Mouton.class).getConstructor(Integer.class,Integer.class,Boolean.class,
 								Integer.class,Integer.class,Integer.class,Integer.class ).newInstance(0,0,femelle,definirEsperanceVie,
 										definirPuberter,this.maxReproduction,1000);
-						*/		
+						*/
 							
 						
 						//appel methode pour mettree dans terrain les plantes
 					}
 					
-					if(type.equals("Loup")){
+					else if(type.equals("Loup")){
 						
 						definirEsperanceVie=(this.esperenceDeVieMoyenne*20/100)+this.esperenceDeVieMoyenne;
 						definirPuberter=(definirEsperanceVie*this.puberte/100);
@@ -144,6 +146,9 @@ public class Moteur {
 						Etre a =new Mouton(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,4,3,2);
 						temp.add(a);
 					}
+					else{
+						//impossible grace a la methode VerifierArgument();
+					}
 					
 				}
 		temp=leTerrain.ajouterEtreALeatoire(temp);
@@ -152,9 +157,10 @@ public class Moteur {
 
 	public void simulation() {
 		
+		
 			for (int i=0; i<lesEtres.size(); i++) {
 				
-				Etre a =lesEtres.get(i);
+				Etre a =lesEtres.get(i);				
 				
 				if (a instanceof EtreMort) {
 					
@@ -166,21 +172,38 @@ public class Moteur {
 				}
 				else if (a instanceof EtreVivant){
 					
-					if (a instanceof Animal){
+					if(!	((FonctionsDeBaseVivant)a).action(leTerrain.map)){ // l'etre fait une action
 						
-						if(!	((Animal)a).action(leTerrain.map)){ // l'animal est mort
+						 //l'etre est mort
+						
+						if (a instanceof Animal){
+							this.leTerrain.map[a.positionX][a.positionY].animalPresent=null;
+						}
+						else if (a instanceof Plante){
+							this.leTerrain.map[a.positionX][a.positionY].plante=null;
+						}
+						a=new EtreMort((EtreVivant) a);
+						lesEtres.set(i, a);
+					}
+					
+					
+				/*	if (a instanceof Animal){
+						
+						if(!	((FonctionsDeBaseVivant)a).action(leTerrain.map)){ // l'animal est mort
 							a=new EtreMort((EtreVivant) a);
 							lesEtres.set(i, a);// remplace l'etreVivant par le nouveau EtreMort dans la list
 							this.leTerrain.map[a.positionX][a.positionY].animalPresent=null;
 						}
 					}
 					else if (a instanceof Plante){
-						if(!	((Plante) a).unTour()){// la plante est morte
+						if(!	((Plante) a).action(leTerrain.map)){// la plante est morte
 							a=new EtreMort((EtreVivant)a);
 							lesEtres.set(i, a);
 							this.leTerrain.map[a.positionX][a.positionY].plante=null;
 						}
 					}
+					
+					*/
 				}
 			}
 			

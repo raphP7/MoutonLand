@@ -1,6 +1,7 @@
-package Moteur;
+package Moteur.Intelligence;
+import Moteur.Terrain.Case;
 
-class FileDeSouvenirs {
+public class FileDeSouvenirs {
 	
 	private Emplacement tete;
 	private int taille;

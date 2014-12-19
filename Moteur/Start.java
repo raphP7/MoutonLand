@@ -3,6 +3,9 @@ package Moteur;
 import java.util.ArrayList;
 import java.util.List;
 
+import Moteur.Terrain.Case;
+import Moteur.Terrain.Terrain;
+
 
 class Start {
 	
@@ -20,9 +23,6 @@ class Start {
 		Etre aaa =new Mouton(0,0,false,100,100,100,1000, 0, 0, 0);
 		listAjout.add(aa);
 		listAjout.add(aaa);
-
-		
-		
 		
 		if (listAjout.get(0) instanceof Plante){
 			System.out.println("une plante");
@@ -80,16 +80,16 @@ class Start {
 						}
 						
 						else if (!tab[i][j].isVisible()){
-							System.out.print(" |"); // pas visible
+							System.out.print(" I"); // pas visible
 						}
 						
 						else{
-						System.out.print(" 0"); // accessible et visible
+						System.out.print(" ."); // accessible et visible
 						}
 						
 					}
 					else{
-						System.out.print(" -");// obstacle (pas accessible , pas visible)
+						System.out.print(" O");// obstacle (pas accessible , pas visible)
 					}
 				}
 			}

@@ -18,7 +18,6 @@ public class Loup extends Animal{
 		return null;
 	}
 
-
 	@Override
 	public void manger() {
 		// TODO Auto-generated method stub

@@ -1,8 +1,14 @@
-package Moteur;
+package Moteur.Terrain;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import Moteur.Animal;
+import Moteur.Etre;
+import Moteur.Loup;
+import Moteur.Mouton;
+import Moteur.Plante;
 
 public class Terrain {
 	

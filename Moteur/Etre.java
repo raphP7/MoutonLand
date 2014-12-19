@@ -1,10 +1,10 @@
 package Moteur;
 
-abstract class Etre {
+public abstract class Etre {
 	
 
-	protected int positionX;
-	protected int positionY;
+	public int positionX;
+	public int positionY;
 	
 	Etre(int x, int y){
 		this.positionX=x;

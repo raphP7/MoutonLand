@@ -16,15 +16,6 @@ public class Mouton extends Animal {
 		return null;
 	}
 
-	public boolean mort(){
-		if(super.mort()){
-			return true;
-		}
-		else {
-			return false;
-		}
-		
-	}
 	public void manger() {
 		// TODO Auto-generated method stub
 		

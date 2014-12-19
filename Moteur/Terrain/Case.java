@@ -1,4 +1,8 @@
-package Moteur;
+package Moteur.Terrain;
+
+import Moteur.Animal;
+import Moteur.Plante;
+
 
 public class Case {
 
@@ -10,7 +14,7 @@ public class Case {
 	
 	private int modif=0;
 	
-	protected int valeurSel;
+	public int valeurSel;
 	
 	private boolean obstacle; // impossible d'acceder , impossible de voir a travers
 	private boolean visible; // true = visible , else = contenu invisible depuis la position x , y de l'Animal
