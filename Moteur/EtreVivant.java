@@ -16,7 +16,7 @@ abstract class EtreVivant extends Etre {
 	
 	private int champDeVision=5;
 	
-	boolean mort=false;
+	//boolean mort=false;
 	
 	public EtreVivant(int x , int y ,boolean femelle , int esperenceDeVie , int nbToursPourDevenirPuber, int  maxReproduction , int esperenceSansManger, int champDeVision){
 		super(x,y);
@@ -30,7 +30,7 @@ abstract class EtreVivant extends Etre {
 	}
 	
 	public boolean mort(){
-		return this.toursEnVie>this.esperenceDeVie || this.toursSansManger>this.esperenceSansManger || mort;
+		return this.toursEnVie>this.esperenceDeVie || this.toursSansManger>this.esperenceSansManger ;//|| mort;
 	}
 	public abstract void manger();
 	

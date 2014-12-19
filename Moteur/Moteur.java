@@ -1,5 +1,5 @@
 package Moteur;
-import java.lang.reflect.Constructor;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,15 +7,14 @@ import java.util.Random;
 
 public class Moteur {
 	public int vitesse;
-	public boolean play;
-	private int esperenceDeVieMoyenne; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
-	private int puberte; // pourcentage entre 0 et 30 de l'esperenceDeVieMoyenne
-	private int maxReproduction;
+	private int esperenceDeVieMoyenne=100; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
+	private int puberte=20; // pourcentage entre 0 et 30 de l'esperenceDeVieMoyenne
+	private int maxReproduction=3;
 	public Terrain leTerrain=new Terrain(10,10);
-	List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
-	List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
-	List<Etre> lesEtres;
-	Random random = new Random();
+	private List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
+	private List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
+	private List<Etre> lesEtres;
+	private Random random = new Random();
 	
 	public int getMaxReproduction() {
 		return maxReproduction;
@@ -48,12 +47,11 @@ public class Moteur {
 	}
 	public Moteur(){
 		this.lesEtres=new ArrayList<Etre>();
-		
 		this.lesnouveauxVivans= new ArrayList<Etre>();
 		this.etreMortDecomposer=new ArrayList<Etre>();
 	}
 
-	public boolean VerifierArgument(String type,int quantite){
+	private boolean VerifierArgument(String type,int quantite){
 		
 		if (quantite<1){
 			return false;
@@ -67,7 +65,7 @@ public class Moteur {
 		}
 		return aEstUnEtreVivant;
 	}
-	public List<Etre> copieListPrincipalMelanger(){
+	private List<Etre> copieListPrincipalMelanger(){
 		
 		List<Etre> temp = new ArrayList<Etre>();
 		for (Etre a : lesEtres) {
@@ -153,44 +151,49 @@ public class Moteur {
 	}
 
 	public void simulation() {
-		while (play) {
-
-			for (Etre a : lesEtres) {
-
+		
+			for (int i=0; i<lesEtres.size(); i++) {
+				
+				Etre a =lesEtres.get(i);
+				
 				if (a instanceof EtreMort) {
-
+					
 					if (((EtreMort) a).decompositionFini()) {
+						
 						leTerrain.map[a.positionX][a.positionY].valeurSel = ((EtreMort) a).valeurEnSel;
 						etreMortDecomposer.add(a);
-
 					}
 				}
 				else if (a instanceof EtreVivant){
 					
 					if (a instanceof Animal){
+						
 						if(!	((Animal)a).action(leTerrain.map)){ // l'animal est mort
-							
-							a=new EtreMort((EtreVivant)a);
+							a=new EtreMort((EtreVivant) a);
+							lesEtres.set(i, a);// remplace l'etreVivant par le nouveau EtreMort dans la list
+							this.leTerrain.map[a.positionX][a.positionY].animalPresent=null;
 						}
 					}
 					else if (a instanceof Plante){
 						if(!	((Plante) a).unTour()){// la plante est morte
 							a=new EtreMort((EtreVivant)a);
+							lesEtres.set(i, a);
+							this.leTerrain.map[a.positionX][a.positionY].plante=null;
 						}
 					}
 				}
 			}
 			
-			lesnouveauxVivans.addAll(leTerrain.unTour());// on applique 1 tour au terrain , pour recuperer les nouvelles plantes
+			//lesnouveauxVivans.addAll(leTerrain.unTour());// on applique 1 tour au terrain , pour recuperer les nouvelles plantes
 			
 			for (Etre b : etreMortDecomposer){ // retire les etre decomposer de la liste LesEtres
 				lesEtres.remove(b);
 			}
+			etreMortDecomposer.clear();
 			for (Etre c : lesnouveauxVivans){// ajoute les nouveaux Etre a la liste lesEtres
 				lesEtres.add(c);
 			}
-			
-		}
+			lesnouveauxVivans.clear();
 	}
 
 	private void ajouter(List<Etre> aAjouter){

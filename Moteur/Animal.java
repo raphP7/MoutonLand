@@ -1,5 +1,9 @@
 package Moteur;
 
+import Moteur.Emotion.Emotion;
+import Moteur.Emotion.Envie;
+
+
 abstract class Animal extends EtreVivant implements FonctionsDeBase {
 	
 	int force;
@@ -63,17 +67,18 @@ abstract class Animal extends EtreVivant implements FonctionsDeBase {
 		if (this.mort()){
 			return false;
 		}
-		this.miseAjourVision(map);
+		//this.miseAjourVision(map);
 		
 		actualiserVariables();
 		
-		this.manger(map);
+		
+		//this.manger(map);
 		return true;
 	}
 	
 	public void manger(Case[][] map) {
 		
-		map[positionX][positionY].plante.getValeur();
+		//map[positionX][positionY].plante.getValeur();
 		
 		toursSansManger=0;
 		
@@ -111,8 +116,6 @@ abstract class Animal extends EtreVivant implements FonctionsDeBase {
 						changement=true;
 						
 						try{
-							
-							
 							for (int w =0; w<cases.length ; w++){
 								System.out.println();
 								for( int z=0 ; z<cases[0].length; z++){

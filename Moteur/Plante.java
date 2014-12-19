@@ -15,7 +15,7 @@ class Plante extends EtreVivant {
 	
 	public boolean unTour(){
 		this.incrementeToursEnVie();
-		return mort;
+		return mort();
 		
 	}
 	

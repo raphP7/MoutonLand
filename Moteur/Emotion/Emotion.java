@@ -1,6 +1,6 @@
-package Moteur;
+package Moteur.Emotion;
 
-enum Emotion {
+public enum Emotion {
 
 	FAIM ("faim"),
 	PEUR ("peur"),
