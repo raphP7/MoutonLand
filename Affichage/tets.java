@@ -14,11 +14,10 @@ public class tets {
 		a.creerAlea("Mouton", 30);
 		a.creerAlea("Plante", 10);
 		
-		a.supprimerAle("Loup",7);
 		
 		a.leTerrain.afficheShell();
 		
-		for (int i=0 ; i<150 ; i++){
+		for (int i=0 ; i<10 ; i++){
 			a.simulation();
 		}
 		a.leTerrain.afficheShell();

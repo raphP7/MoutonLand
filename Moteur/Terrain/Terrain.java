@@ -29,7 +29,7 @@ public class Terrain {
 		}
 	}
 	
-	public Terrain(int x , int y , int obstacles){
+	public Terrain(int x , int y , int obstacles) throws Exception{
 		this(x,y);
 		
 	}
@@ -61,13 +61,13 @@ public class Terrain {
 				
 				if (listAjout.get(0) instanceof Plante){
 					
-					if (map[i][j].plante==null && !map[i][j].isObstacle()){
+					if (map[i][j].getPlante()==null && !map[i][j].isObstacle()){
 						casesVides.add(new Point(i,j));
 					}
 				}
 				else if(listAjout.get(0) instanceof Animal){
 					
-					if (map[i][j].animalPresent==null && !map[i][j].isObstacle()){
+					if (map[i][j].getAnimalPresent()==null && !map[i][j].isObstacle()){
 						casesVides.add(new Point(i,j));
 					}
 				}
@@ -91,10 +91,10 @@ public class Terrain {
 				//placement sur la map de l'Etre
 				
 				if (listAjout.get(0) instanceof Plante){
-					map[tmp.x][tmp.y].plante=(Plante) EtreTmp;
+					map[tmp.x][tmp.y].setPlante((Plante) EtreTmp);
 				}
 				else if(listAjout.get(0) instanceof Animal){
-					map[tmp.x][tmp.y].animalPresent=(Animal) EtreTmp;
+					map[tmp.x][tmp.y].setAnimalPresent((Animal) EtreTmp);
 				}
 				conteur++;
 			}
@@ -105,7 +105,7 @@ public class Terrain {
 		}
 		return listAjout;
 	}
-	public void supprimer(List<Etre> listAsupprimer){
+	public void supprimer(List<Etre> listAsupprimer) throws Exception{
 		
 		boolean trouver;
 		
@@ -118,13 +118,13 @@ public class Terrain {
 				}
 				for (int j=0 ; j<map[0].length ; j++){
 					
-					if (a == map[i][j].animalPresent){
-						map[i][j].animalPresent=null;
+					if (a == map[i][j].getAnimalPresent()){
+						map[i][j].setAnimalPresent(null);
 						trouver=true;
 						break;
 					}
-					else if( a ==map[i][j].plante){
-						map[i][j].plante=null;
+					else if( a ==map[i][j].getPlante()){
+						map[i][j].setPlante(null);
 					}
 				}
 			}
@@ -139,9 +139,9 @@ public class Terrain {
 				
 				int valeur=map[i][j].valeurSel;
 				
-				if (valeur>0 && map[i][j].plante==null){
+				if (valeur>0 && map[i][j].getPlante()==null){
 					
-					nouvellesPlantes.add(new Plante(i,j,false,valeur*10,10,3,valeur*5));
+					nouvellesPlantes.add(new Plante(i,j,false,valeur*10,10,3,valeur*5,6));// a VERIFIER
 				}
 			}
 		}
@@ -166,10 +166,10 @@ public class Terrain {
 					if(!map[i][j].isObstacle()){ // pas obstacle
 
 						
-						if (!(map[i][j].animalPresent==null)){
+						if (!(map[i][j].getAnimalPresent()==null)){
 							
-							if (map[i][j].animalPresent instanceof Mouton){
-								if (!(map[i][j].plante==null)){ 
+							if (map[i][j].getAnimalPresent() instanceof Mouton){
+								if (!(map[i][j].getPlante()==null)){ 
 									System.out.print(" M");
 								}
 								else{
@@ -177,8 +177,8 @@ public class Terrain {
 								}
 								
 							}
-							if (map[i][j].animalPresent instanceof Loup){
-								if (!(map[i][j].plante==null)){ 
+							if (map[i][j].getAnimalPresent() instanceof Loup){
+								if (!(map[i][j].getPlante()==null)){ 
 									System.out.print(" L");
 								}
 								else{
@@ -188,7 +188,7 @@ public class Terrain {
 							}
 						}
 						else {
-							if (!(map[i][j].plante==null)){ 
+							if (!(map[i][j].getPlante()==null)){ 
 								System.out.print(" §");
 							}
 							else{System.out.print(" |");} // accessible et visible

@@ -1,5 +1,5 @@
 package Moteur;
-public class Mouton extends Animal {
+public class Mouton extends Herbivore {
 	
 	public Mouton(int x, int y, boolean femelle, int esperenceDeVie,
 			int nbToursPourDevenirPuber, int maxReproduction,
@@ -8,9 +8,9 @@ public class Mouton extends Animal {
 				esperenceSansManger, champDeVision, force, vitesse);
 	}
 
-	public Mouton bebe(Animal b) {
+	public Mouton bebe(Etre b) {
 
-		if (super.reproduction(b) && b instanceof Mouton) {
+		if (super.reproduction( b) && b instanceof Mouton) {
 			return null;
 		}
 		return null;

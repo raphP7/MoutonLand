@@ -15,7 +15,8 @@ abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	protected int toursSansManger;
 	private int champDeVision=5;
 	
-	//boolean mort=false;
+	private boolean aEteTuer;
+	
 	
 	public EtreVivant(int x , int y ,boolean femelle , int esperenceDeVie , int nbToursPourDevenirPuber, int  maxReproduction , int esperenceSansManger, int champDeVision){
 		super(x,y);
@@ -29,7 +30,7 @@ abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	}
 	
 	public boolean toujourEnVie(){
-		return this.toursEnVie>this.esperenceDeVie || this.toursSansManger>this.esperenceSansManger ;//|| mort;
+		return this.toursEnVie<this.esperenceDeVie || this.toursSansManger<this.esperenceSansManger ;//|| mort;
 	}
 	public abstract void manger();
 	
@@ -78,6 +79,14 @@ abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 		else{
 			this.champDeVision = champDeVision;
 		}
+	}
+
+	public boolean isaEteTuer() {
+		return aEteTuer;
+	}
+
+	public void setaEteTuer(boolean aEteTuer) {
+		this.aEteTuer = aEteTuer;
 	}
 	
 }

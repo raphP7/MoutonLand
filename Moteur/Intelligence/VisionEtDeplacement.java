@@ -1,10 +1,24 @@
 package Moteur.Intelligence;
 
+import java.awt.Point;
+import java.util.LinkedList;
+
+import Moteur.Animal;
+import Moteur.Etre;
 import Moteur.Terrain.Case;
 
-public class Vision {
+public class VisionEtDeplacement {
 	
-	public void champObstacle( Case [][] cases){
+	public Emotion emotionChoisiPourLeDeplacement;
+	
+	public VisionEtDeplacement() {
+		
+	}
+	public VisionEtDeplacement(Emotion emotion) {
+		this.emotionChoisiPourLeDeplacement=emotion;
+	}
+	
+	public void champObstacle( Case [][] cases) throws Exception{
 		boolean changement=false;
 		for (int i =0; i<cases.length ; i++ ){
 			
@@ -147,5 +161,90 @@ public class Vision {
 		return visionActuel;
 		
 	}
+
+
+	public int calculTailleVision(int champDeVision){
+		return 1+champDeVision*2;
+	}
 	
+	public  Case[][] miseAjourVision(Point positionAnimal,int champDeVision ,Case [][] map) throws Exception{
+		
+		Case [][] visionActuel = new Case[calculTailleVision(champDeVision)][calculTailleVision(champDeVision)]; // redefinition de la taille de la visionActuel
+		
+		for (int i = 0; i < visionActuel.length; i++) {
+			for (int j = 0; j < visionActuel[0].length; j++) {
+				visionActuel[i][j]=new Case(); // cases remise par default (sans obstacles et visible)
+			}
+		}
+		int parcour=0;
+		while(parcour<2){
+			for (int i=positionAnimal.x-champDeVision ; i<=positionAnimal.x+champDeVision ;i++){
+				for (int j=positionAnimal.y-champDeVision ; j<=positionAnimal.y+champDeVision ;j++){
+					
+					if (i<0 || j<0 || i>=map.length || j>=map[0].length){//hors du tableau
+
+							visionActuel[i+champDeVision-positionAnimal.x][j+champDeVision-positionAnimal.y].setObstacle(true);
+					}
+					
+					else if(parcour !=0 && map[i][j].isObstacle()){//obstacle de visibilité dans le terrain
+						
+						visionActuel[i+champDeVision-positionAnimal.x][j+champDeVision-positionAnimal.y].setObstacle(true);
+							
+						visionActuel=new VisionEtDeplacement ().ligneObstacle(i+champDeVision-positionAnimal.x ,j+champDeVision-positionAnimal.y,visionActuel,champDeVision);
+							
+						}
+					
+						// juste pour tester les cases non visible
+					else if (parcour !=0 && !map[i][j].isVisible()){
+							visionActuel[i+champDeVision-positionAnimal.x][j+champDeVision-positionAnimal.y].setVisible(false);
+							visionActuel=new VisionEtDeplacement().ligneObstacle(i+champDeVision-positionAnimal.x ,j+champDeVision-positionAnimal.y , visionActuel,champDeVision);
+						}
+						}
+					}
+			parcour++;
+				}
+			
+		//champObstacle(cases);
+		
+		return visionActuel;
+		
+	}
+	
+	
+	private void animalPresent(int x , int y,Case [][] map) throws Exception{
+		
+		if( map[x][y].getAnimalPresent()==null){
+			String s="Attention il n'y a pas d'Animal sur la case ["+x+"] ["+y+"]";
+			throw new Exception(s);	
+		}
+		
+	}
+	public Envie [] regarder(int x , int y,Case [][] map) throws Exception{
+		//met a jour les emotions en fonction de l'environement
+		
+		animalPresent(x, y, map);// peut renvoyer une Exception
+		
+		Etre a=map[x][y].getAnimalPresent();
+		
+		Envie[] temp = ((Animal)a).getLesEnvies();
+		
+		return temp;
+		
+	}
+	public LinkedList<Point> deplacement(int x , int y,Case [][] map) throws Exception{
+		// choisi un deplacement 
+		//renvoi les coordonnées des point du deplacement 
+		animalPresent(x, y, map);
+		
+		LinkedList<Point> listeDePoint = new LinkedList<Point>();
+		Etre a=map[x][y].getAnimalPresent();
+		
+		
+		Envie[] temp = ((Animal)a).getLesEnvies();
+		Point positionArriver=new Point(x,y);// POUR FAIRE DES TEST
+		
+		listeDePoint.add(positionArriver);
+		return listeDePoint;
+		
+	}
 }

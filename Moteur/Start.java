@@ -19,7 +19,7 @@ class Start {
 	public static void main(String[] args) {
 		
 		List<Etre> listAjout =new ArrayList<Etre>();
-		Etre aa =new Plante(0,0,false,100,100,100,1000);
+		Etre aa =new Plante(0,0,false,100,100,100,1000,10);
 		Etre aaa =new Mouton(0,0,false,100,100,100,1000, 0, 0, 0);
 		listAjout.add(aa);
 		listAjout.add(aaa);
@@ -65,7 +65,7 @@ class Start {
 		
 		
 		
-			Case[][] tab=un.miseAjourVision(terrain.map);;
+			Case[][] tab=un.miseAjourVision(terrain.map);
 			
 			for (int i =0; i<tab.length ; i++){
 				

@@ -6,13 +6,11 @@ import Moteur.Plante;
 
 public class Case {
 
-	public Plante plante;
+	private Plante plante;
 	
 	//protected EtreMort nourriture;
 	
-	public Animal animalPresent;
-	
-	private int modif=0;
+	private Animal animalPresent;
 	
 	public int valeurSel;
 	
@@ -21,7 +19,7 @@ public class Case {
 	
 	
 	public Case(){
-		this.setObstacle(false);
+		this.obstacle=false;
 		this.setVisible(true);
 	}
 
@@ -29,10 +27,13 @@ public class Case {
 		return obstacle;
 	}
 
-	public void setObstacle(boolean obstacle) {
-		this.modif++;
+	public void setObstacle(boolean obstacle) throws Exception {
 		this.obstacle = obstacle;
-		if (obstacle){this.visible=false;}
+		if (obstacle){
+		this.visible=false;
+		this.setAnimalPresent(null);
+		this.setPlante(null);
+		}
 	}
 
 	public boolean isVisible() {
@@ -40,13 +41,39 @@ public class Case {
 	}
 
 	public void setVisible(boolean accessible) {
-		this.modif++;
+		
 		this.visible = accessible;
 		if (accessible){this.obstacle=false;}
 	}
-	
-	public int getModif(){
-		return this.modif;
+
+
+	public Plante getPlante() {
+		return plante;
+	}
+
+	public void setPlante(Plante plante) throws Exception {
+		
+		if (this.isObstacle()){
+			this.plante=null;
+			throw new Exception("Impossible de mettre une Plante sur une case obstacle");
+		}
+		else{
+		this.plante = plante;
+		}
+	}
+
+	public Animal getAnimalPresent() {
+		return animalPresent;
+	}
+
+	public void setAnimalPresent(Animal animalPresent) throws Exception {
+		if (this.isObstacle()){
+			this.plante=null;
+			throw new Exception("Impossible de mettre un Animal sur une case obstacle");
+		}
+		else{
+		this.animalPresent = animalPresent;
+		}
 	}
 
 }
