@@ -58,12 +58,16 @@ public abstract class Animal extends EtreVivant  {
 		this.setaEteTuer(false);
 		
 	}
+	public Animal(Etre a, Etre b) {
+		super(a,b);
+	}
+
 	public void actualiserVariables(){
 		this.incrementeToursEnVie();
 		
 	}
-
-	public boolean reproduction(Etre b){
+	
+	public boolean reproductionPossible(Etre b){
 		if (((EtreVivant) b).isFemelle() != this.isFemelle() ){// les animaux sont de  Sexe Opposer et de meme Race
 			if(this.maxReproduction>this.nombreDeReproduction && ((EtreVivant)b).maxReproduction>this.maxReproduction){// les animaux peuvent se reproduire
 				return true;
@@ -169,7 +173,7 @@ public abstract class Animal extends EtreVivant  {
 				for(int j=0 ; i<tmp[0].length;j++){
 					if (tmp[i][j].getAnimalPresent()==this){}
 					else if (tmp[i][j].getAnimalPresent() !=null){
-						if (this.reproduction(tmp[i][j].getAnimalPresent())){
+						if (this.reproductionPossible(tmp[i][j].getAnimalPresent())){
 							partenairesPossible.add(tmp[i][j].getAnimalPresent());
 							
 						}
@@ -223,13 +227,4 @@ public abstract class Animal extends EtreVivant  {
 		
 		return null;
 	}
-	
-	public void manger(Case[][] map) {
-		
-		//map[positionX][positionY].plante.getValeur();
-		
-		toursSansManger=0;
-		
-	}
-
 }

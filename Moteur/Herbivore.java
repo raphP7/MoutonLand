@@ -7,7 +7,10 @@ public abstract class Herbivore extends Animal{
 			int esperenceSansManger, int champDeVision, int force, int vitesse) {
 		super(x, y, femelle, esperenceDeVie, nbToursPourDevenirPuber, maxReproduction,
 				esperenceSansManger, champDeVision, force, vitesse);
-		// TODO Auto-generated constructor stub
+	}
+
+	public Herbivore(Etre a, Etre b) {
+		super(a,b);
 	}
 
 }

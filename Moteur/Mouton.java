@@ -7,19 +7,12 @@ public class Mouton extends Herbivore {
 		super(x, y, femelle, esperenceDeVie, nbToursPourDevenirPuber, maxReproduction,
 				esperenceSansManger, champDeVision, force, vitesse);
 	}
-
-	public Mouton bebe(Etre b) {
-
-		if (super.reproduction( b) && b instanceof Mouton) {
-			return null;
-		}
-		return null;
+	public Mouton(Etre a, Etre b){
+		super(a,b);
 	}
-
 	public void manger() {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 }

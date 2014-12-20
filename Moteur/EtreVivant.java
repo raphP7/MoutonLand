@@ -1,6 +1,9 @@
 package Moteur;
 
-abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	//private boolean bloqueChangement=false;
 	
 	private boolean femelle;// true =femelle , false=male
@@ -17,7 +20,9 @@ abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	
 	private boolean aEteTuer;
 	
-	
+	public EtreVivant(Etre a , Etre b){
+		super(a,b);
+	}
 	public EtreVivant(int x , int y ,boolean femelle , int esperenceDeVie , int nbToursPourDevenirPuber, int  maxReproduction , int esperenceSansManger, int champDeVision){
 		super(x,y);
 		this.femelle=femelle;
@@ -87,6 +92,30 @@ abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 
 	public void setaEteTuer(boolean aEteTuer) {
 		this.aEteTuer = aEteTuer;
+	}
+	public Etre bebe(Etre a) {
+
+		if ( a.getClass().equals(this.getClass()) ){
+			
+			//reflection
+			Constructor<? extends Etre> constructeurBebe;
+			try {
+				constructeurBebe = this.getClass().getConstructor(Etre.class , Etre.class);
+				System.out.println(constructeurBebe.toString());
+				Etre bebe;
+				bebe = constructeurBebe.newInstance(this,a);
+				return bebe;
+				
+			} 
+			catch (NoSuchMethodException | SecurityException |InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		else{
+			return null;
+		}
 	}
 	
 }

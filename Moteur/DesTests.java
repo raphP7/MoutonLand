@@ -7,7 +7,7 @@ import Moteur.Terrain.Case;
 import Moteur.Terrain.Terrain;
 
 
-class Start {
+class DesTests {
 	
 	public static void toot(Class<?> b){
 		System.out.println(b.getName());

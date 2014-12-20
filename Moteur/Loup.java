@@ -12,19 +12,14 @@ public class Loup extends Carnivore{
 
 	}
 
+	public Loup(Etre a , Etre b){
+		super(a,b);
+	}
 
 	@Override
 	public void manger() {
 		// TODO Auto-generated method stub
 		
 	}
-
-
-	@Override
-	public Animal bebe(Etre etre) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 }

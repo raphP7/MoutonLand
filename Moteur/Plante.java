@@ -36,12 +36,6 @@ public class Plante extends EtreVivant {
 	}
 
 	@Override
-	public Animal bebe(Etre b) {
-		// TODO Auto-generated method stub
-		return null;
-	} 
-
-	@Override
 	public Etre action(Case[][] map) {
 		this.incrementeToursEnVie();
 		return null;

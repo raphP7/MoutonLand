@@ -10,9 +10,14 @@ public class tets {
 		
 		Moteur a = new Moteur();
 		
-		a.creerAlea("Loup", 10);
-		a.creerAlea("Mouton", 30);
-		a.creerAlea("Plante", 10);
+		Etre m = new Mouton(0,0,true,100,100,100,100,100,100,100);
+		Etre m2 = new Mouton(0,0,true,100,100,100,100,100,100,100);
+		
+		Etre bebe=((EtreVivant)m).bebe(m2);
+		
+		a.creerAlea("Loup", 50);
+		//a.creerAlea("Mouton", 30);
+		//a.creerAlea("Plante", 10);
 		
 		
 		a.leTerrain.afficheShell();

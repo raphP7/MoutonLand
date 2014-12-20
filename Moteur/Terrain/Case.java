@@ -52,8 +52,10 @@ public class Case {
 	}
 
 	public void setPlante(Plante plante) throws Exception {
-		
-		if (this.isObstacle()){
+		if (plante==null){
+			this.plante=null;
+		}
+		else if (this.isObstacle()){
 			this.plante=null;
 			throw new Exception("Impossible de mettre une Plante sur une case obstacle");
 		}
@@ -67,8 +69,11 @@ public class Case {
 	}
 
 	public void setAnimalPresent(Animal animalPresent) throws Exception {
-		if (this.isObstacle()){
-			this.plante=null;
+		if(animalPresent==null){
+			this.animalPresent=null;
+		}
+		else if (this.isObstacle()){
+			this.animalPresent=null;
 			throw new Exception("Impossible de mettre un Animal sur une case obstacle");
 		}
 		else{
