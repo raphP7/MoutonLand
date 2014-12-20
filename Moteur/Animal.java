@@ -225,10 +225,13 @@ public abstract class Animal extends EtreVivant  {
 		
 	}
 
-	private boolean visionAutourDeThisIsSize9(Case[][] visionAutourDeThis) throws Exception{
+	public boolean visionAutourDeThisIsGoodSize(Case[][] visionAutourDeThis,int champDeVision) throws Exception{
 		
-		if(visionAutourDeThis.length!=3 && visionAutourDeThis[0].length!=3){
-			throw new Exception("la fonction visionAutourDeThisIsSize9 n'a pas ete appeler avec un tableau de 9 cases");
+		int tailleVision=new VisionEtDeplacement().calculTailleVision(champDeVision);
+		
+		if(visionAutourDeThis.length!=tailleVision && visionAutourDeThis[0].length!=tailleVision){
+			throw new Exception("la fonction visionAutourDeThisIsGoodSize a ete appeler "
+					+ "avec un tableau de "+tailleVision+" case de coté pour un tableau de "+visionAutourDeThis.length +" case de coté");
 		}
 		else{
 			return true;
@@ -239,7 +242,7 @@ public abstract class Animal extends EtreVivant  {
 		//renvoi la liste des partenairePossible dans le champ de reproduction de this
 		//plus precisement dans les 8cases autour de this
 		
-		if(! visionAutourDeThisIsSize9(visionAutourDeThis)){
+		if(! visionAutourDeThisIsGoodSize(visionAutourDeThis,3)){
 			return null;
 		}
 		
@@ -265,7 +268,7 @@ public abstract class Animal extends EtreVivant  {
 	
 	private List<Point> casesVidesAutourFemelle(Etre femelle,Case[][] visionAutourDeFemelle) throws Exception{
 		
-		if(! visionAutourDeThisIsSize9(visionAutourDeFemelle)){
+		if(! visionAutourDeThisIsGoodSize(visionAutourDeFemelle,1)){
 			return null;
 		}
 		if(	!((EtreVivant)femelle).isFemelle() ){

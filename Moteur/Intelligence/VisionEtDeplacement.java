@@ -4,7 +4,9 @@ import java.awt.Point;
 import java.util.LinkedList;
 
 import Moteur.Animal;
+import Moteur.Carnivore;
 import Moteur.Etre;
+import Moteur.Herbivore;
 import Moteur.Terrain.Case;
 
 public class VisionEtDeplacement {
@@ -164,10 +166,9 @@ public class VisionEtDeplacement {
 		
 	}
 
-	private int calculTailleVision(int champDeVision){
+	public int calculTailleVision(int champDeVision){
 		return 1+champDeVision*2;
 	}
-	
 	
 /**
  * Renvoi un tableau avec la vue de la map depuis la position d'un animal ,
@@ -249,7 +250,7 @@ public class VisionEtDeplacement {
 	private void animalPresent(int x , int y,Case [][] map) throws Exception{
 		
 		if( map[x][y].getAnimalPresent()==null){
-			String s="Attention il n'y a pas d'Animal sur la case ["+x+"] ["+y+"]";
+			String s="Attention il n'y a pas d'Animal sur la case ["+x+"] ["+y+"] impossible de tester ce qu'il peut voir";
 			throw new Exception(s);	
 		}
 		
@@ -260,9 +261,103 @@ public class VisionEtDeplacement {
 		
 		animalPresent(x, y, map);// peut renvoyer une Exception
 		
-		Etre a=map[x][y].getAnimalPresent();
+		Etre animal=map[x][y].getAnimalPresent();
 		
-		Envie[] temp = ((Animal)a).getLesEnvies();
+		//securiter la map est a la bonne taille par rapport au champ de vision de l'animal
+		((Animal)animal).visionAutourDeThisIsGoodSize(map, ((Animal)animal).getChampDeVision());
+		
+		int nbCarnivore=0;
+		int nbHerbivore=0;
+		int nbPlante=0;
+		int nbObstacle=0;
+		int nBcaseOccuperParUnAnimal=0;
+		int nBcaseSansAnimal=0;
+		
+		for (int i =0 ; i<map.length ; i++){
+			for (int j=0 ; j<map[0].length ; j++){
+				
+				if(map[i][j].isObstacle()){
+					nbObstacle++;
+				}
+				else if (map[i][j].isVisible()){
+					
+					if (map[i][j].getAnimalPresent()!=null){
+						if(map[i][j].getAnimalPresent() instanceof Carnivore){
+							nbCarnivore++;
+							nBcaseOccuperParUnAnimal++;
+						}
+						else if(map[i][j].getAnimalPresent() instanceof Herbivore){
+							nbHerbivore++;
+							nBcaseOccuperParUnAnimal++;
+						}
+					}
+					if(map[i][j].getPlante()!=null){
+						nbPlante++;
+					}
+					
+					nBcaseSansAnimal++;
+					
+				}
+				else{
+					// la case n'est pas visible !!
+				}
+			}
+		}
+		
+		Envie[] temp = ((Animal)animal).getLesEnvies();
+		
+		
+		for (int i=0; i<temp.length ; i++){
+				
+				if (temp[i].getEmotion().getClass().equals(Emotion.PEUR.getClass())){
+					
+					if (animal instanceof Carnivore){
+						
+						if (nbCarnivore*5>nbHerbivore){
+							//peur a 0
+							temp[i].setValeur(0);
+						}
+						else{// un carnivor est apeurer seulement a partir de 5 herbivor
+							//le ratio de carnivore/herbivore multiplier par un ratio 200 de courage pour le carnivore
+							// le resultat est un pourcentage 
+							temp[i].setValeur(100 - ((nbCarnivore/nbHerbivore)*200 ) );
+						}
+					}
+					else{
+						if (nbCarnivore>1){							
+							temp[i].setValeur(nbCarnivore*50);
+						}
+						else{
+							// l'herbivore ne voit pas de Carnivore a ce tour sa peur diminu de 10%
+							temp[i].setValeur(temp[i].getValeur()-10);
+						}
+					}
+				}
+				else if (temp[i].getEmotion().getClass().equals(Emotion.FAIM.getClass())){
+					
+					if (animal instanceof Carnivore){
+						if(nbHerbivore>1){
+							// voir un herbivore donne l'apetit a un carnivore
+							temp[i].setValeur(temp[i].getValeur()+5);
+						}
+					}
+					else{
+						if(nbPlante>1){
+							// voir une plante donne l'apetit a un mouton
+							temp[i].setValeur(temp[i].getValeur()+5);
+						}
+					}
+				}
+				else if (temp[i].getEmotion().getClass().equals(Emotion.DECPLACEMENT.getClass())){
+					
+				int ratioCaseVide = (nBcaseOccuperParUnAnimal/nBcaseSansAnimal)*100;
+				// si au moin 50% des cases autour de l'animal sont libre sa augmente de 5% sont envie de se deplacer pour le plaisir
+				
+					if(ratioCaseVide<50){
+						temp[i].setValeur(temp[i].getValeur() +5);
+					}
+			}
+		}
 		
 		return temp;
 		
