@@ -1,5 +1,7 @@
 package Moteur;
 
+import java.awt.Point;
+
 public abstract class Etre {
 	
 
@@ -11,8 +13,9 @@ public abstract class Etre {
 		this.positionY=y;
 	}
 	
-	public Etre(Etre a , Etre b){
-		
+	public Etre(Point position){
+		this.positionX=position.x;
+		this.positionY=position.y;
 	}
 
 }

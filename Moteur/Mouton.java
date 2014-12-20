@@ -1,4 +1,7 @@
 package Moteur;
+
+import java.awt.Point;
+
 public class Mouton extends Herbivore {
 	
 	public Mouton(int x, int y, boolean femelle, int esperenceDeVie,
@@ -7,8 +10,8 @@ public class Mouton extends Herbivore {
 		super(x, y, femelle, esperenceDeVie, nbToursPourDevenirPuber, maxReproduction,
 				esperenceSansManger, champDeVision, force, vitesse);
 	}
-	public Mouton(Etre a, Etre b){
-		super(a,b);
+	public Mouton(Etre a, Etre b, Point position){
+		super(a,b,position);
 	}
 	public void manger() {
 		// TODO Auto-generated method stub

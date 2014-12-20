@@ -1,5 +1,6 @@
 package Moteur;
 
+import java.awt.Point;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -20,8 +21,8 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	
 	private boolean aEteTuer;
 	
-	public EtreVivant(Etre a , Etre b){
-		super(a,b);
+	public EtreVivant(Etre a , Etre b, Point position){
+		super(position);
 	}
 	public EtreVivant(int x , int y ,boolean femelle , int esperenceDeVie , int nbToursPourDevenirPuber, int  maxReproduction , int esperenceSansManger, int champDeVision){
 		super(x,y);
@@ -93,17 +94,19 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	public void setaEteTuer(boolean aEteTuer) {
 		this.aEteTuer = aEteTuer;
 	}
-	public Etre bebe(Etre a) {
+	
+	
+	public Etre bebe(Etre a,Point positionBebe) {
 
 		if ( a.getClass().equals(this.getClass()) ){
 			
 			//reflection
 			Constructor<? extends Etre> constructeurBebe;
 			try {
-				constructeurBebe = this.getClass().getConstructor(Etre.class , Etre.class);
+				constructeurBebe = this.getClass().getConstructor(Etre.class ,Etre.class,Point.class);
 				System.out.println(constructeurBebe.toString());
 				Etre bebe;
-				bebe = constructeurBebe.newInstance(this,a);
+				bebe = constructeurBebe.newInstance(this,a,positionBebe);
 				return bebe;
 				
 			} 

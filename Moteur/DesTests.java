@@ -10,10 +10,8 @@ import Moteur.Terrain.Terrain;
 class DesTests {
 	
 	public static void toot(Class<?> b){
-		System.out.println(b.getName());
-		
+		System.out.println(b.getName());		
 		System.out.println(b.toString().contains("Animal"));
-		
 		
 	}
 	public static void main(String[] args) {
@@ -61,9 +59,6 @@ class DesTests {
 		terrain.map[5][4].setObstacle(true);
 		terrain.map[7][7].setObstacle(true);
 		terrain.map[5][2].setObstacle(true);
-		
-		
-		
 		
 			Case[][] tab=un.miseAjourVision(terrain.map);
 			

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import Moteur.Intelligence.Emotion;
 import Moteur.Intelligence.Envie;
 import Moteur.Intelligence.FileDeSouvenirs;
@@ -20,10 +19,9 @@ public abstract class Animal extends EtreVivant  {
 	Case[][] visionActuel;
 	
 	private Envie [] lesEnvies;// voir enum Emotion
-	
-	
-	public Envie[] getLesEnvies() {
-		return lesEnvies;
+
+	public Animal(Etre a, Etre b,Point position) {
+		super(a,b, position);
 	}
 	
 	public Animal(int x, int y, boolean femelle, int esperenceDeVie,
@@ -52,14 +50,14 @@ public abstract class Animal extends EtreVivant  {
 			i++;
 		}
 		//initialisation de la file de souvenir avec la position actuel
-		this.mouvements=new FileDeSouvenirs(10, x , y , visionActuel) {
-		};
+		this.mouvements=new FileDeSouvenirs(10, x , y , visionActuel);
 		
 		this.setaEteTuer(false);
 		
 	}
-	public Animal(Etre a, Etre b) {
-		super(a,b);
+	
+	public Envie[] getLesEnvies() {
+		return lesEnvies;
 	}
 
 	public void actualiserVariables(){
@@ -87,6 +85,7 @@ public abstract class Animal extends EtreVivant  {
 		return false;
 		
 	}
+	
 	public Etre action(Case [][] map) throws Exception{
 		
 		this.actualiserVariables();
@@ -163,68 +162,131 @@ public abstract class Animal extends EtreVivant  {
 			//placer le bebe sur la map
 			//return le bebe pour le rajouter a la liste des etres dans le moteur
 			
-			List<Etre> partenairesPossible = new ArrayList<Etre>();
-			List<Point> caseVideAutourFemelle = new ArrayList<Point>();
-			
 			Case[][] tmp=new VisionEtDeplacement().miseAjourVision(new Point(this.positionX,this.positionY),1,map);
-
 			
-			for(int i=0 ; i<tmp.length;i++){
-				for(int j=0 ; i<tmp[0].length;j++){
-					if (tmp[i][j].getAnimalPresent()==this){}
-					else if (tmp[i][j].getAnimalPresent() !=null){
-						if (this.reproductionPossible(tmp[i][j].getAnimalPresent())){
-							partenairesPossible.add(tmp[i][j].getAnimalPresent());
-							
-						}
-					}
-					else{
-						if (this.isFemelle()){
-							caseVideAutourFemelle.add(new Point(i,j));// ATTENTION METTRE LES VRAI I J DE la MAP !!
-						}
-					}
-				}
+			List<Etre> partenairesPossible = this.partenairePossible(tmp);
+			
+			if (partenairesPossible.isEmpty()){
+				//aucun partenaire donc pas de bebe
+				return null;
 			}
 			
 			Collections.shuffle(partenairesPossible);
-			Collections.shuffle(caseVideAutourFemelle);
+			
+			List<Point> caseVideAutourFemelle=new ArrayList<Point>();
+			
+			Etre partenaireChoisi=null;
 			
 			for(int i=0 ; i<partenairesPossible.size() ; i++){
 				
-				if (partenairesPossible.get(i) !=null){
-
-					if(this.isFemelle()){
+				Etre PartenaireATester=partenairesPossible.get(i);
+				
+				if (PartenaireATester!=null){
+		
+					if(this.isFemelle() && partenaireChoisi==null){
 						
-						if(!caseVideAutourFemelle.isEmpty()){
-							Etre bebe=this.bebe(partenairesPossible.get(i));
-							map[caseVideAutourFemelle.get(0).x][caseVideAutourFemelle.get(0).y].setAnimalPresent((Animal)bebe);
-							((EtreVivant)partenairesPossible.get(i)).nombreDeReproduction++;
-							((EtreVivant)this).nombreDeReproduction++;
+						caseVideAutourFemelle= casesVidesAutourFemelle(this,tmp);
+						
+						if ( ! caseVideAutourFemelle.isEmpty()){
+							partenaireChoisi=PartenaireATester;
+						}
+						break;
+					}
+					else if (partenaireChoisi==null){
+						
+						caseVideAutourFemelle= casesVidesAutourFemelle(PartenaireATester,tmp);
+						
+						if ( ! caseVideAutourFemelle.isEmpty()){
+							partenaireChoisi=partenairesPossible.get(i);
 							break;
 						}
-						
 					}
-					else{
+				
+				}
+			}
+			
+			if(partenaireChoisi!=null){
+				Collections.shuffle(caseVideAutourFemelle);
+				
+				Point coordonnesBebe=new Point(caseVideAutourFemelle.get(0).x,caseVideAutourFemelle.get(0).y);
+				
+				Etre bebe=this.bebe(partenaireChoisi,coordonnesBebe);
+				
+				map[bebe.positionX][bebe.positionY].setAnimalPresent((Animal)bebe);
+				
+				((EtreVivant)partenaireChoisi).nombreDeReproduction++;
+				((EtreVivant)this).nombreDeReproduction++;
+				
+				return bebe;
+			}
+		}//fermeture du switch
+		
+		return null;
+		
+	}
+
+	private boolean visionAutourDeThisIsSize9(Case[][] visionAutourDeThis) throws Exception{
+		
+		if(visionAutourDeThis.length!=3 && visionAutourDeThis[0].length!=3){
+			throw new Exception("la fonction visionAutourDeThisIsSize9 n'a pas ete appeler avec un tableau de 9 cases");
+		}
+		else{
+			return true;
+		}
+	}
+	
+	private List<Etre> partenairePossible(Case[][] visionAutourDeThis) throws Exception{
+		//renvoi la liste des partenairePossible dans le champ de reproduction de this
+		//plus precisement dans les 8cases autour de this
+		
+		if(! visionAutourDeThisIsSize9(visionAutourDeThis)){
+			return null;
+		}
+		
+		List<Etre> partenairesPossible = new ArrayList<Etre>();
+		
+		
+		for(int i=0 ; i<visionAutourDeThis.length;i++){
+			for(int j=0 ; i<visionAutourDeThis[0].length;j++){
+				if (visionAutourDeThis[i][j].getAnimalPresent()==this){
+					
+				}
+				else if (visionAutourDeThis[i][j].getAnimalPresent() !=null){
+					if (this.reproductionPossible(visionAutourDeThis[i][j].getAnimalPresent())){
+						partenairesPossible.add(visionAutourDeThis[i][j].getAnimalPresent());
 						
 					}
 				}
 			}
-			
-			break;
-		
-			
 		}
 		
-		Etre plantePresent =map[arriver.x][arriver.y].getPlante();
-		if (plantePresent != null ){
-			if (this instanceof Herbivore){
+		return partenairesPossible;
+	}
+	
+	private List<Point> casesVidesAutourFemelle(Etre femelle,Case[][] visionAutourDeFemelle) throws Exception{
+		
+		if(! visionAutourDeThisIsSize9(visionAutourDeFemelle)){
+			return null;
+		}
+		if(	!((EtreVivant)femelle).isFemelle() ){
+			throw new Exception("Erreur la fonction casesVidesAutourFemelle a ete appeler avec un Male");
+		}
+		
+		List<Point> listeCaseVidePourBebe = new ArrayList<Point>();
+		
+		for(int i=0 ; i<visionAutourDeFemelle.length;i++){
+			for(int j=0 ; i<visionAutourDeFemelle[0].length;j++){
 				
-				((Plante) plantePresent).decrementerValeur();
-				this.manger();
+				Case tmp=visionAutourDeFemelle[i][j];
 				
+				if(tmp.isObstacle() && tmp.getAnimalPresent()==null && !(tmp.getAnimalPresent()==this) ){
+					listeCaseVidePourBebe.add(new Point(i,j));// IL FAUT RECUPERER LES VRAI VALEUR DE LA MAP PAR RAPPORT A 
+				}
+		
+		
 			}
+	
 		}
-		
-		return null;
+		return listeCaseVidePourBebe;
 	}
 }

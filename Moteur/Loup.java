@@ -1,5 +1,7 @@
 package Moteur;
 
+import java.awt.Point;
+
 public class Loup extends Carnivore{
 
 
@@ -12,8 +14,8 @@ public class Loup extends Carnivore{
 
 	}
 
-	public Loup(Etre a , Etre b){
-		super(a,b);
+	public Loup(Etre a , Etre b, Point position){
+		super(a,b,position);
 	}
 
 	@Override

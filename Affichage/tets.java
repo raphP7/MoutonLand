@@ -1,6 +1,8 @@
 package Affichage;
 
 
+import java.awt.Point;
+
 import Moteur.*;
 import Moteur.Terrain.Case;
 
@@ -13,9 +15,10 @@ public class tets {
 		Etre m = new Mouton(0,0,true,100,100,100,100,100,100,100);
 		Etre m2 = new Mouton(0,0,true,100,100,100,100,100,100,100);
 		
-		Etre bebe=((EtreVivant)m).bebe(m2);
+		Etre bebe=((EtreVivant)m).bebe(m2,new Point(0,0));
 		
-		a.creerAlea("Loup", 50);
+		
+		a.creerAlea("Loup", 1);
 		//a.creerAlea("Mouton", 30);
 		//a.creerAlea("Plante", 10);
 		

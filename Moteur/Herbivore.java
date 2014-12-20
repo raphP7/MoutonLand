@@ -1,5 +1,7 @@
 package Moteur;
 
+import java.awt.Point;
+
 public abstract class Herbivore extends Animal{
 
 	public Herbivore(int x, int y, boolean femelle, int esperenceDeVie,
@@ -9,8 +11,8 @@ public abstract class Herbivore extends Animal{
 				esperenceSansManger, champDeVision, force, vitesse);
 	}
 
-	public Herbivore(Etre a, Etre b) {
-		super(a,b);
+	public Herbivore(Etre a, Etre b, Point position) {
+		super(a,b,position);
 	}
 
 }

@@ -1,5 +1,7 @@
 package Moteur;
 
+import java.awt.Point;
+
 public abstract class Carnivore extends Animal{
 
 	public Carnivore(int x, int y, boolean femelle, int esperenceDeVie,
@@ -9,7 +11,7 @@ public abstract class Carnivore extends Animal{
 				esperenceSansManger, champDeVision, force, vitesse);
 	}
 
-	public Carnivore(Etre a, Etre b) {
-		super(a,b);
+	public Carnivore(Etre a, Etre b, Point position) {
+		super(a,b,position);
 	}
 }
