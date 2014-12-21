@@ -9,7 +9,7 @@ import Moteur.Terrain.Terrain;
 
 public class Moteur {
 	public int vitesse;
-	private int esperenceDeVieMoyenne=100; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
+	private int esperenceDeVieMoyenne=500000; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
 	private int puberte=20; // pourcentage entre 0 et 30 de l'esperenceDeVieMoyenne
 	private int maxReproduction=3;
 	public Terrain leTerrain;
@@ -136,7 +136,7 @@ public class Moteur {
 						definirEsperanceVie=(this.esperenceDeVieMoyenne*20/100)+this.esperenceDeVieMoyenne;
 						definirPuberter=(definirEsperanceVie*this.puberte/100);
 						
-						Etre a =new Loup(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,3,3,2);
+						Etre a =new Loup(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,500000,3,3,2);
 						
 						temp.add(a);
 					}

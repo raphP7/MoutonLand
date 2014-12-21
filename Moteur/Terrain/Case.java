@@ -6,6 +6,7 @@ import Moteur.Plante;
 
 public class Case {
 
+	private boolean modif;
 	private Plante plante;
 	
 	//protected EtreMort nourriture;
@@ -21,10 +22,12 @@ public class Case {
 	public Case(){
 		this.obstacle=false;
 		this.setVisible(true);
+		this.modif=false;
 	}
 	
 	public Case(boolean a) throws Exception{
 		this.setObstacle(true);
+		this.modif=false;
 	}
 
 	public boolean isObstacle() {
@@ -45,6 +48,7 @@ public class Case {
 	}
 
 	public void setVisible(boolean accessible) {
+		this.modif=true;
 		this.visible = accessible;
 		if (accessible){this.obstacle=false;}
 	}
@@ -82,6 +86,14 @@ public class Case {
 		else{
 		this.animalPresent = animalPresent;
 		}
+	}
+
+	public boolean isModif() {
+		return modif;
+	}
+
+	public void setModif(boolean modif) {
+		this.modif = modif;
 	}
 
 }

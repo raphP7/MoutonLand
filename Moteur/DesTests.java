@@ -15,7 +15,7 @@ class DesTests {
 		
 	}
 	public static void main(String[] args) {
-		
+	
 		List<Etre> listAjout =new ArrayList<Etre>();
 		Etre aa =new Plante(0,0,false,100,100,100,1000,10);
 		Etre aaa =new Mouton(0,0,false,100,100,100,1000, 0, 0, 0);
