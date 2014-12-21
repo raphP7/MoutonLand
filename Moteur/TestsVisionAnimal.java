@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Moteur.Intelligence.VisionEtDeplacement;
-import Moteur.Terrain.Case;
 import Moteur.Terrain.Terrain;
 
 
-class DesTests {
+class TestsVisionAnimal {
 	
 	public static void toot(Class<?> b){
 		System.out.println(b.getName());		
@@ -50,14 +49,16 @@ class DesTests {
 		
 		
 		Animal un = new Mouton(5,5, false, 0, 0, 0, 0, 3, 0, 0);
+		un.setChampDeVision(10);
 		//un.manger();
 		
-		Terrain terrain = new Terrain(10,10);
+		Terrain terrain = new Terrain(11,10);
 		
-		terrain.map[6][6].setAnimalPresent(un);
-		/*
-		terrain.map[2][2].setVisible(false);
-		terrain.map[6][5].setVisible(false);
+		terrain.map[5][5].setAnimalPresent(un);
+		
+		terrain.map[1][0].setObstacle(true);
+		terrain.map[6][4].setObstacle(true);
+		 
 		terrain.map[7][2].setObstacle(true);
 		terrain.map[6][5].setObstacle(true);
 		terrain.map[5][4].setObstacle(true);
@@ -65,43 +66,15 @@ class DesTests {
 		terrain.map[7][7].setObstacle(true);
 		terrain.map[6][7].setObstacle(true);
 		
-		
-		
 		terrain.map[7][6].setObstacle(true);
 		terrain.map[5][2].setObstacle(true);
-		*/
+		
 		terrain.map[7][5].setObstacle(true);
 		
-		
 		terrain.afficheShell();
-			Case[][] tab=new VisionEtDeplacement().miseAjourVision(new Point(((Animal)un).positionX,((Animal)un).positionY),((Animal)un).getChampDeVision(),terrain.map);
+		terrain.map=new VisionEtDeplacement().miseAjourVision(new Point(((Animal)un).positionX,((Animal)un).positionY),((Animal)un).getChampDeVision(),terrain.map);
 			
-			for (int i =0; i<tab.length ; i++){
-				
-				System.out.println();
-				for( int j=0 ; j<tab[0].length; j++){
-
-					
-					if(!tab[i][j].isObstacle()){ // pas obstacle
-						
-						if (i==tab.length/2 && j==tab[0].length/2){
-							System.out.print(" x");	 // centre
-						}
-						
-						else if (!tab[i][j].isVisible()){
-							System.out.print(" I"); // pas visible
-						}
-						
-						else{
-						System.out.print(" ."); // accessible et visible
-						}
-						
-					}
-					else{
-						System.out.print(" O");// obstacle (pas accessible , pas visible)
-					}
-				}
-			}
+		terrain.afficheVisionShell();
 			
 		}
 }

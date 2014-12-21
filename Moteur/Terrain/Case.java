@@ -53,7 +53,6 @@ public class Case {
 		if (accessible){this.obstacle=false;}
 	}
 
-
 	public Plante getPlante() {
 		return plante;
 	}

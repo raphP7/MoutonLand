@@ -26,6 +26,7 @@ public class FileDeSouvenirs {
 		this.setTaille(taille);
 		this.ajouter(x,y,visionSouvenir);
 	}
+	
 	void ajouter(int x , int y ,Case[][] visionSouvenir){
 		
 		Emplacement tmp=this.tete;
@@ -34,9 +35,11 @@ public class FileDeSouvenirs {
 		
 		boolean parcour=true;
 		Emplacement iter=this.getTete();
+		
 		int i=1;
 		
 		while(parcour){
+			
 			if (i==taille){
 				if (iter.suivant!=null){
 				iter.suivant=null;
@@ -53,9 +56,11 @@ public class FileDeSouvenirs {
 		}
 		
 	}
+	
 	public Emplacement creerEmplacement( int x , int y ,Case[][] visionSouvenir){
 		return new Emplacement(x,y,visionSouvenir);
 	}
+	
 	public int getTaille() {
 		return taille;
 	}

@@ -9,6 +9,7 @@ public class Envie implements Comparable<Envie>{
 	public Envie(){
 		
 	}
+	
 	public Envie(Emotion emotion, int val){
 		this.setEmotion(emotion);
 		this.setValeur(val);
@@ -39,12 +40,7 @@ public class Envie implements Comparable<Envie>{
 	public void trierEnvies(Envie[] lesEnvies){
 		
 		Arrays.sort(lesEnvies);
-		/*
-		for (int i=0 ; i<lesEnvies.length ; i++){
-			
-			System.out.println(lesEnvies[i].valeur);
-		}
-		*/
+		
 	}
 
 	@Override

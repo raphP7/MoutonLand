@@ -1,7 +1,6 @@
 package Affichage;
 
 import Moteur.*;
-import Moteur.Terrain.Case;
 
 public class tets {
 
@@ -31,8 +30,8 @@ public class tets {
 		System.out.println();
 		
 		
-		Etre m = new Mouton(0,0,true,100,100,100,100,100,100,100);
-		Etre m2 = new Mouton(0,0,true,100,100,100,100,100,100,100);
+		//Etre m = new Mouton(0,0,true,100,100,100,100,100,100,100);
+		//Etre m2 = new Mouton(0,0,true,100,100,100,100,100,100,100);
 		
 		//Etre bebe=((EtreVivant)m).bebe(m2,new Point(0,0));
 		

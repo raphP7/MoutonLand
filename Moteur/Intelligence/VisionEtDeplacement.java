@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 import Moteur.Animal;
 import Moteur.Carnivore;
 import Moteur.Etre;
@@ -19,13 +18,25 @@ public class VisionEtDeplacement {
 	public VisionEtDeplacement() {
 		
 	}
+	
 	public VisionEtDeplacement(Emotion emotion) {
 		this.emotionChoisiPourLeDeplacement=emotion;
 	}
 	
-	private Case[][] champObstacle( Case [][] cases,int champDeVision) throws Exception{
+	/**
+	 * 
+	 * Calcul les champs d'obstacle de la vision de l'animal
+	 * modifie le tableau "cases"
+	 * 
+	 * @author Raphael Auvert
+	 * @param cases tableau stockant la vue actuel de l'animal
+	 * @param champDeVision La taille du champs de vision de l'animal , 1 = les 8 cases autour de lui , 2=les 25 cases autour de lui
+	 * @throws	Erreur si une case avec obstacle essaye de stocker un animal ou une plante
+	 */	
+	private void champObstacle( Case [][] cases,int champDeVision) throws Exception{
 		List<Point> coordonnesCasesEncoreVisible = new ArrayList<Point>();
 		
+		// litage de toutes les cases visibles de la vue de l'animal
 		for (int i =0; i<cases.length ; i++ ){
 			for (int j =0; j<cases[0].length ; j++){
 				if(cases[i][j].isVisible()){
@@ -33,23 +44,27 @@ public class VisionEtDeplacement {
 				}
 			}
 		}
-		Terrain affichage=new Terrain(1, 1);
-		affichage.map=cases;
-		affichage.afficheShell();
-		
+		//Verification de chaque case visible si pas entoure d'obstacle 
+		//et donc devenu invisible en realite
 		for(Point a : coordonnesCasesEncoreVisible){
-			
 			if(!backtrak(champDeVision, champDeVision, a, cases)){
 				cases[a.x][a.y].setVisible(false);
 			}
-			
 		}
-		affichage.map=cases;
-		affichage.afficheShell();
-		return cases;
 	}
 
-	public boolean backtrak(int x , int y , Point arriver,Case [][] cases){
+	/**
+	 * Calcul si la case visible "arriver" est reelement visible depuis la position x et y de l'annimal
+	 * 
+	 * @author Raphael Auvert
+	 * 
+	 * @param x Position x de l'animal
+	 * @param y Position y de l'animal
+	 * @param arriver Point stockant les coordonnes x et y de la case visible
+	 * @return true si la case est vraiment visible ou false si elle est entouré d'obstacles
+	 * 
+	 */	
+	private boolean backtrak(int x , int y , Point arriver,Case [][] cases){
 		if(arriver.x==x && arriver.y==y){
 			return true;
 		}
@@ -100,8 +115,6 @@ public class VisionEtDeplacement {
 		return false;
 	}
 
-		
-	
 	private Case[][] ligneObstacle( int x ,int  y, Case [][] visionActuel, int TaillechampsDeVision){
 		
 		int centre = TaillechampsDeVision;
@@ -185,19 +198,19 @@ public class VisionEtDeplacement {
 	public int calculTailleVision(int champDeVision){
 		return 1+champDeVision*2;
 	}
-	
-/**
- * Renvoi un tableau avec la vue de la map depuis la position d'un animal ,
- * prend en compte le champ de vision de l'animal et le fait qu'il ne puisse voir a travers un obstacle
- * 
- * @author Raphael Auvert
- * 
- * @param positionAnimal Un Point avec les coordonnes x et y de l'animal sur la map
- * @param champDeVision La taille du champs de vision de l'animal , 1 = les 8 cases autour de lui , 2=les 25 cases autour de lui
- * @param map Le tableau a deux dimension representant la map de la simulation
- * @return la carte de la vision de l'animal
- * @throws	Erreur si une case avec obstacle essaye de stocker un animal ou une plante
- */	
+
+	/**
+	 * Renvoi un tableau avec la vue de la map depuis la position d'un animal ,
+	 * prend en compte le champ de vision de l'animal et le fait qu'il ne puisse voir a travers un obstacle
+	 * 
+	 * @author Raphael Auvert
+	 * 
+	 * @param positionAnimal Un Point avec les coordonnes x et y de l'animal sur la map
+	 * @param champDeVision La taille du champs de vision de l'animal , 1 = les 8 cases autour de lui , 2=les 25 cases autour de lui
+	 * @param map Le tableau a deux dimension representant la map de la simulation
+	 * @return la carte de la vision de l'animal
+	 * @throws	Erreur si une case avec obstacle essaye de stocker un animal ou une plante
+	 */	
 	public  Case[][] miseAjourVision(Point positionAnimal,int champDeVision ,Case [][] map) throws Exception{
 		
 		int taille=calculTailleVision(champDeVision);
@@ -251,16 +264,15 @@ public class VisionEtDeplacement {
 					
 				}
 			}
-
-			Terrain a =new Terrain(10,10);
-			a.map=visionActuel;
-			System.out.println("avant les champs ");
-			a.afficheShell();
 		parcour++;
 		}
 		
+		champObstacle(visionActuel,champDeVision);
 		
-		visionActuel=champObstacle(visionActuel,champDeVision);
+		Terrain temp=new Terrain(10,10);
+		temp.map=visionActuel;
+		System.out.println("Vision de l'animal");
+		temp.afficheVisionShell();
 		
 	return visionActuel;
 
@@ -285,7 +297,7 @@ public class VisionEtDeplacement {
 		
 		Etre animal=map[x][y].getAnimalPresent();
 		
-		//securiter la map est a la bonne taille par rapport au champ de vision de l'animal
+		//securiter : la map est a la bonne taille par rapport au champ de vision de l'animal
 		((Animal)animal).visionAutourDeThisIsGoodSize(map, ((Animal)animal).getChampDeVision());
 		
 		int nbCarnivore=0;

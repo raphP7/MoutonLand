@@ -265,6 +265,7 @@ public class Terrain {
 		return pareil;
 		
 	}
+	
 	public List<Etre> ajouterEtreALeatoire(List<Etre> listAjout) throws Exception{
 		
 		if(! ListSansDefauts(listAjout)){
@@ -322,6 +323,7 @@ public class Terrain {
 		}
 		return lesEtrePlacer;
 	}
+	
 	public void supprimer(List<Etre> listAsupprimer) throws Exception{
 		
 		boolean trouver;
@@ -373,9 +375,40 @@ public class Terrain {
 		this.caseVide = caseVide;
 	}
 	
+	public void afficheVisionShell(){
+		
+		System.out.println("\n");
+		for (int i =0; i<map.length ; i++){
+			
+			System.out.println();
+			for( int j=0 ; j<map[0].length; j++){
+
+				
+				if(!map[i][j].isObstacle()){ // pas obstacle
+					
+					if (i==map.length/2 && j==map[0].length/2){
+						System.out.print(" x");	 // centre
+					}
+					
+					else if (!map[i][j].isVisible()){
+						System.out.print(" I"); // pas visible
+					}
+					
+					else{
+					System.out.print(" ."); // accessible et visible
+					}
+					
+				}
+				else{
+					System.out.print(" O");// obstacle (pas accessible , pas visible)
+				}
+			}
+		}
+		System.out.println("\n");
+	}
+	
 	public void afficheShell(){
-		System.out.println();
-		System.out.println();
+		System.out.println("\n");
 		System.out.print("/");
 		for(int i=0 ; i<map[0].length; i++){
 			System.out.print("——");
@@ -387,8 +420,6 @@ public class Terrain {
 				for( int j=0 ; j<map[0].length; j++){
 					if(j==0){System.out.print("|");}
 					if(!map[i][j].isObstacle()){ // pas obstacle
-
-						
 						if (!(map[i][j].getAnimalPresent()==null)){
 							
 							if (map[i][j].getAnimalPresent() instanceof Mouton){
@@ -418,7 +449,7 @@ public class Terrain {
 						}
 						
 					}
-					else if(map[i][j].isVisible()){
+					else if(map[i][j].isVisible() && !map[i][j].isObstacle()){
 						
 						System.out.print(" °");// obstacle (pas accessible , pas visible)
 					}
@@ -434,5 +465,6 @@ public class Terrain {
 			System.out.print("——");
 		}
 		System.out.print(" /");
+		System.out.println("\n");
 	}
 }
