@@ -22,6 +22,10 @@ public class Case {
 		this.obstacle=false;
 		this.setVisible(true);
 	}
+	
+	public Case(boolean a) throws Exception{
+		this.setObstacle(true);
+	}
 
 	public boolean isObstacle() {
 		return obstacle;
@@ -41,7 +45,6 @@ public class Case {
 	}
 
 	public void setVisible(boolean accessible) {
-		
 		this.visible = accessible;
 		if (accessible){this.obstacle=false;}
 	}

@@ -18,7 +18,6 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	private int esperenceSansManger;
 	protected int toursSansManger;
 	private int champDeVision=5;
-	
 	private boolean aEteTuer;
 	
 	public EtreVivant(Etre a , Etre b, Point position){
@@ -33,10 +32,11 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 		this.esperenceSansManger=esperenceSansManger;
 		this.champDeVision=champDeVision;
 		//this.bloqueChangement=true;
+		this.aEteTuer=false;
 	}
 	
 	public boolean toujourEnVie(){
-		return this.toursEnVie<this.esperenceDeVie || this.toursSansManger<this.esperenceSansManger ;//|| mort;
+		return this.toursEnVie<this.esperenceDeVie && this.toursSansManger<this.esperenceSansManger && !aEteTuer;
 	}
 	public abstract void manger();
 	

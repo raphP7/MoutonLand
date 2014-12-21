@@ -12,7 +12,7 @@ public class Moteur {
 	private int esperenceDeVieMoyenne=100; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
 	private int puberte=20; // pourcentage entre 0 et 30 de l'esperenceDeVieMoyenne
 	private int maxReproduction=3;
-	public Terrain leTerrain=new Terrain(10,10);
+	public Terrain leTerrain;
 	public List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
 	public List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
 	private List<Etre> lesEtres;
@@ -47,7 +47,8 @@ public class Moteur {
 			this.puberte = puberte;
 		}
 	}
-	public Moteur(){
+	public Moteur(int x,int y,int obstacles) throws Exception{
+		this.leTerrain=new Terrain(x,y,obstacles);
 		this.lesEtres=new ArrayList<Etre>();
 		this.lesnouveauxVivans= new ArrayList<Etre>();
 		this.etreMortDecomposer=new ArrayList<Etre>();
@@ -116,11 +117,9 @@ public class Moteur {
 						
 						definirEsperanceVie=this.esperenceDeVieMoyenne*20/100;
 						definirPuberter=(definirEsperanceVie*this.puberte/100);
+						definirEsperanceVie=10;// POUR TEST
 						
-						
-						definirEsperanceVie=10000;// POUR TEST
-						
-						Etre a =new Plante(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,30);
+						Etre a =new Plante(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,10);
 						temp.add(a);
 						
 					/*	Etre.class.asSubclass(Mouton.class).getConstructor(Integer.class,Integer.class,Boolean.class,
@@ -137,7 +136,7 @@ public class Moteur {
 						definirEsperanceVie=(this.esperenceDeVieMoyenne*20/100)+this.esperenceDeVieMoyenne;
 						definirPuberter=(definirEsperanceVie*this.puberte/100);
 						
-						Etre a =new Loup(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,4,3,2);
+						Etre a =new Loup(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,3,3,2);
 						
 						temp.add(a);
 					}
@@ -176,7 +175,6 @@ public class Moteur {
 				else if (a instanceof EtreVivant){
 					
 					if(((FonctionsDeBaseVivant)a).isMort()){
-						
 						if (a instanceof Animal){
 							this.leTerrain.map[a.positionX][a.positionY].setAnimalPresent(null);
 						}
@@ -226,7 +224,11 @@ public class Moteur {
 			lesnouveauxVivans.clear();
 	}
 
-	private void ajouter(List<Etre> aAjouter){
+	private void ajouter(List<Etre> aAjouter) throws Exception{
+		
+		if (aAjouter==null || aAjouter.isEmpty()){
+			throw new Exception("liste vide");
+		}
 		
 		for (Etre c : aAjouter){// ajoute les nouveaux Etre a la liste lesEtres
 			lesEtres.add(c);

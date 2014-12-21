@@ -2,7 +2,9 @@ package Moteur.Terrain;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import Moteur.Animal;
 import Moteur.Etre;
@@ -30,30 +32,182 @@ public class Terrain {
 	}
 	
 	public Terrain(int x , int y , int obstacles) throws Exception{
-		this(x,y);
+		this.x=x;
+		this.y=y;
+		this.map= new Case[x][y];
+		boolean a=false;
+		for (int i =0 ; i<map.length ; i++){
+			for (int j=0 ; j<map[0].length ; j++){
+				if (obstacles>0){
+					map[i][j]=new Case(a);
+				}
+				else{
+					map[i][j]=new Case();
+				}
+				
+			}
+		}
 		
-	}
+		if (obstacles>=x*y){
+			obstacles=x*y;
+			return;
+		}
+		
+		if (obstacles>0){
+			
+			Random rand = new Random();
+			
+			//pour partir d'environ le centre
+			int nombreAleatoireX = rand.nextInt(1)+x/2;
+			int nombreAleatoireY = rand.nextInt(1)+y/2;
+			
+			map[nombreAleatoireX][nombreAleatoireY].setVisible(true);
+			
+			//Point debut =new Point(nombreAleatoireX,nombreAleatoireY);
+			
+			//LinkedList<Point> listePointAccessible=new LinkedList<Point>();
+			//listePointAccessible.add(debut);
+			//LinkedList<Point> listePointEntourerAccessible=new LinkedList<Point>();
+			
+			int caseVide = (x*y)-obstacles;
+			caseVide--;
+			System.out.println("case a trouver "+caseVide);
+			boolean uneCaseTrouver;
+			int casesTrouver=0;
+			while(caseVide>0){
+				
+				int Xalea = rand.nextInt(x+1);
+				
+				int Yalea = rand.nextInt(y+1);
 	
-	public List<Etre> ajouterEtreALeatoire(List<Etre> listAjout) throws Exception{
+				uneCaseTrouver=false;
+				
+				for(int i=Xalea-1 ; i<Xalea+1 ; i++){
+					
+					if(uneCaseTrouver){
+						break;
+					}
+					
+					for(int j=Yalea-1 ; j<Yalea+1 ; j++){
+						
+						
+						if (!((i==Xalea) && (y==Yalea))){
+							
+							if ((i-1<0 || j-1<0 || i+1>=x || j+1>=y)){//test hors limite
+								
+							}
+							
+							else{
+								if (!map[i+1][j+1].isObstacle()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									break;
+									//listePointEntourerAccessible.add(new Point(i,j));
+								}
+								else if (!map[i+1][j].isObstacle()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									break;
+									//listePointEntourerAccessible.add(new Point(i,j));
+									
+								}
+	
+								else if (!map[i][j-1].isObstacle()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									break;
+									//listePointEntourerAccessible.add(new Point(i,j));
+									
+								}
+								else if (!map[i-1][j].isObstacle()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									break;
+									//listePointEntourerAccessible.add(new Point(i,j));
+									
+								}
+								else if (!map[i][j+1].isObstacle()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									break;
+									//listePointEntourerAccessible.add(new Point(i,j));
+									
+								}
+								else if (!map[i-1][j-1].isObstacle()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									break;
+									//listePointEntourerAccessible.add(new Point(i,j));
+									
+								}
+								else if (!map[i-1][j+1].isObstacle()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									break;
+									//listePointEntourerAccessible.add(new Point(i,j));
+									
+								}
+								else if (!map[i+1][j-1].isObstacle()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									break;
+									//listePointEntourerAccessible.add(new Point(i,j));
+									
+								}
+							}
+						}
+					}
+					
+				}
+				
+				if(uneCaseTrouver){
+					casesTrouver++;
+				}
+					
+		}
+			System.out.println(casesTrouver);
+	}
+		
+			
+}
+	
+	private boolean ListSansDefauts(List<Etre> listAjout) throws Exception{
+		//return true si tous les Etre de la liste sont de la meme instance
 		
 		if (listAjout ==null){
-			return null;
+			return false;
 		}
-		if (listAjout.size()==0){
-			return null;
+		if (listAjout.isEmpty()){
+			return false;
 		}
-		boolean different=false;
+		boolean pareil=true;
 		Etre temporaire=listAjout.get(0);
 		
 		for(Etre etre : listAjout){
 			if (!temporaire.getClass().equals(etre.getClass())){
-				different=true;
+				pareil=false;
+				break;
 			}
 		}
-		if(different){
-			throw new Exception("Attention la list doit contenir uniquement des object de la meme instance");
+		if(!pareil){
+			throw new Exception("\nAttention la list doit contenir \nuniquement des object de la meme instance\n");
 		}
+		return pareil;
 		
+	}
+	public List<Etre> ajouterEtreALeatoire(List<Etre> listAjout) throws Exception{
+		
+		if(! ListSansDefauts(listAjout)){
+			return null;
+		}
 		List<Point> casesVides = new ArrayList<Point>();
 		
 		for (int i =0 ; i<map.length ; i++){
@@ -73,8 +227,8 @@ public class Terrain {
 				}
 			}
 		}
-		
 		Collections.shuffle(casesVides);
+		List<Etre> lesEtrePlacer = new ArrayList<Etre>();
 		int conteur=0;
 		for (int i=0; i<listAjout.size() ; i++ ){
 			
@@ -88,6 +242,7 @@ public class Terrain {
 				EtreTmp.positionX=tmp.x;
 				EtreTmp.positionY=tmp.y;
 				
+				lesEtrePlacer.add(EtreTmp);
 				//placement sur la map de l'Etre
 				
 				if (listAjout.get(0) instanceof Plante){
@@ -103,7 +258,7 @@ public class Terrain {
 			}
 			
 		}
-		return listAjout;
+		return lesEtrePlacer;
 	}
 	public void supprimer(List<Etre> listAsupprimer) throws Exception{
 		
@@ -158,11 +313,17 @@ public class Terrain {
 	
 	public void afficheShell(){
 		System.out.println();
+		System.out.println();
+		System.out.print("/");
+		for(int i=0 ; i<map.length; i++){
+			System.out.print("——");
+		}
+		System.out.print(" \\");
 		for (int i =0; i<map.length ; i++){
-				
+			
 				System.out.println();
 				for( int j=0 ; j<map[0].length; j++){
-					
+					if(j==0){System.out.print("|");}
 					if(!map[i][j].isObstacle()){ // pas obstacle
 
 						
@@ -191,14 +352,21 @@ public class Terrain {
 							if (!(map[i][j].getPlante()==null)){ 
 								System.out.print(" §");
 							}
-							else{System.out.print(" |");} // accessible et visible
+							else{System.out.print(" .");} // accessible et visible
 						}
 						
 					}
 					else{
-						System.out.print(" -");// obstacle (pas accessible , pas visible)
+						System.out.print(" #");// obstacle (pas accessible , pas visible)
 					}
 				}
+				System.out.print(" |");
 			}
+		System.out.println("");
+		System.out.print("\\");
+		for(int i=0 ; i<map.length; i++){
+			System.out.print("——");
+		}
+		System.out.print(" /");
 	}
 }

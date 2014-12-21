@@ -77,9 +77,7 @@ public abstract class Animal extends EtreVivant  {
 	}
 	
 	public boolean isMort(){
-		
 		if (!	this.toujourEnVie()){
-			System.out.println("ici");
 			return false;
 		}
 		return false;
@@ -92,7 +90,7 @@ public abstract class Animal extends EtreVivant  {
 		
 		this.visionActuel=new VisionEtDeplacement().miseAjourVision(new Point(this.positionX,this.positionY),this.getChampDeVision(),map);
 		
-		this.lesEnvies=new VisionEtDeplacement().regarder(this.positionX, this.positionY, map);
+		this.lesEnvies=new VisionEtDeplacement().regarder(visionActuel,this.getChampDeVision());
 		
 		new Envie().trierEnvies(lesEnvies);
 		
@@ -230,8 +228,8 @@ public abstract class Animal extends EtreVivant  {
 		int tailleVision=new VisionEtDeplacement().calculTailleVision(champDeVision);
 		
 		if(visionAutourDeThis.length!=tailleVision && visionAutourDeThis[0].length!=tailleVision){
-			throw new Exception("la fonction visionAutourDeThisIsGoodSize a ete appeler "
-					+ "avec un tableau de "+tailleVision+" case de coté pour un tableau de "+visionAutourDeThis.length +" case de coté");
+			throw new Exception("\nla fonction visionAutourDeThisIsGoodSize a ete appeler \n"
+					+ "avec un tableau de "+tailleVision+" case de coté \npour un tableau de "+visionAutourDeThis.length +" case de coté\n");
 		}
 		else{
 			return true;

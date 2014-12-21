@@ -250,14 +250,17 @@ public class VisionEtDeplacement {
 	private void animalPresent(int x , int y,Case [][] map) throws Exception{
 		
 		if( map[x][y].getAnimalPresent()==null){
-			String s="Attention il n'y a pas d'Animal sur la case ["+x+"] ["+y+"] impossible de tester ce qu'il peut voir";
+			String s="\nAttention il n'y a pas d'Animal sur la case \n["+x+"] ["+y+"] impossible de tester ce qu'il peut voir\n";
 			throw new Exception(s);	
 		}
 		
 	}
 	
-	public Envie [] regarder(int x , int y,Case [][] map) throws Exception{// A FINIR
+	public Envie [] regarder(Case [][] map, int ChampDeVision) throws Exception{// A FINIR
 		//met a jour les emotions en fonction de l'environement
+		
+		int x=ChampDeVision;
+		int y=ChampDeVision;
 		
 		animalPresent(x, y, map);// peut renvoyer une Exception
 		
