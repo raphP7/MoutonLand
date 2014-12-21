@@ -7,25 +7,10 @@ public class tets {
 
 	public static void main(String[] args) throws Exception {
 		
-		int x=10;
-		if(x==11){
-			System.out.println(10);
-		}
-		else if(x==10){
-			System.out.println(10);
-		}
-		else if(x==10){
-			System.out.println(10);
-		}
-		else{
-			System.out.println(10);
-		}
-		
-		
 		
 		long time=0;
 		
-		Moteur a;
+		Moteur a = null;
 		
 		long c=0;
 		
@@ -33,7 +18,7 @@ public class tets {
 			c++;
 			long startTime = System.currentTimeMillis();
 
-			a= new Moteur(30,30,1);
+			a= new Moteur(20,20,300);
 			a.leTerrain.afficheShell();
 
 			long endTime = System.currentTimeMillis();
@@ -51,14 +36,14 @@ public class tets {
 		
 		//Etre bebe=((EtreVivant)m).bebe(m2,new Point(0,0));
 		
-		//a.creerAlea("Loup", 1);
+		a.creerAlea("Loup", 1);
 		//a.creerAlea("Mouton", 60);
 		//a.creerAlea("Plante", 100);
 		
-		
-		//for (int i=0 ; i<50; i++){
-			//a.simulation();
-		
-		//a.leTerrain.afficheShell();
+		a.leTerrain.afficheShell();
+		for (int i=0 ; i<3; i++){
+			a.simulation();
+		}
+		a.leTerrain.afficheShell();
 	}
 }

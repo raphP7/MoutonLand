@@ -1,8 +1,10 @@
 package Moteur;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import Moteur.Intelligence.VisionEtDeplacement;
 import Moteur.Terrain.Case;
 import Moteur.Terrain.Terrain;
 
@@ -14,7 +16,7 @@ class DesTests {
 		System.out.println(b.toString().contains("Animal"));
 		
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 	
 		List<Etre> listAjout =new ArrayList<Etre>();
 		Etre aa =new Plante(0,0,false,100,100,100,1000,10);
@@ -47,20 +49,32 @@ class DesTests {
 		System.out.println(aEstUnEtreVivant);
 		
 		
-		Animal un = new Mouton(6,6, false, 0, 0, 0, 0, 3, 0, 0);
-		un.manger();
+		Animal un = new Mouton(5,5, false, 0, 0, 0, 0, 3, 0, 0);
+		//un.manger();
 		
 		Terrain terrain = new Terrain(10,10);
 		
-		//terrain.map[2][2].setVisible(false);
-		
+		terrain.map[6][6].setAnimalPresent(un);
+		/*
+		terrain.map[2][2].setVisible(false);
+		terrain.map[6][5].setVisible(false);
 		terrain.map[7][2].setObstacle(true);
 		terrain.map[6][5].setObstacle(true);
 		terrain.map[5][4].setObstacle(true);
+		terrain.map[2][4].setObstacle(true);
 		terrain.map[7][7].setObstacle(true);
-		terrain.map[5][2].setObstacle(true);
+		terrain.map[6][7].setObstacle(true);
 		
-			Case[][] tab=un.miseAjourVision(terrain.map);
+		
+		
+		terrain.map[7][6].setObstacle(true);
+		terrain.map[5][2].setObstacle(true);
+		*/
+		terrain.map[7][5].setObstacle(true);
+		
+		
+		terrain.afficheShell();
+			Case[][] tab=new VisionEtDeplacement().miseAjourVision(new Point(((Animal)un).positionX,((Animal)un).positionY),((Animal)un).getChampDeVision(),terrain.map);
 			
 			for (int i =0; i<tab.length ; i++){
 				

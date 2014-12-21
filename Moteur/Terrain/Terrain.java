@@ -48,13 +48,13 @@ public class Terrain {
 			}
 		}
 		
-		if (obstacles>x*y){
-			obstacles=x*y;
+		if (obstacles+1>x*y){
+			obstacles=x*y-1;
 			return;
 		}
 		
 		if (obstacles>0){
-			
+			obstacles++;
 			Random rand = new Random();
 			
 			//pour partir d'environ le centre
@@ -64,8 +64,7 @@ public class Terrain {
 			//la case aleatoire est rendu accessible et comme jamais modifier pour commencer
 			map[nombreAleatoireX][nombreAleatoireY].setVisible(true);
 			
-			map[nombreAleatoireX][nombreAleatoireY].setModif(false);
-			
+			//map[nombreAleatoireX][nombreAleatoireY].setModif(false);
 			
 			Point debut =new Point(nombreAleatoireX,nombreAleatoireY);
 			
@@ -77,27 +76,63 @@ public class Terrain {
 			boolean uneCaseTrouver;
 			while(caseVide>0){
 				
-				int aleatoire;
-				if (listePointEntourerAccessible.size()<1000){
-					aleatoire = rand.nextInt(listePointEntourerAccessible.size()+1);
-				}
-				else{
-					aleatoire= rand.nextInt(1000);
+				int aleatoire = 0;
+				boolean deja=true;
+				int Xalea = 0;
+				int Yalea = 0;
+				while(deja){
+					
+					if (listePointEntourerAccessible.size()<10000){
+						aleatoire = rand.nextInt(listePointEntourerAccessible.size()+1);
+					}
+					else{
+						aleatoire= rand.nextInt(1);
+					}
+					
+					if(aleatoire>0){
+						aleatoire--;
+					}
+					
+					Xalea=listePointEntourerAccessible.get(aleatoire).x;
+					Yalea=listePointEntourerAccessible.get(aleatoire).y;
+					
+					/*
+					int alea1 =1;
+					int alea2 =1;
+					while(alea1==1 && alea2==1){
+						alea1 = rand.nextInt(3);
+						alea2 = rand.nextInt(3);
+					}
+					if (alea1==0){
+						Xalea=Xexistant-1;
+					}
+					else if (alea1==1){
+						Xalea=Xexistant;
+					}
+					else{
+						Xalea=Xexistant+1;
+					}
+					if(alea2==0){
+						Yalea=Yexistant-1;
+					}
+					else if(alea2==1){
+						Yalea=Yexistant;
+					}
+					else{
+						Yalea=Yexistant+1;
+					}
+					
+					if(Xalea+1>x || Xalea<0 || Yalea<0 || Yalea+1>y || !map[Xalea][Yalea].isModif()){
+						
+						deja=false;
+					}
+					*/
+					deja=false;
 				}
 				
-				//System.out.println(aleatoire);
-				if(aleatoire>0){
-					aleatoire--;
-				}
-				
-				int Xproche=listePointEntourerAccessible.get(aleatoire).x;
-				int Yproche=listePointEntourerAccessible.get(aleatoire).y;
-				
-				int Xalea = rand.nextInt(Xproche+10)+(Xproche-10);
-				int Yalea = rand.nextInt(Yproche+10)+(Yproche-10);
-			
 				uneCaseTrouver=false;
 				
+				int compteur=0;
 				for(int i=Xalea-1 ; i<=Xalea+1 ; i++){
 					
 					if(uneCaseTrouver){
@@ -108,39 +143,25 @@ public class Terrain {
 					
 					for(int j=Yalea-1 ; j<=Yalea+1; j++){
 						
-						if (!((i==Xalea) && (y==Yalea) )){
+						if (i!=Xalea || (j!=Yalea) ){
+							
 								if(i+1>x || i<0 || j<0 || j+1>y || map[i][j].isModif()){
-									uneCaseTrouver=true;
-									break;
+									compteur++;
+									/*
+									System.out.println("la "+compteur);
+									System.out.println("en position "+i +" "+j);
+									System.out.println("je suis"+Xalea +" "+Yalea);
+									*/
 									
 								}
-								else if (i+1<x && j+1<y && !map[i+1][j+1].isObstacle()){
+								else if (i+1<x && j+1<y && !map[i+1][j+1].isModif()){
 									map[i][j].setVisible(true);
 									caseVide--;
 									uneCaseTrouver=true;
-									
 									listePointEntourerAccessible.push(new Point(i,j));
 									break;
 								}
-								else if (i+1<x && !map[i+1][j].isObstacle()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-									
-								}
-								else if (j+1<y && !map[i][j+1].isObstacle()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-									
-								}
-								else if (j-1>0 &&!map[i][j-1].isObstacle()){
+								else if (i+1<x && !map[i+1][j].isModif()){
 									map[i][j].setVisible(true);
 									caseVide--;
 									uneCaseTrouver=true;
@@ -149,7 +170,7 @@ public class Terrain {
 									break;
 									
 								}
-								else if (i-1>0 &&!map[i-1][j].isObstacle()){
+								else if (j+1<y && !map[i][j+1].isModif()){
 									map[i][j].setVisible(true);
 									caseVide--;
 									uneCaseTrouver=true;
@@ -158,7 +179,25 @@ public class Terrain {
 									break;
 									
 								}
-								else if (i-1>0 && j+1<y && !map[i-1][j+1].isObstacle()){
+								else if (j-1>0 && !map[i][j-1].isModif()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									
+									listePointEntourerAccessible.push(new Point(i,j));
+									break;
+									
+								}
+								else if (i-1>0 && !map[i-1][j].isModif()){
+									map[i][j].setVisible(true);
+									caseVide--;
+									uneCaseTrouver=true;
+									
+									listePointEntourerAccessible.push(new Point(i,j));
+									break;
+									
+								}
+								else if (i-1>0 && j+1<y && !map[i-1][j+1].isModif()){
 									map[i][j].setVisible(true);
 									caseVide--;
 									uneCaseTrouver=true;
@@ -166,7 +205,7 @@ public class Terrain {
 									listePointEntourerAccessible.push(new Point(i,j));
 									break;
 								}
-								else if (i+1<x && j-1>0 && !map[i+1][j-1].isObstacle()){
+								else if (i+1<x && j-1>0 && !map[i+1][j-1].isModif()){
 									map[i][j].setVisible(true);
 									caseVide--;
 									uneCaseTrouver=true;
@@ -174,7 +213,7 @@ public class Terrain {
 									listePointEntourerAccessible.push(new Point(i,j));
 									break;
 								}
-								else if (i-1>0 && j-1>0 &&!map[i-1][j-1].isObstacle()){
+								else if (i-1>0 && j-1>0 && !map[i-1][j-1].isModif()){
 									map[i][j].setVisible(true);
 									caseVide--;
 									uneCaseTrouver=true;
@@ -187,6 +226,15 @@ public class Terrain {
 					}
 					
 				}
+				if(compteur==8){
+					uneCaseTrouver=true;
+					listePointEntourerAccessible.remove(aleatoire);
+				}
+				try{
+				//Thread.sleep(10);
+				//this.afficheShell();
+				}
+				catch(Exception e){}
 		}
 	}
 		
@@ -369,6 +417,10 @@ public class Terrain {
 							else{System.out.print(" .");} // accessible et visible
 						}
 						
+					}
+					else if(map[i][j].isVisible()){
+						
+						System.out.print(" °");// obstacle (pas accessible , pas visible)
 					}
 					else{
 						System.out.print(" #");// obstacle (pas accessible , pas visible)

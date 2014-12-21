@@ -1,13 +1,16 @@
 package Moteur.Intelligence;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import Moteur.Animal;
 import Moteur.Carnivore;
 import Moteur.Etre;
 import Moteur.Herbivore;
 import Moteur.Terrain.Case;
+import Moteur.Terrain.Terrain;
 
 public class VisionEtDeplacement {
 	
@@ -20,70 +23,84 @@ public class VisionEtDeplacement {
 		this.emotionChoisiPourLeDeplacement=emotion;
 	}
 	
-	@Deprecated
-	private void champObstacle( Case [][] cases) throws Exception{
-		boolean changement=false;
+	private Case[][] champObstacle( Case [][] cases,int champDeVision) throws Exception{
+		List<Point> coordonnesCasesEncoreVisible = new ArrayList<Point>();
+		
 		for (int i =0; i<cases.length ; i++ ){
-			
 			for (int j =0; j<cases[0].length ; j++){
-				
-				if (!cases[i][j].isObstacle()){
-					int cmp=0;
-					if(i-1>0){
-						
-						if (cases[i-1][j].isObstacle()){cmp++;}
-					}
-					if (j-1>0){
-						
-						if (cases[i][j-1].isObstacle()){cmp++;}
-					}
-					if (i+1<cases.length ){
-	
-						if (cases[i+1][j].isObstacle()){cmp++;}
-						
-					}
-					if(j+1<cases[0].length){
-						
-						if (cases[i][j+1].isObstacle()){cmp++;}
-					}
-					if(cmp>2){
-						
-						System.out.print(i+"  ");
-						System.out.println(j);
-						cases[i][j].setObstacle(true);
-						changement=true;
-						
-						try{
-							for (int w =0; w<cases.length ; w++){
-								System.out.println();
-								for( int z=0 ; z<cases[0].length; z++){
-									if(!cases[w][z].isObstacle()){
-										System.out.print(" 0");
-									}
-									else{
-										System.out.print(" -");
-									}
-								}
-							}
-							Thread.sleep(100);
-							
-						}
-						catch(Exception e){
-							
-						}
-						break;
-					}
+				if(cases[i][j].isVisible()){
+					coordonnesCasesEncoreVisible.add(new Point(i,j));
 				}
 			}
+		}
+		Terrain affichage=new Terrain(1, 1);
+		affichage.map=cases;
+		affichage.afficheShell();
+		
+		for(Point a : coordonnesCasesEncoreVisible){
 			
-			if (changement){break;}
+			if(!backtrak(champDeVision, champDeVision, a, cases)){
+				cases[a.x][a.y].setVisible(false);
+			}
+			
+		}
+		affichage.map=cases;
+		affichage.afficheShell();
+		return cases;
+	}
+
+	public boolean backtrak(int x , int y , Point arriver,Case [][] cases){
+		if(arriver.x==x && arriver.y==y){
+			return true;
 		}
 		
-		if (changement){
-			System.out.println("recursif");
-			champObstacle(cases);}
-		
+		if(!cases[x][y].isVisible()){
+			return false;
+		}
+		if (arriver.x<x){
+			if(backtrak(x-1 ,y ,arriver,cases)){
+				return true;
+			}
+		}
+		if( arriver.y<y){
+			if(backtrak(x ,y-1 ,arriver,cases)){
+				return true;
+			}
+		}
+		if(arriver.x>x){
+			if(backtrak(x+1 ,y ,arriver,cases)){
+				return true;
+			}
+		}
+		if(arriver.y>y){
+			if(backtrak(x ,y+1 ,arriver,cases)){
+				return true;
+			}
+		}
+		if(arriver.x<x && arriver.y<y){
+			if(backtrak(x-1 ,y-1 ,arriver,cases)){
+				return true;
+			}
+		}
+		if(arriver.x>x && arriver.y<y){
+			if(backtrak(x+1 ,y-1 ,arriver,cases)){
+				return true;
+			}
+		}
+		if(arriver.x>x && arriver.y>y){
+			if(backtrak(x+1 ,y+1 ,arriver,cases)){
+				return true;
+			}
+		}
+		if(arriver.x<x && arriver.y>y){
+			if(backtrak(x-1 ,y+1 ,arriver,cases)){
+				return true;
+			}
+		}
+		return false;
 	}
+
+		
 	
 	private Case[][] ligneObstacle( int x ,int  y, Case [][] visionActuel, int TaillechampsDeVision){
 		
@@ -163,7 +180,6 @@ public class VisionEtDeplacement {
 			 
 		}
 		return visionActuel;
-		
 	}
 
 	public int calculTailleVision(int champDeVision){
@@ -184,12 +200,10 @@ public class VisionEtDeplacement {
  */	
 	public  Case[][] miseAjourVision(Point positionAnimal,int champDeVision ,Case [][] map) throws Exception{
 		
-		
-		
 		int taille=calculTailleVision(champDeVision);
 		Case [][] visionActuel = new Case[taille][taille]; // redefinition de la taille de la visionActuel
 		
-		for (int i = 0; i < visionActuel.length; i++) {
+		for (int i = 0; i <visionActuel.length; i++) {
 			for (int j = 0; j < visionActuel[0].length; j++) {
 				visionActuel[i][j]=new Case(); //initialise
 				
@@ -197,7 +211,7 @@ public class VisionEtDeplacement {
 			}
 		}
 		int parcour=0;
-		// 2 parcour
+		// il y a 2 parcour
 		// le premier pour trouver les obstacles limites de la vue ( dans les angles et bords de la map)
 		// le deuxieme pour trouver les obstacles dans le champDeVision et leur appliquer des non visible
 		while(parcour<2){
@@ -211,13 +225,11 @@ public class VisionEtDeplacement {
 
 							visionActuel[visionActuelI][visionActuelJ].setObstacle(true);
 					}
-					
 					else if(parcour !=0 && map[i][j].isObstacle()){//obstacle de visibilité dans le terrain
 						
 						visionActuel[visionActuelI][visionActuelJ].setObstacle(true);
 							
 						visionActuel=ligneObstacle(visionActuelI ,visionActuelJ, visionActuel,champDeVision);
-						
 						}
 					
 					/*pour tester les cases non visible  ATTENTION INUTILE pour le moment!
@@ -230,18 +242,25 @@ public class VisionEtDeplacement {
 						// la case est dans le champ de vision et n'est pas un obstacle
 						// on recopie l'animal ou la plante qui est dessus
 						if (parcour!=0){
-							visionActuel[visionActuelI][visionActuelJ].setAnimalPresent(map[i][j].getAnimalPresent());
-							visionActuel[visionActuelI][visionActuelJ].setPlante(map[i][j].getPlante());		
-							
+							if(visionActuel[visionActuelI][visionActuelJ].isVisible()){
+								visionActuel[visionActuelI][visionActuelJ].setAnimalPresent(map[i][j].getAnimalPresent());
+								visionActuel[visionActuelI][visionActuelJ].setPlante(map[i][j].getPlante());		
+							}
 						}
 					}
 					
 				}
 			}
+
+			Terrain a =new Terrain(10,10);
+			a.map=visionActuel;
+			System.out.println("avant les champs ");
+			a.afficheShell();
 		parcour++;
 		}
-			
-		//champObstacle(cases);
+		
+		
+		visionActuel=champObstacle(visionActuel,champDeVision);
 		
 	return visionActuel;
 
