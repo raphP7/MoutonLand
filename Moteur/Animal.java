@@ -15,8 +15,8 @@ public abstract class Animal extends EtreVivant  {
 	
 	int force;
 	int vitesse;
-	FileDeSouvenirs mouvements;
-	Case[][] visionActuel;
+	private FileDeSouvenirs mouvements;
+	Case[][] tableauVision;
 	
 	private Envie [] lesEnvies;// voir enum Emotion
 
@@ -50,7 +50,7 @@ public abstract class Animal extends EtreVivant  {
 			i++;
 		}
 		//initialisation de la file de souvenir avec la position actuel
-		this.mouvements=new FileDeSouvenirs(10, x , y , visionActuel);
+		this.mouvements=(new FileDeSouvenirs(10, x , y , tableauVision));
 		
 		this.setaEteTuer(false);
 		
@@ -61,8 +61,7 @@ public abstract class Animal extends EtreVivant  {
 	}
 
 	public void actualiserVariables(){
-		this.incrementeToursEnVie();
-		
+		this.incrementeToursEnVie();	
 	}
 	
 	public boolean reproductionPossible(Etre b){
@@ -88,9 +87,9 @@ public abstract class Animal extends EtreVivant  {
 		
 		this.actualiserVariables();
 		
-		this.visionActuel=new VisionEtDeplacement().miseAjourVision(new Point(this.positionX,this.positionY),this.getChampDeVision(),map);
+		this.tableauVision=new VisionEtDeplacement().miseAjourVision(new Point(this.positionX,this.positionY),this.getChampDeVision(),map);
 		
-		this.lesEnvies=new VisionEtDeplacement().regarder(visionActuel,this.getChampDeVision());
+		this.lesEnvies=new VisionEtDeplacement().regarder(tableauVision,this.getChampDeVision());
 		
 		new Envie().trierEnvies(lesEnvies);
 		
@@ -223,7 +222,7 @@ public abstract class Animal extends EtreVivant  {
 		
 	}
 
-	public boolean visionAutourDeThisIsGoodSize(Case[][] visionAutourDeThis,int champDeVision) throws Exception{
+	public void visionAutourDeThisIsGoodSize(Case[][] visionAutourDeThis,int champDeVision) throws Exception{
 		
 		int tailleVision=new VisionEtDeplacement().calculTailleVision(champDeVision);
 		
@@ -231,18 +230,14 @@ public abstract class Animal extends EtreVivant  {
 			throw new Exception("\nla fonction visionAutourDeThisIsGoodSize a ete appeler \n"
 					+ "avec un tableau de "+tailleVision+" case de coté \npour un tableau de "+visionAutourDeThis.length +" case de coté\n");
 		}
-		else{
-			return true;
-		}
 	}
 	
 	private List<Etre> partenairePossible(Case[][] visionAutourDeThis) throws Exception{
 		//renvoi la liste des partenairePossible dans le champ de reproduction de this
 		//plus precisement dans les 8cases autour de this
 		
-		if(! visionAutourDeThisIsGoodSize(visionAutourDeThis,3)){
-			return null;
-		}
+		//Securite
+		visionAutourDeThisIsGoodSize(visionAutourDeThis,3);
 		
 		List<Etre> partenairesPossible = new ArrayList<Etre>();
 		
@@ -266,9 +261,9 @@ public abstract class Animal extends EtreVivant  {
 	
 	private List<Point> casesVidesAutourFemelle(Etre femelle,Case[][] visionAutourDeFemelle) throws Exception{
 		
-		if(! visionAutourDeThisIsGoodSize(visionAutourDeFemelle,1)){
-			return null;
-		}
+		//SECURITER
+		visionAutourDeThisIsGoodSize(visionAutourDeFemelle,1);
+		
 		if(	!((EtreVivant)femelle).isFemelle() ){
 			throw new Exception("Erreur la fonction casesVidesAutourFemelle a ete appeler avec un Male");
 		}
@@ -289,5 +284,10 @@ public abstract class Animal extends EtreVivant  {
 	
 		}
 		return listeCaseVidePourBebe;
+	}
+
+	
+	public FileDeSouvenirs getMouvements() {
+		return mouvements;
 	}
 }

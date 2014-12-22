@@ -1,11 +1,12 @@
 package Affichage;
 
+import java.awt.Point;
+
 import Moteur.*;
 
 public class tets {
 
 	public static void main(String[] args) throws Exception {
-		
 		
 		long time=0;
 		
@@ -30,17 +31,17 @@ public class tets {
 		System.out.println();
 		
 		
-		//Etre m = new Mouton(0,0,true,100,100,100,100,100,100,100);
-		//Etre m2 = new Mouton(0,0,true,100,100,100,100,100,100,100);
+		Etre m = new Mouton(0,0,true,100,100,100,100,100,100,100);
+		Etre m2 = new Mouton(0,0,true,100,100,100,100,100,100,100);
 		
-		//Etre bebe=((EtreVivant)m).bebe(m2,new Point(0,0));
+		Etre bebe=((EtreVivant)m).bebe(m2,new Point(0,0));
 		
-		a.creerAlea("Loup", 1);
+		a.creerAlea("Loup", 10);
 		//a.creerAlea("Mouton", 60);
 		//a.creerAlea("Plante", 100);
 		
 		a.leTerrain.afficheShell();
-		for (int i=0 ; i<3; i++){
+		for (int i=0 ; i<1; i++){
 			a.simulation();
 		}
 		a.leTerrain.afficheShell();

@@ -8,13 +8,12 @@ import java.util.Random;
 import Moteur.Terrain.Terrain;
 
 public class Moteur {
-	public int vitesse;
 	private int esperenceDeVieMoyenne=500000; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
 	private int puberte=20; // pourcentage entre 0 et 30 de l'esperenceDeVieMoyenne
 	private int maxReproduction=3;
 	public Terrain leTerrain;
-	public List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
-	public List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
+	private List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
+	private List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
 	private List<Etre> lesEtres;
 	private Random random = new Random();
 	
@@ -159,7 +158,6 @@ public class Moteur {
 
 	public void simulation() throws Exception {
 		
-		
 			for (int i=0; i<lesEtres.size(); i++) {
 				
 				Etre a =lesEtres.get(i);				
@@ -248,4 +246,14 @@ public class Moteur {
 		
 	}
 	
+	/**
+	 * 
+	 * @param taille nombre de souvenir des anciennes position de l'animal
+	 */
+	public void changerTailleSouvenir(int taille){
+		
+		for (Etre a : lesEtres){
+			((Animal)a).getMouvements().setTaille(taille);
+		}
+	}
 }
