@@ -1,6 +1,5 @@
 package Affichage;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -8,11 +7,19 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Moteur.*;
+import Moteur.Moteur;
 public class Fenetre extends JFrame{
 	private int width;
 	private int height;
-	Fenetre(){
+	protected static Moteur moteur;
+	Fenetre(int w,int h,int nbObstacle) throws Exception{
+		
+		moteur=new Moteur(w,h,nbObstacle);
+		moteur.creerAlea("Loup", 1);
+		moteur.creerAlea("Plante", 10);
+		moteur.creerAlea("Mouton", 3);
+		
+		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//pour que la croix ferme le Jframe
 		this.setTitle("MoutonLand");//nom de la fenetre
 		this.setMinimumSize(new Dimension(500,500));
@@ -21,17 +28,17 @@ public class Fenetre extends JFrame{
 		this.setSize((int)(this.width*0.95),(int)(this.height*0.95)); // la taille par defaut de la fenetre
 		
 		JPanel comteneurGlobal=new JPanel();
-		comteneurGlobal.setLayout(new BoxLayout(comteneurGlobal,BoxLayout.LINE_AXIS));//J'ajoute un layout a mon comteneur.
+		comteneurGlobal.setLayout(new BoxLayout(comteneurGlobal,BoxLayout.LINE_AXIS));//J'ajoute un layout(Vertical) a mon comteneurGlobal.
 		
 		JPanel comteneurGauche=new JPanel();
-		comteneurGauche.setLayout(new BoxLayout(comteneurGauche,BoxLayout.PAGE_AXIS));
-		comteneurGauche.setBackground(Color.BLACK);
+		comteneurGauche.setBackground(Color.WHITE);
+		comteneurGauche.setLayout(new BoxLayout(comteneurGauche,BoxLayout.PAGE_AXIS));//J'ajoute un layout(Horizontal) a mon comteneurGlobal.
 		
 		JPanel comteneurDroit=new JPanel();
-		comteneurDroit.setLayout(new BoxLayout(comteneurDroit,BoxLayout.PAGE_AXIS));
-		comteneurDroit.setBackground(Color.BLUE);
+		comteneurDroit.setBackground(new Color(115,67,29));
+		comteneurDroit.setLayout(new BoxLayout(comteneurDroit,BoxLayout.PAGE_AXIS));//J'ajoute un layout(Horizontal) a mon comteneurGlobal.
 		
-		
+		//Ajout des JPanel.
 		comteneurGlobal.add(comteneurGauche);
 		comteneurGlobal.add(comteneurDroit);
 		comteneurGauche.add(new Bouton(this.width,this.height));
@@ -42,5 +49,18 @@ public class Fenetre extends JFrame{
 		
 	    this.setContentPane(comteneurGlobal);
 		this.setVisible(true); // la fenetre est visible
+		
+		for (int i=0 ; i<10000; i++){
+			moteur.simulation();
+			
+			try{
+				//Thread.sleep(10);
+
+			}catch(Exception e){
+				
+			}
+			
+			repaint();
+		}
 	}
 }

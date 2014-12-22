@@ -113,6 +113,8 @@ public abstract class Animal extends EtreVivant  {
 	
 	public Etre action(Case [][] map) throws Exception{
 		
+		if(this.isaEteTuer()){return null;}
+		
 		this.actualiserVariables();
 		
 		//System.out.println(toStringLesEnvies());
@@ -159,11 +161,10 @@ public abstract class Animal extends EtreVivant  {
 		//System.out.println("arriver X : "+(arriver.x+converteur.x));
 		//System.out.println("arriver Y : "+(arriver.y+converteur.y));
 		
-		//recupere l'Animal hypotethiquement present
-		
-		
+		//recupere l'Animal hypotethiquement present		
 		Etre animalPresent=map[arriver.x+converteur.x][arriver.y+converteur.y].getAnimalPresent();
 		
+		//recupere la plante hypotethiquement present
 		Etre plantePresente=map[arriver.x+converteur.x][arriver.y+converteur.y].getPlante();
 		//applique une action en fonction de l'emotion
 		switch (choixAction.emotionChoisiPourLeDeplacement){
