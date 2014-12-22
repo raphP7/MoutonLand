@@ -34,6 +34,7 @@ public class FileDeSouvenirs implements Iterable<Emplacement>{
 		}
 		return i;
 	}
+	
 	public void ajouter(int x , int y ,Case[][] visionSouvenir){
 		
 		this.tete=new Emplacement(x,y,visionSouvenir,this.tete);

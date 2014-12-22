@@ -18,10 +18,4 @@ public class Loup extends Carnivore{
 		super(a,b,position);
 	}
 
-	@Override
-	public void manger() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

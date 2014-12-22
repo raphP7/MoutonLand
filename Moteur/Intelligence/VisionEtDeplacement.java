@@ -286,8 +286,8 @@ public class VisionEtDeplacement {
 		
 		Terrain temp=new Terrain(10,10);
 		temp.map=tableauVision;
-		System.out.println("Vision de l'animal");
-		temp.afficheVisionShell();
+		//System.out.println("Vision de l'animal");
+		//temp.afficheVisionShell();
 		
 	return tableauVision;
 
@@ -423,22 +423,23 @@ public class VisionEtDeplacement {
 	 * Calcul le deplacement de l'animal
 	 * @param x Position X de l'animal
 	 * @param y Position Y de l'animal
-	 * @param tableauVision Tableau de la vision de l'animal
+	 * @param map Tableau de la map
 	 * @return Une liste de point qui represente le chemin que va parcourir l'animal sur la map
 	 * dont le dernier point est la position d'arriver
 	 * @throws Exception si la variable emotionChoisiPourLeDeplacement de class est null;
 	 */
-	public LinkedList<Point> deplacement(int x , int y,Case [][] tableauVision) throws Exception{// A FINIR
+	public LinkedList<Point> deplacement(int x , int y,Case [][] map) throws Exception{// A FINIR
 		// choisi un deplacement 
 		//renvoi les coordonnées des point du deplacement 
-		animalPresent(x, y, tableauVision);
+		//animalPresent(x, y, );
 		
+		Case [][]  tableauVision =((Animal)(map[x][y].getAnimalPresent())).tableauVision;
 		if(this.emotionChoisiPourLeDeplacement==null){
 			throw new Exception("Attention l'animal ne peut se deplacer sans Emotion");
 		}
 		
 		LinkedList<Point> chemin = new LinkedList<Point>();
-		Etre animal=tableauVision[x][y].getAnimalPresent();
+		Etre animal=map[x][y].getAnimalPresent();
 		
 		FileDeSouvenirs souvenirs=((Animal)animal).getMouvements();
 		
@@ -472,6 +473,11 @@ public class VisionEtDeplacement {
 			int alea=random.nextInt(casesAccessible.size());
 			Point arriver=casesAccessible.get(alea);
 			chemin.add(arriver);
+			
+
+			//System.out.println("arriver X sans conversion: "+arriver.x);
+			//System.out.println("arriver Y sans conversion: "+arriver.y);
+			
 			souvenirs.ajouter(arriver.x, arriver.y, tableauVision);
 			
 			//if(backtrak(x, y, arriver, tableauVision, chemin)){
@@ -489,8 +495,7 @@ public class VisionEtDeplacement {
 		switch(this.emotionChoisiPourLeDeplacement){
 		
 		case DEPLACEMENT:
-			
-			
+			System.out.println("DEPLACEMENT");
 			break;
 		case REPRODUCTION:
 			System.out.println("REPRODUCTION");
@@ -504,6 +509,7 @@ public class VisionEtDeplacement {
 		}
 		
 		
+
 		return chemin;
 		
 	}

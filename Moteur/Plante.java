@@ -1,5 +1,6 @@
 package Moteur;
 
+import Moteur.Intelligence.Envie;
 import Moteur.Terrain.Case;
 
 public class Plante extends EtreVivant {
@@ -16,6 +17,12 @@ public class Plante extends EtreVivant {
 
 		
 		this.setValeur(valeur);
+	}
+	
+	public void manger(Etre etreManger, Envie envieTemporaire){
+		
+		
+		
 	}
 	
 	public int getValeur() {

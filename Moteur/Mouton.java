@@ -13,9 +13,5 @@ public class Mouton extends Herbivore {
 	public Mouton(Etre a, Etre b, Point position){
 		super(a,b,position);
 	}
-	public void manger() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

@@ -33,8 +33,9 @@ public class Emplacement implements Iterator<Emplacement>{
 		}
 		
 	}
-
+	
 	@Override
+	
 	public Emplacement next() throws NoSuchElementException {
 		
 		if(hasNext()){

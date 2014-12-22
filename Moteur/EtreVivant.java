@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import Moteur.Intelligence.Envie;
+
 public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	//private boolean bloqueChangement=false;
 	
@@ -38,7 +40,6 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	public boolean toujourEnVie(){
 		return this.toursEnVie<this.esperenceDeVie && this.toursSansManger<this.esperenceSansManger && !aEteTuer;
 	}
-	public abstract void manger();
 	
 	public boolean isPuber() {
 		return puber;

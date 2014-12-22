@@ -29,15 +29,18 @@ public class Moteur {
 	public int getEsperenceDeVieMoyenne() {
 		return esperenceDeVieMoyenne;
 	}
+	
 	public void setEsperenceDeVieMoyenne(int esperenceDeVieMoyenne) {
 		if (esperenceDeVieMoyenne<0){
 			esperenceDeVieMoyenne=2000;
 		}
 		this.esperenceDeVieMoyenne = esperenceDeVieMoyenne;
 	}
+	
 	public int getPuberte() {
 		return puberte;
 	}
+	
 	public void setPuberte(int puberte) {
 		
 		if(puberte<0 || puberte>30){
@@ -67,6 +70,7 @@ public class Moteur {
 		}
 		return aEstUnEtreVivant;
 	}
+	
 	private List<Etre> copieListPrincipalMelanger(){
 		
 		List<Etre> temp = new ArrayList<Etre>();
@@ -242,8 +246,7 @@ public class Moteur {
 	}
 	
 	public EtreMort mourir(EtreVivant a){
-		return new EtreMort(a);
-		
+		return new EtreMort(a);	
 	}
 	
 	/**

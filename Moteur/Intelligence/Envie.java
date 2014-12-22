@@ -26,6 +26,12 @@ public class Envie implements Comparable<Envie>{
 		return valeur;
 	}
 
+	public void reduireValeur(int pourcentage){
+		if(pourcentage>0 && pourcentage<=100){
+			this.setValeur(this.valeur-pourcentage);
+		}
+		
+	}
 	public void setValeur(int valeur) {
 		
 		if (valeur>100){
@@ -36,7 +42,7 @@ public class Envie implements Comparable<Envie>{
 		}
 	}
 	
-	public Emotion envieLaPlusForte(Envie[] lesEnvies){
+	public Envie envieLaPlusForte(Envie[] lesEnvies){
 		
 		Envie tmp=lesEnvies[0];
 		int valeur;
@@ -47,7 +53,7 @@ public class Envie implements Comparable<Envie>{
 				tmp=lesEnvies[i+1];
 			}
 		}
-		return tmp.getEmotion();
+		return tmp;
 	}
 
 	@Override
@@ -84,5 +90,10 @@ public class Envie implements Comparable<Envie>{
 			System.out.println(this.valeur +" < " +arg0.valeur);
 			return -1;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Envie | Emotion : "+emotion.toString()+" , valeur : "+valeur;
 	}
 }

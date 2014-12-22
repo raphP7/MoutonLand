@@ -17,6 +17,8 @@ class TestsVisionAnimal {
 		System.out.println(b.toString().contains("Animal"));
 		
 	}
+	
+	
 	public static void main(String[] args) throws Exception {
 	
 		

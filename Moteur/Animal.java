@@ -16,10 +16,18 @@ public abstract class Animal extends EtreVivant  {
 	int force;
 	int vitesse;
 	private FileDeSouvenirs mouvements;
-	Case[][] tableauVision;
+	private Envie [] lesEnvies;// voir l'enumeration Emotion
+	public Case[][] tableauVision;
 	
-	private Envie [] lesEnvies;// voir enum Emotion
-
+	public String toStringLesEnvies(){
+		String retour="";
+		for(int i=0 ; i<lesEnvies.length ; i++){
+			retour=retour+lesEnvies[i].toString();
+			retour=retour+"\n";
+		}
+		return retour;
+	}
+	
 	public Animal(Etre a, Etre b,Point position) {
 		super(a,b, position);
 	}
@@ -86,19 +94,45 @@ public abstract class Animal extends EtreVivant  {
 		
 	}
 	
+	public void manger(Etre etreManger, Envie envieTemporaire){
+		if(this instanceof Herbivore && etreManger instanceof Plante){
+			((Plante)etreManger).decrementerValeur();
+			
+			//VARIABLE !!
+			
+			envieTemporaire.reduireValeur(5);
+			this.toursSansManger=0;
+		}
+		else if(this instanceof Carnivore && etreManger instanceof Animal){
+			((EtreVivant) etreManger).setaEteTuer(true);
+			envieTemporaire.reduireValeur(100);
+			this.toursSansManger=0;
+		}
+		
+	}
+	
 	public Etre action(Case [][] map) throws Exception{
 		
 		this.actualiserVariables();
 		
+		//System.out.println(toStringLesEnvies());
+		
+		//mettre a jour la vision de l'animal
 		this.tableauVision=new VisionEtDeplacement().miseAjourVision(new Point(this.positionX,this.positionY),this.getChampDeVision(),map);
 		
+		//mettre a jour les emotions en fonction de la vision
 		this.lesEnvies=new VisionEtDeplacement().regarder(tableauVision,this.getChampDeVision());
 		
-		Emotion emotionTemporaire =new Envie().envieLaPlusForte(lesEnvies);
+		//Recupere l'envie la plus forte
+		Envie envieTemporaire =new Envie().envieLaPlusForte(lesEnvies);
+
+		//recupere la valeur de cette envie
+		Emotion emotionTemporaire=envieTemporaire.getEmotion();
 		
-		System.out.println(emotionTemporaire);
+		//Instancie une intelligence avec cette emotion
 		VisionEtDeplacement choixAction = new VisionEtDeplacement(emotionTemporaire);
 		
+		//recupere la liste du chemin parcouru par l'Animal
 		LinkedList<Point> chemin =choixAction.deplacement(this.positionX,this.positionY,map);
 		
 		if(chemin.size()==0){
@@ -108,54 +142,104 @@ public abstract class Animal extends EtreVivant  {
 		// l'animal est retirer de sa case actuel
 		map[this.positionX][this.positionY].setAnimalPresent(null);
 		
+		Point converteur=new Point (this.positionX-this.getChampDeVision(),this.positionY-this.getChampDeVision());
+		
+		
 		//appliquer les deplacement intermediaire
 		for(int i =0; i<chemin.size()-1; i++){
 			
 			Point tmp=chemin.get(i);
-			
-			map[tmp.x][tmp.y].setAnimalPresent(this);
+			map[(tmp.x+converteur.x)][(tmp.y+converteur.y)].setAnimalPresent(this);
 			
 		}
 		
 		//appliquer le dernier deplacement
-		
 		Point arriver =chemin.getLast();
 		
-		Etre animalPresent=map[arriver.x][arriver.y].getAnimalPresent();
+		//System.out.println("arriver X : "+(arriver.x+converteur.x));
+		//System.out.println("arriver Y : "+(arriver.y+converteur.y));
 		
+		//recupere l'Animal hypotethiquement present
+		
+		
+		Etre animalPresent=map[arriver.x+converteur.x][arriver.y+converteur.y].getAnimalPresent();
+		
+		Etre plantePresente=map[arriver.x+converteur.x][arriver.y+converteur.y].getPlante();
+		//applique une action en fonction de l'emotion
 		switch (choixAction.emotionChoisiPourLeDeplacement){
 		
 		case FAIM:
 			if (animalPresent != null && this!=animalPresent){
+				// il y a un autre annimal sur la case d'arriver
 				
 				if (this instanceof Carnivore && animalPresent instanceof Herbivore ){
 					
-					EtreVivant seFaitManger=map[arriver.x][arriver.y].getAnimalPresent();
+					EtreVivant seFaitManger=map[(arriver.x+converteur.x)][(arriver.y+converteur.y)].getAnimalPresent();
 					
-					seFaitManger.setaEteTuer(true);
-					this.manger();
+					this.manger(seFaitManger,envieTemporaire);
 					
-					map[arriver.x][arriver.y].setAnimalPresent(this);
+					map[(arriver.x+converteur.x)][(arriver.y+converteur.y)].setAnimalPresent(this);
+
+					this.positionX=arriver.x+converteur.x;
+					this.positionY=arriver.y+converteur.y;
 					return null;					
+				}
+				else if( this instanceof Carnivore && animalPresent instanceof Carnivore){
+					
+					//deux carnivor d'instance differente qui s'affronte
+					EtreVivant seFaitAttaquer=map[(arriver.x+converteur.x)][(arriver.y+converteur.y)].getAnimalPresent();
+					
+					if(this.force>=((Animal)animalPresent).force){
+						//this a gagner
+						this.manger(seFaitAttaquer,envieTemporaire);
+						map[(arriver.x+converteur.x)][(arriver.y+converteur.y)].setAnimalPresent(this);
+
+						this.positionX=arriver.x+converteur.x;
+						this.positionY=arriver.y+converteur.y;
+						return null;
+					}
+					else{
+						//seFaitAttaquer a gagner
+						seFaitAttaquer.manger(this,envieTemporaire);
+						return null;
+					}
+					
 				}
 				else if (this instanceof Herbivore){
 					throw new Exception("un Herbivore ne peut aller sur la case d'un autre Animal");
 				}
-				else if ( this instanceof Carnivore){
+				else if (this instanceof Carnivore && this.getClass().equals(animalPresent.getClass())){
 					throw new Exception("un Carnivore ne peut aller sur la case d'un autre Carnivore");
 				}
-			}
-			else if(animalPresent !=null){
 				
 			}
-			
-			
+			else if(animalPresent ==null){
+				if (this instanceof Herbivore &&  plantePresente!=null){
+					this.manger(plantePresente,envieTemporaire);
+				}
+				map[(arriver.x+converteur.x)][(arriver.y+converteur.y)].setAnimalPresent(this);
+
+				this.positionX=arriver.x+converteur.x;
+				this.positionY=arriver.y+converteur.y;
+				return null;
+				
+			}
 		case PEUR:
-			choixAction.emotionChoisiPourLeDeplacement.setEmotion("DEPLACEMENT");;// A TESTER
+			map[arriver.x+converteur.x][arriver.y+converteur.y].setAnimalPresent(this);
+			
+
+			this.positionX=arriver.x+converteur.x;
+			this.positionY=arriver.y+converteur.y;
+			
+			return null;
 			
 		case DEPLACEMENT:
-			map[arriver.x][arriver.y].setAnimalPresent(this);
+			map[arriver.x+converteur.x][arriver.y+converteur.y].setAnimalPresent(this);
+			
 
+			this.positionX=arriver.x+converteur.x;
+			this.positionY=arriver.y+converteur.y;
+			
 			return null;
 			
 		case REPRODUCTION:
@@ -173,6 +257,10 @@ public abstract class Animal extends EtreVivant  {
 			
 			if (partenairesPossible.isEmpty()){
 				//aucun partenaire donc pas de bebe
+
+				this.positionX=arriver.x+converteur.x;
+				this.positionY=arriver.y+converteur.y;
+				
 				return null;
 			}
 			
@@ -222,9 +310,17 @@ public abstract class Animal extends EtreVivant  {
 				((EtreVivant)partenaireChoisi).nombreDeReproduction++;
 				((EtreVivant)this).nombreDeReproduction++;
 				
+
+				this.positionX=arriver.x+converteur.x;
+				this.positionY=arriver.y+converteur.y;
+				
 				return bebe;
 			}
 		}//fermeture du switch
+		
+		
+		this.positionX=arriver.x+converteur.x;
+		this.positionY=arriver.y+converteur.y;
 		
 		return null;
 		

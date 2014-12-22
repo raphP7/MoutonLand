@@ -6,10 +6,7 @@ import Moteur.*;
 
 public class tets {
 
-	public static void main(String[] args) throws Exception {
-		
-		
-		
+	public static void main(String[] args) throws Exception {		
 		long time=0;
 		
 		Moteur a = null;
@@ -20,7 +17,7 @@ public class tets {
 			c++;
 			long startTime = System.currentTimeMillis();
 
-			a= new Moteur(20,20,300);
+			a= new Moteur(10,10,80);
 			a.leTerrain.afficheShell();
 
 			long endTime = System.currentTimeMillis();
@@ -43,9 +40,10 @@ public class tets {
 		//a.creerAlea("Plante", 100);
 		
 		a.leTerrain.afficheShell();
-		for (int i=0 ; i<1; i++){
+		for (int i=0 ; i<10; i++){
 			a.simulation();
+			a.leTerrain.afficheShell();
 		}
-		a.leTerrain.afficheShell();
+		
 	}
 }
