@@ -1,25 +1,12 @@
 package Moteur.Intelligence;
+import java.util.Iterator;
+
 import Moteur.Terrain.Case;
 
-public class FileDeSouvenirs {
+public class FileDeSouvenirs implements Iterable<Emplacement>{
 	
 	private Emplacement tete;
 	private int taille;
-	
-	class Emplacement{
-
-		int x;
-		int y;
-		
-		Case[][] visionSouvenir;
-		Emplacement suivant;
-		
-		private Emplacement(int x , int y ,Case[][] visionSouvenir){
-			this.x=x;
-			this.y=y;
-			this.visionSouvenir=visionSouvenir;
-		}
-	}
 	
 	public FileDeSouvenirs(int taille , int x , int y ,Case[][] visionSouvenir){
 	
@@ -27,12 +14,29 @@ public class FileDeSouvenirs {
 		this.ajouter(x,y,visionSouvenir);
 	}
 	
-	void ajouter(int x , int y ,Case[][] visionSouvenir){
+	public int taillereele(){
 		
-		Emplacement tmp=this.tete;
-		this.tete=creerEmplacement(x,y,visionSouvenir);
-		this.tete.suivant=tmp;
+		boolean a=true;
+		Emplacement b=this.tete;
+		if(this.tete==null){
+			return 0;	
+		}
+		int i=1;
+		while(a){
+			
+			if(b.hasNext()){
+				b=b.suivant;
+				i++;
+			}
+			else{
+				a=false;
+			}
+		}
+		return i;
+	}
+	public void ajouter(int x , int y ,Case[][] visionSouvenir){
 		
+		this.tete=new Emplacement(x,y,visionSouvenir,this.tete);
 		boolean parcour=true;
 		Emplacement iter=this.getTete();
 		
@@ -57,8 +61,9 @@ public class FileDeSouvenirs {
 		
 	}
 	
-	public Emplacement creerEmplacement( int x , int y ,Case[][] visionSouvenir){
-		return new Emplacement(x,y,visionSouvenir);
+	@Deprecated
+	public Emplacement creerUnEmplacement( int x , int y ,Case[][] visionSouvenir){
+		return new Emplacement(x,y,visionSouvenir,null); 
 	}
 	
 	public int getTaille() {
@@ -77,4 +82,12 @@ public class FileDeSouvenirs {
 	public Emplacement getTete() {
 		return tete;
 	}
+
+	@Override
+	
+	public Iterator<Emplacement> iterator() {
+		return tete;
+		
+	}
+
 }

@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+
 import Moteur.Animal;
 import Moteur.Carnivore;
 import Moteur.Etre;
@@ -47,7 +49,7 @@ public class VisionEtDeplacement {
 		//Verification de chaque case visible si pas entoure d'obstacle 
 		//et donc devenu invisible en realite
 		for(Point a : coordonnesCasesEncoreVisible){
-			if(!backtrak(champDeVision, champDeVision, a, tableauVision)){
+			if(!backtrak(champDeVision, champDeVision, a, tableauVision,null)){
 				tableauVision[a.x][a.y].setVisible(false);
 			}
 		}
@@ -60,12 +62,16 @@ public class VisionEtDeplacement {
 	 * 
 	 * @param x Position x de l'animal
 	 * @param y Position y de l'animal
-	 * @param arriver Point stockant les coordonnes x et y de la case visible
+	 * @param arriver Point stockant les coordonnes x et y de la case a tester
+	 * @param tableauVision le tableau de la visionActuel de l'animal
+	 * @param chemin linkedList avec un chemin vers l'arriver
+	 * 
 	 * @return true si la case est vraiment visible ou false si elle est entouré d'obstacles
 	 * 
 	 */	
-	private boolean backtrak(int x , int y , Point arriver,Case [][] tableauVision){
+	private boolean backtrak(int x , int y , Point arriver,Case [][] tableauVision,LinkedList<Point> chemin){
 		if(arriver.x==x && arriver.y==y){
+			if(chemin!=null){chemin.add(new Point(x,y));}
 			return true;
 		}
 		
@@ -73,42 +79,50 @@ public class VisionEtDeplacement {
 			return false;
 		}
 		if (arriver.x<x){
-			if(backtrak(x-1 ,y ,arriver,tableauVision)){
+			if(backtrak(x-1 ,y ,arriver,tableauVision, chemin)){
+				if(chemin!=null){chemin.add(new Point(x,y));}
 				return true;
 			}
 		}
 		if( arriver.y<y){
-			if(backtrak(x ,y-1 ,arriver,tableauVision)){
+			if(backtrak(x ,y-1 ,arriver,tableauVision, chemin)){
+				if(chemin!=null){chemin.add(new Point(x,y));}
 				return true;
 			}
 		}
 		if(arriver.x>x){
-			if(backtrak(x+1 ,y ,arriver,tableauVision)){
+			if(backtrak(x+1 ,y ,arriver,tableauVision, chemin)){
+				if(chemin!=null){chemin.add(new Point(x,y));}
 				return true;
 			}
 		}
 		if(arriver.y>y){
-			if(backtrak(x ,y+1 ,arriver,tableauVision)){
+			if(backtrak(x ,y+1 ,arriver,tableauVision, chemin)){
+				if(chemin!=null){chemin.add(new Point(x,y));}
 				return true;
 			}
 		}
 		if(arriver.x<x && arriver.y<y){
-			if(backtrak(x-1 ,y-1 ,arriver,tableauVision)){
+			if(backtrak(x-1 ,y-1 ,arriver,tableauVision, chemin)){
+				if(chemin!=null){chemin.add(new Point(x,y));}
 				return true;
 			}
 		}
 		if(arriver.x>x && arriver.y<y){
-			if(backtrak(x+1 ,y-1 ,arriver,tableauVision)){
+			if(backtrak(x+1 ,y-1 ,arriver,tableauVision, chemin)){
+				if(chemin!=null){chemin.add(new Point(x,y));}
 				return true;
 			}
 		}
 		if(arriver.x>x && arriver.y>y){
-			if(backtrak(x+1 ,y+1 ,arriver,tableauVision)){
+			if(backtrak(x+1 ,y+1 ,arriver,tableauVision, chemin)){
+				if(chemin!=null){chemin.add(new Point(x,y));}
 				return true;
 			}
 		}
 		if(arriver.x<x && arriver.y>y){
-			if(backtrak(x-1 ,y+1 ,arriver,tableauVision)){
+			if(backtrak(x-1 ,y+1 ,arriver,tableauVision, chemin)){
+				if(chemin!=null){chemin.add(new Point(x,y));}
 				return true;
 			}
 		}
@@ -390,7 +404,7 @@ public class VisionEtDeplacement {
 						}
 					}
 				}
-				else if (temp[i].getEmotion().getClass().equals(Emotion.DECPLACEMENT.getClass())){
+				else if (temp[i].getEmotion().getClass().equals(Emotion.DEPLACEMENT.getClass())){
 					
 				int ratioCaseVide = (nBcaseOccuperParUnAnimal/nBcaseSansAnimal)*100;
 				// si au moin 50% des cases autour de l'animal sont libre sa augmente de 5% sont envie de se deplacer pour le plaisir
@@ -409,31 +423,31 @@ public class VisionEtDeplacement {
 	 * Calcul le deplacement de l'animal
 	 * @param x Position X de l'animal
 	 * @param y Position Y de l'animal
-	 * @param map Tableau de la vision de l'animal
+	 * @param tableauVision Tableau de la vision de l'animal
 	 * @return Une liste de point qui represente le chemin que va parcourir l'animal sur la map
 	 * dont le dernier point est la position d'arriver
 	 * @throws Exception si la variable emotionChoisiPourLeDeplacement de class est null;
 	 */
-	public LinkedList<Point> deplacement(int x , int y,Case [][] map) throws Exception{// A FINIR
+	public LinkedList<Point> deplacement(int x , int y,Case [][] tableauVision) throws Exception{// A FINIR
 		// choisi un deplacement 
 		//renvoi les coordonnées des point du deplacement 
-		animalPresent(x, y, map);
+		animalPresent(x, y, tableauVision);
 		
 		if(this.emotionChoisiPourLeDeplacement==null){
 			throw new Exception("Attention l'animal ne peut se deplacer sans Emotion");
 		}
 		
-		LinkedList<Point> listeDePoint = new LinkedList<Point>();
-		Etre animal=map[x][y].getAnimalPresent();
+		LinkedList<Point> chemin = new LinkedList<Point>();
+		Etre animal=tableauVision[x][y].getAnimalPresent();
 		
 		FileDeSouvenirs souvenirs=((Animal)animal).getMouvements();
 		
 		List<Point> casesAccessible = new LinkedList<Point>();
 		
-		for (int i = 0 ; i< map.length ; i++){
-			for (int j =0 ; j<map[0].length ; j++){
+		for (int i = 0 ; i< tableauVision.length ; i++){
+			for (int j =0 ; j<tableauVision[0].length ; j++){
 				
-				Case tmp =map[i][j];  
+				Case tmp =tableauVision[i][j];  
 				
 				if (tmp.isVisible()){
 					if (animal instanceof Herbivore){
@@ -452,12 +466,45 @@ public class VisionEtDeplacement {
 			}
 		}
 		
-		Envie[] temp = ((Animal)animal).getLesEnvies();
+		//if(souvenirs.getTete()==null){
+			//pas de souvenirs
+			Random random = new Random();
+			int alea=random.nextInt(casesAccessible.size());
+			Point arriver=casesAccessible.get(alea);
+			chemin.add(arriver);
+			souvenirs.ajouter(arriver.x, arriver.y, tableauVision);
+			
+			//if(backtrak(x, y, arriver, tableauVision, chemin)){
+			//}
+			
+		//}
+		//else{
+			
+			//for(Emplacement a : souvenirs){
+			//}
+			
+			
+		//}
 		
-		Point positionArriver=new Point(x,y);// POUR FAIRE DES TEST
+		switch(this.emotionChoisiPourLeDeplacement){
 		
-		listeDePoint.add(positionArriver);
-		return listeDePoint;
+		case DEPLACEMENT:
+			
+			
+			break;
+		case REPRODUCTION:
+			System.out.println("REPRODUCTION");
+			break;
+		case PEUR:
+			System.out.println("PEUR");
+			break;
+		case FAIM:
+			System.out.println("FAIM");
+			break;
+		}
+		
+		
+		return chemin;
 		
 	}
 }

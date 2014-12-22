@@ -5,7 +5,7 @@ public enum Emotion {
 	FAIM ("faim"),
 	PEUR ("peur"),
 	REPRODUCTION ("reproduction"),
-	DECPLACEMENT ("deplacement oisif");
+	DEPLACEMENT ("deplacement oisif");
 
 	private String emotion;
 	

@@ -33,10 +33,6 @@ public abstract class Animal extends EtreVivant  {
 		
 		this.force=force;
 		this.vitesse=vitesse;
-		//this.deplacements = new <Point>();
-		//int nombreCases = calculTailleVision();
-		//this.visionActuel= new Case[nombreCases][nombreCases];
-			
 		this.toursSansManger=0;
 		this.immobile=0;
 		this.nombreDeReproduction=0;		
@@ -46,7 +42,14 @@ public abstract class Animal extends EtreVivant  {
 		this.lesEnvies=new Envie[Emotion.values().length];
 		int i=0;
 		for (Emotion a : Emotion.values()){
+			
 			this.lesEnvies[i]=new Envie(a,0);
+			
+			if(a.equals(Emotion.DEPLACEMENT)){//POUR TESTS
+				System.out.println("deplacement =100");
+				this.lesEnvies[i].setValeur(100);
+				
+			}
 			i++;
 		}
 		//initialisation de la file de souvenir avec la position actuel
@@ -61,7 +64,7 @@ public abstract class Animal extends EtreVivant  {
 	}
 
 	public void actualiserVariables(){
-		this.incrementeToursEnVie();	
+		this.incrementeToursEnVie();
 	}
 	
 	public boolean reproductionPossible(Etre b){
@@ -91,15 +94,19 @@ public abstract class Animal extends EtreVivant  {
 		
 		this.lesEnvies=new VisionEtDeplacement().regarder(tableauVision,this.getChampDeVision());
 		
-		new Envie().trierEnvies(lesEnvies);
+		Emotion emotionTemporaire =new Envie().envieLaPlusForte(lesEnvies);
 		
-		VisionEtDeplacement choixAction = new VisionEtDeplacement(lesEnvies[0].getEmotion());
+		System.out.println(emotionTemporaire);
+		VisionEtDeplacement choixAction = new VisionEtDeplacement(emotionTemporaire);
 		
 		LinkedList<Point> chemin =choixAction.deplacement(this.positionX,this.positionY,map);
 		
 		if(chemin.size()==0){
 			throw new Exception("aucune case d'arriver n'a ete choisi par l'animal");
 		}
+		
+		// l'animal est retirer de sa case actuel
+		map[this.positionX][this.positionY].setAnimalPresent(null);
 		
 		//appliquer les deplacement intermediaire
 		for(int i =0; i<chemin.size()-1; i++){
@@ -146,8 +153,9 @@ public abstract class Animal extends EtreVivant  {
 		case PEUR:
 			choixAction.emotionChoisiPourLeDeplacement.setEmotion("DEPLACEMENT");;// A TESTER
 			
-		case DECPLACEMENT:
+		case DEPLACEMENT:
 			map[arriver.x][arriver.y].setAnimalPresent(this);
+
 			return null;
 			
 		case REPRODUCTION:
@@ -286,7 +294,6 @@ public abstract class Animal extends EtreVivant  {
 		return listeCaseVidePourBebe;
 	}
 
-	
 	public FileDeSouvenirs getMouvements() {
 		return mouvements;
 	}

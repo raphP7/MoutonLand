@@ -1,5 +1,4 @@
 package Moteur.Intelligence;
-import java.util.Arrays;
 
 public class Envie implements Comparable<Envie>{
 	
@@ -37,20 +36,52 @@ public class Envie implements Comparable<Envie>{
 		}
 	}
 	
-	public void trierEnvies(Envie[] lesEnvies){
+	public Emotion envieLaPlusForte(Envie[] lesEnvies){
 		
-		Arrays.sort(lesEnvies);
-		
+		Envie tmp=lesEnvies[0];
+		int valeur;
+		for(int i=0 ; i<lesEnvies.length-1 ; i++){
+			
+			valeur=tmp.compareTo(lesEnvies[i+1]);
+			if(valeur<0){
+				tmp=lesEnvies[i+1];
+			}
+		}
+		return tmp.getEmotion();
 	}
 
 	@Override
-	public int compareTo(Envie arg0) {
+	public int compareTo(Envie arg0){
 		
-		if (this.valeur==arg0.valeur){  return 0;}
+		
+		if(arg0.getEmotion().getClass().equals(Emotion.DEPLACEMENT.getClass())){
+			
+			System.out.println("deplacement dans comparTO : "+arg0.getValeur());
+		}
+		
+		if (this.valeur==arg0.valeur){
+			
+			if(this.getEmotion().getClass().equals(Emotion.PEUR.getClass())){
+				return 1;
+			}
+			else if(arg0.getEmotion().getClass().equals(Emotion.PEUR.getClass())){
+				return -1;
+			}
+			if(this.getEmotion().getClass().equals(Emotion.FAIM.getClass())){
+				return 1;
+			}
+			else if(arg0.getEmotion().getClass().equals(Emotion.FAIM.getClass())){
+				return -1;
+			}
+			System.out.println(this.valeur +" == " +arg0.valeur);
+			return 0;
+			}
 		else if (this.valeur>arg0.valeur){
+			System.out.println(this.valeur +" > " +arg0.valeur);
 			return 1;	
 		}
 		else{
+			System.out.println(this.valeur +" < " +arg0.valeur);
 			return -1;
 		}
 	}

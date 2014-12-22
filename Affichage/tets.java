@@ -8,6 +8,8 @@ public class tets {
 
 	public static void main(String[] args) throws Exception {
 		
+		
+		
 		long time=0;
 		
 		Moteur a = null;
@@ -36,7 +38,7 @@ public class tets {
 		
 		Etre bebe=((EtreVivant)m).bebe(m2,new Point(0,0));
 		
-		a.creerAlea("Loup", 10);
+		a.creerAlea("Loup", 1);
 		//a.creerAlea("Mouton", 60);
 		//a.creerAlea("Plante", 100);
 		

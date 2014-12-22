@@ -4,6 +4,8 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import Moteur.Intelligence.Emplacement;
+import Moteur.Intelligence.FileDeSouvenirs;
 import Moteur.Intelligence.VisionEtDeplacement;
 import Moteur.Terrain.Terrain;
 
@@ -17,6 +19,8 @@ class TestsVisionAnimal {
 	}
 	public static void main(String[] args) throws Exception {
 	
+		
+		
 		List<Etre> listAjout =new ArrayList<Etre>();
 		Etre aa =new Plante(0,0,false,100,100,100,1000,10);
 		Etre aaa =new Mouton(0,0,false,100,100,100,1000, 0, 0, 0);
@@ -75,6 +79,26 @@ class TestsVisionAnimal {
 		terrain.map=new VisionEtDeplacement().miseAjourVision(new Point(((Animal)un).positionX,((Animal)un).positionY),((Animal)un).getChampDeVision(),terrain.map);
 			
 		terrain.afficheVisionShell();
+		
+		FileDeSouvenirs test=((Animal)un).getMouvements();
+		
+		test.ajouter(10, 10, terrain.map);
+		test.ajouter(10, 10, terrain.map);
+		
+		System.out.println(test.taillereele());
+		
+		for(Emplacement temp:test){
+			try{
+				Thread.sleep(1000);
+				
+				if(temp!=null){System.out.println(temp.toString());}
+			}
+			catch(Exception e){
+				
+			}
+			
+		}
+		
 			
 		}
 }
