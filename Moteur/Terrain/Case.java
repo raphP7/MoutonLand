@@ -1,25 +1,20 @@
 package Moteur.Terrain;
-
 import Moteur.Animal;
 import Moteur.Plante;
-
 
 public class Case {
 
 	private boolean modif;
 	private Plante plante;
-	
-	//protected EtreMort nourriture;
-	
 	private Animal animalPresent;
-	
-	public int valeurSel;
+	private int valeurSel;
 	
 	private boolean obstacle; // impossible d'acceder , impossible de voir a travers
 	private boolean visible; // true = visible , else = contenu invisible depuis la position x , y de l'Animal
 	
 	
 	public Case(){
+		this.valeurSel=0;
 		this.obstacle=false;
 		this.setVisible(true);
 		this.modif=false;
@@ -93,6 +88,14 @@ public class Case {
 
 	public void setModif(boolean modif) {
 		this.modif = modif;
+	}
+
+	public int getValeurSel() {
+		return valeurSel;
+	}
+
+	public void setValeurSel(int valeurSel) {
+		this.valeurSel = valeurSel;
 	}
 
 }

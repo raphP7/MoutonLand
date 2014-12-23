@@ -4,13 +4,10 @@ import java.awt.Point;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import Moteur.Intelligence.Envie;
-
 public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	//private boolean bloqueChangement=false;
 	
 	private boolean femelle;// true =femelle , false=male
-	protected int immobile;
 	private int esperenceDeVie;
 	private int toursEnVie;
 	private boolean puber;
@@ -96,7 +93,6 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 		this.aEteTuer = aEteTuer;
 	}
 	
-	
 	public Etre bebe(Etre a,Point positionBebe) {
 
 		if ( a.getClass().equals(this.getClass()) ){
@@ -109,10 +105,10 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 				Etre bebe;
 				bebe = constructeurBebe.newInstance(this,a,positionBebe);
 				return bebe;
-				
-			} 
+			}
 			catch (NoSuchMethodException | SecurityException |InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException e) {
+					| IllegalArgumentException | InvocationTargetException e)
+			{
 				e.printStackTrace();
 			}
 			return null;

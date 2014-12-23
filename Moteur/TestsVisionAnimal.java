@@ -87,7 +87,7 @@ class TestsVisionAnimal {
 		test.ajouter(10, 10, terrain.map);
 		test.ajouter(10, 10, terrain.map);
 		
-		System.out.println(test.taillereele());
+		//System.out.println(test.taillereele());
 		
 		for(Emplacement temp:test){
 			try{

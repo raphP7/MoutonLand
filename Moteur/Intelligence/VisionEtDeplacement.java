@@ -492,6 +492,8 @@ public class VisionEtDeplacement {
 			
 		//}
 		
+			
+		/*
 		switch(this.emotionChoisiPourLeDeplacement){
 		
 		case DEPLACEMENT:
@@ -508,7 +510,7 @@ public class VisionEtDeplacement {
 			break;
 		}
 		
-		
+		*/
 
 		return chemin;
 		

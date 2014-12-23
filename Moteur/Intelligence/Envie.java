@@ -62,7 +62,7 @@ public class Envie implements Comparable<Envie>{
 		
 		if(arg0.getEmotion().getClass().equals(Emotion.DEPLACEMENT.getClass())){
 			
-			System.out.println("deplacement dans comparTO : "+arg0.getValeur());
+			//System.out.println("deplacement dans comparTO : "+arg0.getValeur());
 		}
 		
 		if (this.valeur==arg0.valeur){
@@ -79,15 +79,15 @@ public class Envie implements Comparable<Envie>{
 			else if(arg0.getEmotion().getClass().equals(Emotion.FAIM.getClass())){
 				return -1;
 			}
-			System.out.println(this.valeur +" == " +arg0.valeur);
+			//System.out.println(this.valeur +" == " +arg0.valeur);
 			return 0;
 			}
 		else if (this.valeur>arg0.valeur){
-			System.out.println(this.valeur +" > " +arg0.valeur);
+			//System.out.println(this.valeur +" > " +arg0.valeur);
 			return 1;	
 		}
 		else{
-			System.out.println(this.valeur +" < " +arg0.valeur);
+			//System.out.println(this.valeur +" < " +arg0.valeur);
 			return -1;
 		}
 	}

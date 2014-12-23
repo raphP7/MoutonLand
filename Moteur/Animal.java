@@ -11,8 +11,8 @@ import Moteur.Intelligence.FileDeSouvenirs;
 import Moteur.Intelligence.VisionEtDeplacement;
 import Moteur.Terrain.Case;
 
-public abstract class Animal extends EtreVivant  {
-	
+public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnimal {
+	protected int immobile;
 	int force;
 	int vitesse;
 	private FileDeSouvenirs mouvements;
@@ -54,7 +54,7 @@ public abstract class Animal extends EtreVivant  {
 			this.lesEnvies[i]=new Envie(a,0);
 			
 			if(a.equals(Emotion.DEPLACEMENT)){//POUR TESTS
-				System.out.println("deplacement =100");
+				//System.out.println("deplacement =100");
 				this.lesEnvies[i].setValeur(100);
 				
 			}
@@ -201,7 +201,7 @@ public abstract class Animal extends EtreVivant  {
 					}
 					else{
 						//seFaitAttaquer a gagner
-						seFaitAttaquer.manger(this,envieTemporaire);
+						((Animal) seFaitAttaquer).manger(this,envieTemporaire);
 						return null;
 					}
 					
@@ -237,7 +237,6 @@ public abstract class Animal extends EtreVivant  {
 		case DEPLACEMENT:
 			map[arriver.x+converteur.x][arriver.y+converteur.y].setAnimalPresent(this);
 			
-
 			this.positionX=arriver.x+converteur.x;
 			this.positionY=arriver.y+converteur.y;
 			

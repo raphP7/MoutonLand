@@ -1,12 +1,12 @@
 package Moteur;
 
-class EtreMort extends Etre {
+public class EtreMort extends Etre {
 	int valeurEnSel;
 	int decompostion;
 	
 	public EtreMort (EtreVivant a){
 		
-		super(a.positionX , a.positionY);
+		super(a.positionX , a.positionY);	
 		
 		if (a instanceof Plante ){
 			this.valeurEnSel=this.decompostion=2;

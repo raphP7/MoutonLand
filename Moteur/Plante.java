@@ -1,9 +1,9 @@
 package Moteur;
+import java.awt.Point;
 
-import Moteur.Intelligence.Envie;
 import Moteur.Terrain.Case;
 
-public class Plante extends EtreVivant {
+public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 
 	private int valeur;
 	
@@ -14,17 +14,13 @@ public class Plante extends EtreVivant {
 				esperenceSansManger, 0);
 		
 		//champ de vision a 0 pour les plantes
-
-		
 		this.setValeur(valeur);
 	}
 	
-	public void manger(Etre etreManger, Envie envieTemporaire){
-		
-		
-		
+	public void manger(int valeurEnSel){
+		//VARIABLE
+		this.valeur=this.valeur+valeurEnSel;
 	}
-	
 	public int getValeur() {
 		return valeur;
 	}
@@ -36,19 +32,25 @@ public class Plante extends EtreVivant {
 	}
 	
 	public void decrementerValeur(){
-		System.out.println("decrementer");
-		this.setValeur((this.getValeur())-1);
-	}
-	public void manger() {
-		// TODO Auto-generated method stub
 		
+		this.setValeur((this.getValeur())-1);
 	}
 
 	@Override
 	public Etre action(Case[][] map) {
+	
+		// la plante veilli d'une annee
 		incrementeToursEnVie();
-		return null;
+		if(!this.isPuber()){
+			//durant leur enfance les plantes gagnent 1 de valeur par tour
+			//VARIABLE
+			this.valeur++;
+		}
 		
+		// la plante mange le sel present sur la case et augmente sa propre Valeur
+		manger(map[this.positionX][this.positionY].getValeurSel());
+		
+		return null;
 	}
 
 	@Override
@@ -57,7 +59,15 @@ public class Plante extends EtreVivant {
 			return true;// Mort
 		}
 		return false;// en vie
-		
+	}
 
+	public void setMaxValeur() {
+		this.valeur=Moteur.getValeurParDefautPlante();
+	}
+
+	@Override
+	public Etre bebe(Point positionBebe) {
+		
+		return null;
 	}
 }

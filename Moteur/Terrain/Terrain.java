@@ -2,9 +2,11 @@ package Moteur.Terrain;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import Moteur.Animal;
 import Moteur.Etre;
@@ -30,217 +32,100 @@ public class Terrain {
 			}
 		}
 	}
-	
+	class Position{
+	    private int[] position;
+	    Position(int x,int y){
+	        position=new int[2];
+	        position[0]=x;
+	        position[1]=y;
+	    }
+	    @Override
+	    public boolean equals(Object obj) {
+	        return this.position[0]==((Position)obj).position[0] && this.position[1]==((Position)obj).position[1];
+	    }
+	    @Override
+	    public int hashCode() {
+	        return this.position[0]*2+this.position[1]*3;
+	    }
+	}
 	public Terrain(int x , int y , int obstacles) throws Exception{
-		this.x=x;
-		this.y=y;
-		this.map= new Case[x][y];
-		boolean a=false;
-		for (int i =0 ; i<map.length ; i++){
-			for (int j=0 ; j<map[0].length ; j++){
-				if (obstacles>0){
-					map[i][j]=new Case(a);
-				}
-				else{
-					map[i][j]=new Case();
-				}
-				
+		class NombreObstacle extends Exception{
+		    public NombreObstacle(){
+		        System.out.println("Vous voulez mettre plus d'obstacle que de nombre de case");
+		    }
+		}
+	if(obstacles>=(x*y)){//Si il a plus d'obstable que de case.
+	throw new NombreObstacle();//Je leve une exeption
+	}
+	int abscisse,ordonnee;
+	Random choix=new Random();
+
+	Set<Position> ensemblePossible=new HashSet<Position>();//Ensemble ou je met toute les case possiblement visible.
+	map=new Case[x][y];//Initialisation des ma map a la taille x,y.
+	for(int i=0;i<x;i++){
+	for(int j=0;j<y;j++){
+	map[i][j]=new Case();
+	map[i][j].setObstacle(true);//J'initialise toute mes case comme inaccessible.
+	}
+	}
+
+	map[(abscisse=choix.nextInt(x))][(ordonnee=choix.nextInt(y))].setObstacle(false);//Je libere une case au hazard
+	//System.out.println(abscisse+" "+ordonnee);
+	//J'ajoute toute les nouvelle possibilité des cases potentiellement libre.
+	this.ajouterPossibilite(abscisse, ordonnee,x,y, ensemblePossible);
+	for(int i=0;i<(x*y-obstacles-1);i++){//Tant que j'ai pas liberer x*y-obstacle-1 de case.
+	Position[] possible=ensemblePossible.toArray(new Position [0]);//Pour avoir un tableau avec tout mes case qui peuvent devenir accecible.
+	Position b=possible[choix.nextInt(possible.length)];//prendre un element au hazard.
+	map[b.position[0]][b.position[1]].setObstacle(false);//supprime l'obstacle.
+	this.ajouterPossibilite(b.position[0],b.position[1],x,y, ensemblePossible);//on ajoute les nouvelle possibilité
+	ensemblePossible.remove(b);
+	//for(Position a:possible){
+	//System.out.println(a.position[0]+" "+a.position[1]+" "+map[a.position[0]][a.position[1]].isObstacle());
+	//}
+	}
+	}
+	private void ajouterPossibilite(int abscisse,int ordonnee,int x,int y,Set<Position> ensemblePossible ){
+		if(abscisse-1>=0){
+				//System.out.println("Ajoute1");
+			if(map[abscisse-1][ordonnee].isObstacle())
+				ensemblePossible.add(new Position(abscisse-1,ordonnee));
+			if(ordonnee-1>=0){
+					//System.out.println("Ajoute2");
+				if(map[abscisse-1][ordonnee-1].isObstacle())
+					ensemblePossible.add(new Position(abscisse-1,ordonnee-1));
+			}
+			if(ordonnee+1<y){
+					//System.out.println("Ajoute3");
+				if(map[abscisse-1][ordonnee+1].isObstacle())
+					ensemblePossible.add(new Position(abscisse-1,ordonnee+1));
 			}
 		}
-		
-		if (obstacles+1>x*y){
-			obstacles=x*y-1;
-			return;
+		if(ordonnee-1>=0){
+			//System.out.println("Ajoute4");
+			if(map[abscisse][ordonnee-1].isObstacle())
+			ensemblePossible.add(new Position(abscisse,ordonnee-1));
 		}
-		
-		if (obstacles>0){
-			obstacles++;
-			Random rand = new Random();
-			
-			//pour partir d'environ le centre
-			int nombreAleatoireX = rand.nextInt(map.length/2)+x/2;
-			int nombreAleatoireY = rand.nextInt(map[0].length/3)+y/2;
-			
-			//la case aleatoire est rendu accessible et comme jamais modifier pour commencer
-			map[nombreAleatoireX][nombreAleatoireY].setVisible(true);
-			
-			//map[nombreAleatoireX][nombreAleatoireY].setModif(false);
-			
-			Point debut =new Point(nombreAleatoireX,nombreAleatoireY);
-			
-			//LinkedList<Point> listePointAccessible=new LinkedList<Point>();
-			
-			LinkedList<Point> listePointEntourerAccessible=new LinkedList<Point>();
-			listePointEntourerAccessible.add(debut);
-			int caseVide = (x*y)-obstacles;
-			boolean uneCaseTrouver;
-			while(caseVide>0){
-				
-				int aleatoire = 0;
-				boolean deja=true;
-				int Xalea = 0;
-				int Yalea = 0;
-				while(deja){
-					
-					if (listePointEntourerAccessible.size()<10000){
-						aleatoire = rand.nextInt(listePointEntourerAccessible.size()+1);
-					}
-					else{
-						aleatoire= rand.nextInt(1);
-					}
-					
-					if(aleatoire>0){
-						aleatoire--;
-					}
-					
-					Xalea=listePointEntourerAccessible.get(aleatoire).x;
-					Yalea=listePointEntourerAccessible.get(aleatoire).y;
-					
-					/*
-					int alea1 =1;
-					int alea2 =1;
-					while(alea1==1 && alea2==1){
-						alea1 = rand.nextInt(3);
-						alea2 = rand.nextInt(3);
-					}
-					if (alea1==0){
-						Xalea=Xexistant-1;
-					}
-					else if (alea1==1){
-						Xalea=Xexistant;
-					}
-					else{
-						Xalea=Xexistant+1;
-					}
-					if(alea2==0){
-						Yalea=Yexistant-1;
-					}
-					else if(alea2==1){
-						Yalea=Yexistant;
-					}
-					else{
-						Yalea=Yexistant+1;
-					}
-					
-					if(Xalea+1>x || Xalea<0 || Yalea<0 || Yalea+1>y || !map[Xalea][Yalea].isModif()){
-						
-						deja=false;
-					}
-					*/
-					deja=false;
+		if(ordonnee+1<y){
+			//System.out.println("Ajoute5");
+			if(map[abscisse][ordonnee+1].isObstacle())
+				ensemblePossible.add(new Position(abscisse,ordonnee+1));
+		}
+		if(abscisse+1<x){
+			//System.out.println("Ajoute6");
+			if(map[abscisse+1][ordonnee].isObstacle())
+				ensemblePossible.add(new Position(abscisse+1,ordonnee));
+			if(ordonnee-1>=0){
+				//System.out.println("Ajoute7");
+				if(map[abscisse+1][ordonnee-1].isObstacle())
+					ensemblePossible.add(new Position(abscisse+1,ordonnee-1));
+			}
+			if(ordonnee+1<y){
+					//System.out.println("Ajoute8");
+				if(map[abscisse+1][ordonnee+1].isObstacle())
+					ensemblePossible.add(new Position(abscisse+1,ordonnee+1));
 				}
-				
-				uneCaseTrouver=false;
-				
-				int compteur=0;
-				for(int i=Xalea-1 ; i<=Xalea+1 ; i++){
-					
-					if(uneCaseTrouver){
-						
-						//this.afficheShell();
-						break;
-					}
-					
-					for(int j=Yalea-1 ; j<=Yalea+1; j++){
-						
-						if (i!=Xalea || (j!=Yalea) ){
-							
-								if(i+1>x || i<0 || j<0 || j+1>y || map[i][j].isModif()){
-									compteur++;
-									/*
-									System.out.println("la "+compteur);
-									System.out.println("en position "+i +" "+j);
-									System.out.println("je suis"+Xalea +" "+Yalea);
-									*/
-									
-								}
-								else if (i+1<x && j+1<y && !map[i+1][j+1].isModif()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-								}
-								else if (i+1<x && !map[i+1][j].isModif()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-									
-								}
-								else if (j+1<y && !map[i][j+1].isModif()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-									
-								}
-								else if (j-1>0 && !map[i][j-1].isModif()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-									
-								}
-								else if (i-1>0 && !map[i-1][j].isModif()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-									
-								}
-								else if (i-1>0 && j+1<y && !map[i-1][j+1].isModif()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-								}
-								else if (i+1<x && j-1>0 && !map[i+1][j-1].isModif()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-								}
-								else if (i-1>0 && j-1>0 && !map[i-1][j-1].isModif()){
-									map[i][j].setVisible(true);
-									caseVide--;
-									uneCaseTrouver=true;
-									
-									listePointEntourerAccessible.push(new Point(i,j));
-									break;
-								}
-							
-						}
-					}
-					
-				}
-				if(compteur==8){
-					uneCaseTrouver=true;
-					listePointEntourerAccessible.remove(aleatoire);
-				}
-				try{
-				//Thread.sleep(10);
-				//this.afficheShell();
-				}
-				catch(Exception e){}
 		}
 	}
-		
-			
-}
-	
 	private boolean ListSansDefauts(List<Etre> listAjout) throws Exception{
 		//return true si tous les Etre de la liste sont de la meme instance
 		
@@ -356,7 +241,7 @@ public class Terrain {
 		for (int i =0 ; i<map.length ; i++){
 			for (int j=0 ; j<map[0].length ; j++){
 				
-				int valeur=map[i][j].valeurSel;
+				int valeur=map[i][j].getValeurSel();
 				
 				if (valeur>0 && map[i][j].getPlante()==null){
 					
@@ -466,5 +351,18 @@ public class Terrain {
 		}
 		System.out.print(" /");
 		System.out.println("\n");
+	}
+	public void ajouterBebePlante(Etre bebe) throws Exception {
+		
+		if(bebe.positionX<0 || bebe.positionX>=map.length || bebe.positionY<0 || bebe.positionY>=map.length ){
+			throw new Exception("Attention , le bebe plante a sa position hors de la map");
+		}
+			
+		if(this.map[bebe.positionX][bebe.positionY].getPlante()!=null){
+			//il y a deja une plante
+			Etre anciennePlante=this.map[bebe.positionX][bebe.positionY].getPlante();
+			((Plante)anciennePlante).setMaxValeur();
+		}
+		
 	}
 }

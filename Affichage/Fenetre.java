@@ -15,10 +15,9 @@ public class Fenetre extends JFrame{
 	Fenetre(int w,int h,int nbObstacle) throws Exception{
 		
 		moteur=new Moteur(w,h,nbObstacle);
-		moteur.creerAlea("Loup", 1);
+		moteur.creerAlea("Loup", 10);
 		moteur.creerAlea("Plante", 10);
-		moteur.creerAlea("Mouton", 3);
-		
+		moteur.creerAlea("Mouton", 10);
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//pour que la croix ferme le Jframe
 		this.setTitle("MoutonLand");//nom de la fenetre
@@ -31,6 +30,8 @@ public class Fenetre extends JFrame{
 		comteneurGlobal.setLayout(new BoxLayout(comteneurGlobal,BoxLayout.LINE_AXIS));//J'ajoute un layout(Vertical) a mon comteneurGlobal.
 		
 		JPanel comteneurGauche=new JPanel();
+		
+		comteneurGauche.setMinimumSize(new Dimension(300,0));
 		comteneurGauche.setBackground(Color.WHITE);
 		comteneurGauche.setLayout(new BoxLayout(comteneurGauche,BoxLayout.PAGE_AXIS));//J'ajoute un layout(Horizontal) a mon comteneurGlobal.
 		
@@ -50,11 +51,13 @@ public class Fenetre extends JFrame{
 	    this.setContentPane(comteneurGlobal);
 		this.setVisible(true); // la fenetre est visible
 		
-		for (int i=0 ; i<10000; i++){
+		//pack();
+		
+		for (int i=0 ; i<1000; i++){
 			moteur.simulation();
 			
 			try{
-				//Thread.sleep(10);
+				Thread.sleep(100);
 
 			}catch(Exception e){
 				
