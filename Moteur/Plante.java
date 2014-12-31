@@ -32,13 +32,15 @@ public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 	}
 	
 	public void decrementerValeur(){
-		
 		this.setValeur((this.getValeur())-1);
 	}
 
 	@Override
-	public Etre action(Case[][] map) {
-	
+	public Etre action(Case[][] map) throws Exception {
+		
+		if(this.isMort(map)){return null;}
+		//la plante est deja morte , aucune action a effectue
+		
 		// la plante veilli d'une annee
 		incrementeToursEnVie();
 		if(!this.isPuber()){
@@ -54,8 +56,13 @@ public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 	}
 
 	@Override
-	public boolean isMort() {
+	public boolean isMort(Case [][] map) throws Exception {
 		if (valeur<1 || !toujourEnVie()){
+			
+			if(map[positionX][positionY].getPlante()==this){
+				map[positionX][positionY].setPlante(null);
+			}
+			
 			return true;// Mort
 		}
 		return false;// en vie

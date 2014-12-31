@@ -4,10 +4,6 @@ public class Envie implements Comparable<Envie>{
 	
 	private Emotion emotion;
 	private int valeur;
-
-	public Envie(){
-		
-	}
 	
 	public Envie(Emotion emotion, int val){
 		this.setEmotion(emotion);
@@ -40,9 +36,12 @@ public class Envie implements Comparable<Envie>{
 		else if(valeur<0){
 			this.valeur = 0;
 		}
+		else{
+			this.valeur=valeur;
+		}
 	}
 	
-	public Envie envieLaPlusForte(Envie[] lesEnvies){
+	public static Envie envieLaPlusForte(Envie[] lesEnvies){
 		
 		Envie tmp=lesEnvies[0];
 		int valeur;
@@ -59,14 +58,9 @@ public class Envie implements Comparable<Envie>{
 	@Override
 	public int compareTo(Envie arg0){
 		
-		
-		if(arg0.getEmotion().getClass().equals(Emotion.DEPLACEMENT.getClass())){
-			
-			//System.out.println("deplacement dans comparTO : "+arg0.getValeur());
-		}
-		
 		if (this.valeur==arg0.valeur){
 			
+			// dans une egaliter la peur est prioritaire
 			if(this.getEmotion().getClass().equals(Emotion.PEUR.getClass())){
 				return 1;
 			}
@@ -79,15 +73,15 @@ public class Envie implements Comparable<Envie>{
 			else if(arg0.getEmotion().getClass().equals(Emotion.FAIM.getClass())){
 				return -1;
 			}
-			//System.out.println(this.valeur +" == " +arg0.valeur);
+			
 			return 0;
 			}
 		else if (this.valeur>arg0.valeur){
-			//System.out.println(this.valeur +" > " +arg0.valeur);
+			
 			return 1;	
 		}
 		else{
-			//System.out.println(this.valeur +" < " +arg0.valeur);
+			
 			return -1;
 		}
 	}

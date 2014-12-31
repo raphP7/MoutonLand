@@ -9,17 +9,20 @@ public class EtreMort extends Etre {
 		super(a.positionX , a.positionY);	
 		
 		if (a instanceof Plante ){
-			this.valeurEnSel=this.decompostion=2;
-			
+			this.decompostion=2;
+			this.valeurEnSel=this.decompostion;
 		}
 		else if(a instanceof Mouton){
-			this.valeurEnSel=this.decompostion=7;
+			this.decompostion=7;
+			this.valeurEnSel=this.decompostion;
 		}
 		else if(a instanceof Loup){
-			this.valeurEnSel=this.decompostion=13;
+			this.decompostion=13;
+			this.valeurEnSel=this.decompostion;
 		}
 		else{
-			decompostion=0;
+			this.decompostion=0;
+			this.valeurEnSel=this.decompostion;
 		}
 		
 	}

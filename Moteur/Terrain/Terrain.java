@@ -3,7 +3,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -49,11 +48,13 @@ public class Terrain {
 	    }
 	}
 	public Terrain(int x , int y , int obstacles) throws Exception{
+		
 		class NombreObstacle extends Exception{
 		    public NombreObstacle(){
 		        System.out.println("Vous voulez mettre plus d'obstacle que de nombre de case");
 		    }
 		}
+		
 	if(obstacles>=(x*y)){//Si il a plus d'obstable que de case.
 	throw new NombreObstacle();//Je leve une exeption
 	}
