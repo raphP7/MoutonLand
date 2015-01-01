@@ -3,6 +3,7 @@ package Affichage;
 import java.awt.Point;
 
 import Moteur.*;
+import Moteur.animauxHerbivores.Mouton;
 
 public class tets {
 

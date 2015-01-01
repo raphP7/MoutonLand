@@ -9,9 +9,9 @@ import java.util.Set;
 
 import Moteur.Animal;
 import Moteur.Etre;
-import Moteur.Loup;
-import Moteur.Mouton;
 import Moteur.Plante;
+import Moteur.animauxCarnivores.Loup;
+import Moteur.animauxHerbivores.Mouton;
 
 public class Terrain {
 	

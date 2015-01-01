@@ -10,9 +10,12 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import Moteur.Loup;
-import Moteur.Mouton;
+import Moteur.Carnivore;
+import Moteur.Herbivore;
+import Moteur.Plante;
 import Moteur.Terrain.Case;
+import Moteur.animauxCarnivores.Loup;
+import Moteur.animauxHerbivores.Mouton;
 
 public class AffichageTerrain extends JPanel {
 	// La vue par default de la terrain en abscisse(en nombre de case.)
@@ -23,33 +26,18 @@ public class AffichageTerrain extends JPanel {
 	protected static int y = Minimap.y;// ordonnée
 	protected int w;
 	protected int h;
-	
 	Random random = new Random();
-
-	
-	// Image du Terrain.
-	private BufferedImage herbeLoupAdulteFemelle = null;
-	private BufferedImage herbeLoupAdulteMal = null;
-	private BufferedImage herbeLoupBebe = null;
-	private BufferedImage herbeMoutonAdulteFemelle1 = null;
-	private BufferedImage herbeMoutonAdulteFemelle2 = null;
-	private BufferedImage herbeMoutonAdulteMal2 = null;
-	private BufferedImage herbeMoutonBebe1 = null;
-	private BufferedImage herbeMoutonBebe2 = null;
-	private BufferedImage herbeMoutonAdulteMal1 = null;
-
-	private BufferedImage terreLoupAdulteFemelle = null;
-	private BufferedImage terreLoupAdulteMal = null;
-	private BufferedImage terreLoupBebe = null;
-	private BufferedImage terreMoutonAdulteFemelle1 = null;
-	private BufferedImage terreMoutonAdulteFemelle2 = null;
-	private BufferedImage terreMoutonAdulteMal2 = null;
-	private BufferedImage terreMoutonBebe1 = null;
-	private BufferedImage terreMoutonBebe2 = null;
-	private BufferedImage terreMoutonAdulteMal1 = null;
-
+	private BufferedImage LoupAdulteFemelle = null;
+	private BufferedImage LoupAdulteMal = null;
+	private BufferedImage LoupBebe = null;
+	private BufferedImage MoutonAdulteFemelle1 = null;
+	private BufferedImage MoutonAdulteFemelle2 = null;
+	private BufferedImage MoutonAdulteMal2 = null;
+	private BufferedImage MoutonBebe1 = null;
+	private BufferedImage MoutonBebe2 = null;
+	private BufferedImage MoutonAdulteMal1 = null;
 	private BufferedImage terre = null;
-	private BufferedImage herbe = null;
+	private BufferedImage plante = null;
 	private BufferedImage obstacle = null;
 
 	AffichageTerrain(int w, int h) {
@@ -62,67 +50,34 @@ public class AffichageTerrain extends JPanel {
 			vueOrdonnee = length;
 		}
 		try {
-			herbeLoupAdulteFemelle = ImageIO.read(this.getClass()
-					.getClassLoader()
-					.getResource("images/herbeLoupAdulteFemelle.jpg"));
-			herbeLoupAdulteMal = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/herbeLoupAdulteMal.jpg"));
-			herbeLoupBebe = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/herbeLoupBebe.jpg"));
+			terre= ImageIO.read(this.getClass().getClassLoader().getResource("Terre.jpg"));
+			plante = ImageIO.read(this.getClass().getClassLoader().getResource("Herbe.jpg"));
+			obstacle = ImageIO.read(this.getClass().getClassLoader().getResource("obstacle.jpg"));
 
-			herbeMoutonAdulteMal1 = ImageIO.read(this.getClass()
+			 LoupAdulteFemelle = ImageIO.read(this.getClass().getClassLoader().getResource("LoupAdulteFemelle.png"));
+			 LoupAdulteMal = ImageIO.read(this.getClass().getClassLoader()
+					.getResource("LoupAdulteMal.png"));
+			 LoupBebe = ImageIO.read(this.getClass().getClassLoader()
+					.getResource("LoupBebe.png"));
+			 MoutonAdulteMal1 = ImageIO.read(this.getClass()
 					.getClassLoader()
-					.getResource("images/herbeMoutonAdulteMal1.jpg"));
-			herbeMoutonAdulteMal2 = ImageIO.read(this.getClass()
+					.getResource("MoutonAdulteMale1.png"));
+			 MoutonAdulteMal2 = ImageIO.read(this.getClass()
 					.getClassLoader()
-					.getResource("images/herbeMoutonAdulteMal2.jpg"));
+					.getResource("MoutonAdulteMale2.png"));
+			 MoutonAdulteFemelle1 = ImageIO.read(this.getClass()
+					.getClassLoader()
+					.getResource("MoutonAdulteFemelle1.png"));
+			 MoutonAdulteFemelle2 = ImageIO.read(this.getClass()
+					.getClassLoader()
+					.getResource("MoutonAdulteFemelle2.png"));
 
-			herbeMoutonAdulteFemelle1 = ImageIO.read(this.getClass()
-					.getClassLoader()
-					.getResource("images/herbeMoutonAdulteFemelle1.jpg"));
-			herbeMoutonAdulteFemelle2 = ImageIO.read(this.getClass()
-					.getClassLoader()
-					.getResource("images/herbeMoutonAdulteFemelle2.jpg"));
+			 MoutonBebe1 = ImageIO.read(this.getClass().getClassLoader()
+					.getResource("MoutonBebe1.png"));
+			 MoutonBebe2 = ImageIO.read(this.getClass().getClassLoader()
+					.getResource("MoutonBebe2.png"));
 
-			herbeMoutonBebe1 = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/herbeMoutonBebe1.jpg"));
-			herbeMoutonBebe2 = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/herbeMoutonBebe2.jpg"));
-
-			terreLoupAdulteFemelle = ImageIO.read(this.getClass()
-					.getClassLoader()
-					.getResource("images/terreLoupAdulteFemelle.jpg"));
-			terreLoupAdulteMal = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/terreLoupAdulteMal.jpg"));
-			terreLoupBebe = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/terreLoupBebe.jpg"));
-
-			terreMoutonAdulteMal1 = ImageIO.read(this.getClass()
-					.getClassLoader()
-					.getResource("images/terreMoutonAdulteMal1.jpg"));
-			terreMoutonAdulteMal2 = ImageIO.read(this.getClass()
-					.getClassLoader()
-					.getResource("images/terreMoutonAdulteMal2.jpg"));
-
-			terreMoutonAdulteFemelle1 = ImageIO.read(this.getClass()
-					.getClassLoader()
-					.getResource("images/terreMoutonAdulteFemelle1.jpg"));
-			terreMoutonAdulteFemelle2 = ImageIO.read(this.getClass()
-					.getClassLoader()
-					.getResource("images/terreMoutonAdulteFemelle2.jpg"));
-
-			terreMoutonBebe1 = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/terreMoutonBebe1.jpg"));
-			terreMoutonBebe2 = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/terreMoutonBebe2.jpg"));
-
-			terre = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/Terre.jpg"));
-			herbe = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/Herbe.jpg"));
-			obstacle = ImageIO.read(this.getClass().getClassLoader()
-					.getResource("images/obstacle.jpg"));
-
+			 
 		} catch (IOException e) {
 			System.out.println("Une image na pas etait trouver.");
 		}
@@ -139,114 +94,59 @@ public class AffichageTerrain extends JPanel {
 			for (int j = 0; j < AffichageTerrain.vueOrdonnee; j++) {
 				Case a = map[i][j];
 				//Affichage Image:
-				int valRandom;
 				if(a.isObstacle()){
 					g.drawImage(obstacle,i*w, j*h, w, h,this);
 				}
 				else{
+					
 					if(a.getPlante()!=null){
-						if(a.getAnimalPresent() instanceof Loup){
-							
-							if(a.getAnimalPresent().isPuber()){
-								if(a.getAnimalPresent().isFemelle()){
-									g.drawImage(terreLoupAdulteFemelle,i*w, j*h, w, h,this);
-								}else{
-									g.drawImage(terreLoupAdulteMal,i*w, j*h, w, h,this);
-								}
-							}
-							else{
-								g.drawImage(terreLoupBebe,i*w, j*h, w, h,this);
-							}
-						}
-						else if(a.getAnimalPresent() instanceof Mouton){
-							if(a.getAnimalPresent().isPuber()){
-								if(a.getAnimalPresent().isFemelle()){
-									valRandom=random.nextInt(1);
-									if(valRandom==0){
-										g.drawImage(terreMoutonAdulteFemelle1,i*w, j*h, w, h,this);
-									}else{
-										g.drawImage(terreMoutonAdulteFemelle2,i*w, j*h, w, h,this);
-										}
-								}else{
-									valRandom=random.nextInt(1);
-									if(valRandom==0){
-										g.drawImage(terreMoutonAdulteMal1,i*w, j*h, w, h,this);
-									}
-									else{
-										g.drawImage(terreMoutonAdulteMal2,i*w, j*h, w, h,this);
-									}
-								}
-							}
-							else{
-								valRandom=random.nextInt(1);
-								if(valRandom==0){
-									g.drawImage(terreMoutonBebe1,i*w, j*h, w, h,this);
-								}else{
-									g.drawImage(terreMoutonBebe2,i*w, j*h, w, h,this);
-								}
-								
-							}	
-						}
-						else{
-							g.drawImage(terre,i*w, j*h, w, h,this);
-						}
-					}
+						g.drawImage(plante,i*w, j*h, w, h,this);}
 					else{
-
-						if(a.getAnimalPresent() instanceof Loup){
-							
-							if(a.getAnimalPresent().isPuber()){
-								if(a.getAnimalPresent().isFemelle()){
-									g.drawImage(herbeLoupAdulteFemelle,i*w, j*h, w, h,this);
-								}else{
-									g.drawImage(herbeLoupAdulteMal,i*w, j*h, w, h,this);
-								}
-							}
-							else{
-								g.drawImage(herbeLoupBebe,i*w, j*h, w, h,this);
-							}
-						}
-						else if(a.getAnimalPresent() instanceof Mouton){
-							if(a.getAnimalPresent().isPuber()){
-								if(a.getAnimalPresent().isFemelle()){
-									
-									valRandom=random.nextInt(1);
-									if(valRandom==0){
-										g.drawImage(herbeMoutonAdulteFemelle1,i*w, j*h, w, h,this);
+						g.drawImage(terre,i*w, j*h, w, h,this);}
+					
+					if(a.getAnimalPresent() instanceof Carnivore){
+							if (a.getAnimalPresent() instanceof Loup){
+								
+								if(a.getAnimalPresent().isPuber()){
+									if(a.getAnimalPresent().isFemelle()){
+										g.drawImage(LoupAdulteFemelle,i*w, j*h, w, h,this);
+									}else{
+										g.drawImage(LoupAdulteMal,i*w, j*h, w, h,this);
 									}
-									else{
-										g.drawImage(herbeMoutonAdulteFemelle2,i*w, j*h, w, h,this);
-									}
-									
-								}else{
-									
-									valRandom=random.nextInt(1);
-									if(valRandom==0){
-										g.drawImage(herbeMoutonAdulteMal1,i*w, j*h, w, h,this);
-									}
-									else{
-										g.drawImage(herbeMoutonAdulteMal2,i*w, j*h, w, h,this);
-									}
-								}
-							}
-							else{
-								valRandom=random.nextInt(1);
-								if(valRandom==0){
-									g.drawImage(herbeMoutonBebe1,i*w, j*h, w, h,this);
 								}
 								else{
-									g.drawImage(herbeMoutonBebe2,i*w, j*h, w, h,this);
+									g.drawImage(LoupBebe,i*w, j*h, w, h,this);
 								}
 								
-							}	
+							}
+							
+					}
+					
+					else if (a.getAnimalPresent() instanceof Herbivore) {
+						if (a.getAnimalPresent() instanceof Mouton) {
+
+							if (a.getAnimalPresent().isPuber()) {
+								
+								if (a.getAnimalPresent().isFemelle()) {
+									
+									//if(a.getAnimalPresent().)
+										g.drawImage(MoutonAdulteFemelle1,i * w, j * h, w, h, this);
+										//g.drawImage(MoutonAdulteFemelle2,i * w, j * h, w, h, this);
+									
+								} else {
+										g.drawImage(MoutonAdulteMal1, i * w, j * h, w, h, this);
+										//g.drawImage(MoutonAdulteMal2, i * w, j * h, w, h, this);
+									}
+								}
+							else{
+								g.drawImage(MoutonBebe1, i * w, j * h, w, h, this);
+								//g.drawImage(MoutonBebe2, i * w, j * h, w, h, this);
+							}
+							}
 						}
-						else{
-							//afficher herbe.
-							g.drawImage(herbe,i*w, j*h, w, h,this);
-						}
+
 					}
 				}
 			}
 		}
 	}
-}

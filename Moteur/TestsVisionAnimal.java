@@ -9,6 +9,7 @@ import Moteur.Intelligence.Envie;
 import Moteur.Intelligence.FileDeSouvenirs;
 import Moteur.Intelligence.VisionEtDeplacement;
 import Moteur.Terrain.Terrain;
+import Moteur.animauxHerbivores.Mouton;
 
 
 class TestsVisionAnimal {

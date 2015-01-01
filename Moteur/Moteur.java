@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
 import Affichage.Fenetre;
 import Moteur.Terrain.Terrain;
+import Moteur.animauxCarnivores.Loup;
+import Moteur.animauxHerbivores.Mouton;
 
 public class Moteur {
 	private int esperenceDeVieMoyenne=10; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
@@ -117,7 +118,6 @@ public class Moteur {
 					
 					if(type.equals("Plante")){
 						
-						
 						definirEsperanceVie=this.esperenceDeVieMoyenne*20/100;
 						definirPuberter=(definirEsperanceVie*this.pubert/100);
 						definirEsperanceVie=10;// POUR TEST
@@ -169,7 +169,7 @@ public class Moteur {
 			
 			if (a instanceof EtreMort) {
 				if (((EtreMort) a).decompositionFini()) {
-					System.out.println("decomposition");
+					//System.out.println("decomposition");
 					leTerrain.map[a.positionX][a.positionY].setValeurSel(((EtreMort) a).valeurEnSel);
 					etreMortDecomposer.add(a);
 				}
@@ -179,7 +179,7 @@ public class Moteur {
 				if(((EtreVivant)a).isMort(leTerrain.map)){
 					
 					//decomposition fini
-					System.out.println("decomposition fini");
+					//System.out.println("decomposition fini");
 					a=new EtreMort((EtreVivant) a);
 					lesEtres.set(i, a);
 				}
@@ -205,7 +205,7 @@ public class Moteur {
 		etreMortDecomposer.clear();
 		
 		for (Etre c : lesnouveauxVivans){// ajoute les nouveaux Etre a la liste lesEtres
-			System.out.println("bebe ajouter");
+			//System.out.println("bebe ajouter");
 			lesEtres.add(c);
 		}
 		lesnouveauxVivans.clear();

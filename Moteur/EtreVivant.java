@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 import Affichage.Fenetre;
+import Moteur.Intelligence.Emotion;
+import Moteur.Intelligence.Envie;
 public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	//private boolean bloqueChangement=false;
 	
@@ -14,7 +16,7 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 	private int toursEnVie;
 	private boolean puber;
 	private int nbToursPourDevenirPuber;
-	protected int nombreDeReproduction;
+	private int nombreDeReproduction;
 	protected int maxReproduction;
 	private int esperenceSansManger;
 	protected int toursSansManger;
@@ -70,18 +72,22 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 		
 		this.aEteTuer=false;
 		this.puber=false;
+		this.nombreDeReproduction=0;
+		
 		
 	}
 	public EtreVivant(int x , int y ,boolean femelle , int esperenceDeVie , int nbToursPourDevenirPuber, int  maxReproduction , int esperenceSansManger, int champDeVision){
 		super(x,y);
 		this.femelle=femelle;
 		this.esperenceDeVie=esperenceDeVie;
-		this.puber=false;
+		
 		this.nbToursPourDevenirPuber=nbToursPourDevenirPuber;
 		this.maxReproduction=maxReproduction;
 		this.esperenceSansManger=esperenceSansManger;
 		this.champDeVision=champDeVision;
 		this.aEteTuer=false;
+		this.puber=false;
+		this.nombreDeReproduction=0;
 	}
 	
 	public boolean toujourEnVie(){
@@ -163,7 +169,7 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 			
 			try {
 				constructeurBebe = this.getClass().getConstructor(Etre.class ,Etre.class,Point.class);
-				System.out.println(constructeurBebe.toString());
+				//System.out.println(constructeurBebe.toString());
 				Etre bebe;
 				bebe = constructeurBebe.newInstance(this,b,positionBebe);
 				return bebe;
@@ -177,6 +183,23 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 		}
 		else{
 			return null;
+		}
+	}
+	public int getNombreDeReproduction() {
+		return nombreDeReproduction;
+	}
+	public void setNombreDeReproduction() throws Exception {
+		this.nombreDeReproduction++;
+		if(this.nombreDeReproduction>this.maxReproduction){
+			throw new Exception("l'etre vivant c'est reproduit plus de fois que possible");
+		}
+		
+		if(this instanceof Animal){
+			for (Envie a : ((Animal)this).getLesEnvies()){
+				if(a.getEmotion()==Emotion.REPRODUCTION){
+					a.setValeur(0);
+				}
+			}
 		}
 	}
 	

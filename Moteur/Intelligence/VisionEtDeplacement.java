@@ -14,7 +14,14 @@ import Moteur.Herbivore;
 import Moteur.Terrain.Case;
 import Moteur.Terrain.Terrain;
 
-
+/**Class qui permet de : 
+ * mettre a jour la vision d'un Animal.
+ * mettre a jour ces emotions en fonction de ce qui l'entour.
+ * recuperer un deplacement selon les emotions de l'animal
+ * 
+ * @author Raph
+ *
+ */
 public class VisionEtDeplacement {
 	
 	/**
@@ -121,122 +128,106 @@ public class VisionEtDeplacement {
 
 	private static boolean backtrakCheminAnimal(int x , int y , Point arriver,Case [][] tableauVision,Stack<Point> chemin, int tailleMax, Etre etreEnMouvement,int nbAnimal){
 		
-		if(nbAnimal>1){
+		if(nbAnimal>0){
 			return false;
 		}
 		
-		if(tableauVision[x][y].getAnimalPresent() != null || tableauVision[x][y].getAnimalPresent() != etreEnMouvement ){
+		if(tableauVision[x][y].getAnimalPresent() != null && tableauVision[x][y].getAnimalPresent() != etreEnMouvement ){
 			nbAnimal++;
-			
 		}
 		
 		if(!tableauVision[x][y].isVisible()){
-			
 			return false;
 		}
 		
 		if(tableauVision[x][y].isObstacle()){
-			
 			return false;
 			
 		}
 		
 		if(arriver.x==x && arriver.y==y){
-			if(chemin!=null && chemin.size()<=tailleMax){
-				chemin.push(new Point(x,y));}
+			if(chemin.size()<=tailleMax){
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
+			}
 		}
-		
 		
 		if (arriver.x < x && arriver.y == y) {
 			if (
-					chemin != null
-					&& chemin.size() <= tailleMax
-					
+					chemin.size() <= tailleMax
 					&& backtrakCheminAnimal(x - 1, y, arriver, tableauVision, chemin,tailleMax,etreEnMouvement,nbAnimal)
 					) {
-				chemin.push(new Point(x, y));
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
 			}
 		}
 		if( arriver.y<y && arriver.x==x){
 			if(
-					
-					chemin != null
-					&& chemin.size() <= tailleMax
-					
+					chemin.size() <= tailleMax
 					&& backtrakCheminAnimal(x ,y-1 ,arriver,tableauVision, chemin,tailleMax,etreEnMouvement,nbAnimal)
 					) {
 
-				chemin.push(new Point(x, y));
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
 			}
 		}
 		if(arriver.x>x && arriver.y==y){
 			if(
-					chemin != null
-					&& chemin.size() <= tailleMax
-					
+					chemin.size() <= tailleMax
 					&& backtrakCheminAnimal(x+1 ,y ,arriver,tableauVision, chemin,tailleMax,etreEnMouvement,nbAnimal)
 					) {
 
-				chemin.push(new Point(x, y));
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
 			}
 		}
 		if(arriver.y>y && arriver.x==x){
 			if(	
-					chemin != null
-					&& chemin.size() <= tailleMax
-					
+					chemin.size() <= tailleMax
 					&& backtrakCheminAnimal(x ,y+1 ,arriver,tableauVision, chemin,tailleMax,etreEnMouvement,nbAnimal)
 					) {
 
-				chemin.push(new Point(x, y));
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
 			}
 		}
 		if(arriver.x<x && arriver.y<y){
 			if(		
-					chemin != null
-					&& chemin.size() <= tailleMax
+					chemin.size() <= tailleMax
 					&& backtrakCheminAnimal(x-1 ,y-1 ,arriver,tableauVision, chemin,tailleMax,etreEnMouvement,nbAnimal)
 					) {
 
-				chemin.push(new Point(x, y));
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
 			}
 		}
 		if(arriver.x>x && arriver.y<y){
 			if(	
-					chemin != null
-					&& chemin.size() <= tailleMax
+					chemin.size() <= tailleMax
 					&& backtrakCheminAnimal(x+1 ,y-1 ,arriver,tableauVision, chemin,tailleMax,etreEnMouvement,nbAnimal)
 					) {
 
-				chemin.push(new Point(x, y));
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
 			}
 		}
 		if(arriver.x>x && arriver.y>y){
 			if(
-					chemin != null
-					&& chemin.size() <= tailleMax
+					chemin.size() <= tailleMax
 					&& backtrakCheminAnimal(x+1 ,y+1 ,arriver,tableauVision, chemin,tailleMax,etreEnMouvement,nbAnimal)
 					) {
 
-				chemin.push(new Point(x, y));
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
 			}
 		}
 		if(arriver.x<x && arriver.y>y){
 			if(
-					chemin != null
-					&& chemin.size() <= tailleMax
+					chemin.size() <= tailleMax
 					&& backtrakCheminAnimal(x-1 ,y+1 ,arriver,tableauVision, chemin,tailleMax,etreEnMouvement,nbAnimal)
 					) {
 
-				chemin.push(new Point(x, y));
+				if(chemin != null){chemin.push(new Point(x, y));}
 				return true;
 			}
 		}
@@ -406,15 +397,15 @@ public class VisionEtDeplacement {
 		Terrain a = new Terrain(10,10,10);
 		a.map=tableauVision;
 		
-		System.out.println("AVANT CHAMP OBSTACLES");
+		//System.out.println("AVANT CHAMP OBSTACLES");
 		
-		a.afficheVisionShell();
+		//a.afficheVisionShell();
 		
 		champObstacle(tableauVision,champDeVision);
 
-		System.out.println("APRES CHAMP OBSTACLES");
+		//System.out.println("APRES CHAMP OBSTACLES");
 		
-		a.afficheVisionShell();
+		//a.afficheVisionShell();
 		
 	return tableauVision;
 	
@@ -572,48 +563,87 @@ public class VisionEtDeplacement {
 		
 		int champDeVision=((Animal)animal).getChampDeVision();
 		
-		List<Point> casesAccessible = new LinkedList<Point>();
+		LinkedList<Point> casesAccessible =listePointAccessible(tableauVision, animal , emotion);
+		//System.out.println("nb de case accessible " +casesAccessible.size());
+		Random random = new Random();
+		int alea;
+		alea=random.nextInt(casesAccessible.size());
+		Point arriver=casesAccessible.get(alea);
+		souvenirs.ajouter(arriver.x, arriver.y, tableauVision);
+		//System.out.println("aleaoitre choisi"+alea);
+		try{
+			Thread.sleep(0);
 
+		}catch(Exception e){
+			
+		}
+		
+		backtrakCheminAnimal(champDeVision, champDeVision, arriver, tableauVision, chemin, champDeVision,animal,0);	
+		switch(emotion){
+			
+			case DEPLACEMENT:
+				break;
+			case REPRODUCTION:
+				break;
+			case PEUR:
+				break;
+			case FAIM:
+				break;
+			/*	chemin.clear();
+				if(tableauVision[champDeVision][champDeVision].getPlante()!=null){
+					casesAccessible.add(new Point(champDeVision, champDeVision));
+					break;
+				}
+				else{
+				}
+				*/
+		}
+		
+		return chemin;
+		
+	}
+	
+	/**
+	 * Trouve toutes les case accessible a un animal
+	 * @param tableauVision Le tableau de la vision de l'animal
+	 * @param animal L'animal qui cherche a se deplacer
+	 * @return une liste des case accessible a l'animal a ce tour
+	 */
+	private static LinkedList<Point> listePointAccessible(Case [][] tableauVision , Etre animal ,Emotion emotion){
+	
+	LinkedList<Point> casesAccessible = new LinkedList<Point>();
+	int champDeVision=((Animal)animal).getChampDeVision();
+	Stack<Point> chemin = new Stack<Point>();
 		
 		//Met les cases visible dans la liste
 		int parcour=0;
 		while (parcour<2){
 		for (int i = 0; i < tableauVision.length; i++) {
 			for (int j = 0; j < tableauVision[0].length; j++) {
-
 				Case tmp = tableauVision[i][j];
 				Point point = new Point(i,j);
-				
 				if(parcour==0){
 					
 						if (tmp.isVisible()) {
 
 							if (animal instanceof Herbivore) {
 								// un herbivore ne peut aller que sur une case sans animal deja present
-								if (tmp.getAnimalPresent() == null
-										|| tmp.getAnimalPresent() == animal) {
-									// casesAccessible.add(new Point(i, j));
-								} else {
-									tmp.setVisible(false);
-								}
-							} else {
+								if (tmp.getAnimalPresent() == null || tmp.getAnimalPresent() == animal) {} 
+								else {tmp.setVisible(false);}
+								
+							}
+							else{
+
+								if (tmp.getAnimalPresent() == null || tmp.getAnimalPresent() == animal) {}
 								// un carnivor peut aller sur la case d'un herbivor pour le manger
-								if (tmp.getAnimalPresent() == null
-										|| tmp.getAnimalPresent() == animal
-										|| (tmp.getAnimalPresent() instanceof Herbivore)) {
-
-									// casesAccessible.add(new Point(i, j));
-
-								} else {
-
-									tmp.setVisible(false);
-
-								}
+								else if(emotion==Emotion.FAIM && tmp.getAnimalPresent() instanceof Herbivore){}
+								
+								else {tmp.setVisible(false);}
 							}
 						}
+				
 			}
 			if(parcour==1){
-				
 				chemin.clear();
 					if(backtrakCheminAnimal(champDeVision, champDeVision, point, tableauVision, chemin, champDeVision,animal,0))
 					{
@@ -623,41 +653,8 @@ public class VisionEtDeplacement {
 			}
 		}
 		parcour++;
-		
 		}
-		
-		
-		
-		
-		
-		
-		chemin.clear();
-		System.out.println("nb de case accessible " +casesAccessible.size());
-		Random random = new Random();
-		int alea;
-		alea=random.nextInt(casesAccessible.size());
-		Point arriver=casesAccessible.get(alea);
-		souvenirs.ajouter(arriver.x, arriver.y, tableauVision);
-		
-		backtrakCheminAnimal(champDeVision, champDeVision, arriver, tableauVision, chemin, champDeVision,animal,0);
-		
-		switch(emotion){
-			
-			case DEPLACEMENT:
-				System.out.println("DEPLACEMENT");
-				break;
-			case REPRODUCTION:
-				System.out.println("REPRODUCTION");
-				break;
-			case PEUR:
-				System.out.println("PEUR");
-				break;
-			case FAIM:
-				System.out.println("FAIM");
-				break;
-		}
-		
-		return chemin;
-		
+		return casesAccessible;
 	}
+	
 }

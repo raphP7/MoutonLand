@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
-
-import Affichage.Fenetre;
 import Moteur.Intelligence.Emotion;
 import Moteur.Intelligence.Envie;
 import Moteur.Intelligence.FileDeSouvenirs;
@@ -72,8 +70,6 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 	public void initialiserRaviablesAnimal(int x , int y){
 		this.toursSansManger=0;
 		this.immobile=0;
-		this.nombreDeReproduction=0;		
-		
 		//initialisation du tableau lesEnvies avec des objects Envie qui sont listé par la Enum Emotion
 		
 		this.lesEnvies=new Envie[Emotion.values().length];	
@@ -134,11 +130,11 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 	public boolean reproductionPossible(Etre b){
 		
 		if (((EtreVivant) b).isFemelle() != this.isFemelle()  && this.getClass().equals(b.getClass()) ){// les animaux sont de  Sexe Opposer et de meme Race
-			System.out.println("return true");
+			//System.out.println("return true");
 			
 			
 			//les animaux peuvents encore se reproduire
-			if(this.maxReproduction>this.nombreDeReproduction && ((EtreVivant)b).maxReproduction>((EtreVivant)b).nombreDeReproduction){// les animaux peuvent se reproduire
+			if(this.maxReproduction>this.getNombreDeReproduction() && ((EtreVivant)b).maxReproduction>((EtreVivant)b).getNombreDeReproduction()){// les animaux peuvent se reproduire
 				
 				//les animaux sont puberts
 				if(this.isPuber() && ((Animal)b).isPuber()){
@@ -186,7 +182,6 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 		else if(this instanceof Carnivore && etreManger instanceof Animal){
 			
 			((EtreVivant) etreManger).setaEteTuer(true);
-			map[etreManger.positionX][etreManger.positionY].setAnimalPresent(null);
 			envieTemporaire.reduireValeur(100);
 			this.toursSansManger=0;
 		}
@@ -197,13 +192,13 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 		
 		if(this.isMort(map)){return null;}
 		
-		System.out.println("ACTUALISER VARIABLES");
+		//System.out.println("ACTUALISER VARIABLES");
 		
 		this.actualiserVariables();
 		//mettre a jour la vision de l'animal
 		this.tableauVision=VisionEtDeplacement.miseAjourVision(new Point(this.positionX,this.positionY),this.getChampDeVision(),map);
 		
-		System.out.println("APRES VISION ANIMAL");
+		//System.out.println("APRES VISION ANIMAL");
 		
 		
 		//mettre a jour les emotions en fonction de la vision
@@ -219,9 +214,13 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 		Stack<Point> chemin =VisionEtDeplacement.deplacement(this.positionX,this.positionY,map,envieTemporaire.getEmotion());
 		
 		
+		
 		if(chemin.size()==0){
-			throw new Exception("aucune case d'arriver n'a ete choisi par l'animal");
-		}
+			Terrain a =new Terrain(10,10,10);
+				a.map=tableauVision;
+				a.afficheShell();
+				throw new Exception("aucune case d'arriver n'a ete choisi par l'animal");	
+			}
 		
 		Point converteur=new Point (this.positionX-this.getChampDeVision(),this.positionY-this.getChampDeVision());
 		
@@ -240,23 +239,25 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 			
 			map[this.positionX][this.positionY].setAnimalPresent(null);
 			
-			//Moteur.lafenetre.miseAjoursCase(this.positionX, this.positionY);
+			Moteur.laFenetre.miseAjoursCase(this.positionX, this.positionY);
+			//
 			
 			this.positionX=tmp.x+converteur.x;
 			this.positionY=tmp.y+converteur.y;
 			
-			//System.out.println("position ou aller "+this.positionX+" "+this.positionY);
+			//
 			
 			map[this.positionX][this.positionY].setAnimalPresent(this);
+			//Moteur.laFenetre.repaint();
+			Moteur.laFenetre.miseAjoursCase(this.positionX, this.positionY);
 			try{
-				Thread.sleep(1000);
+				Thread.sleep(0);
 
 			}catch(Exception e){
 				
 			}
-			//Fenetre.affichegeTerrain.repaint();
-			//Moteur.lafenetre.miseAjoursCase(this.positionX, this.positionY);
-			//Fenetre.affichegeTerrain.repaint();
+			
+			
 			
 		}
 		//appliquer le dernier deplacement
@@ -264,12 +265,10 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 		
 		map[this.positionX][this.positionY].setAnimalPresent(null);
 		
-		Moteur.laFenetre.repaint();
+		Moteur.laFenetre.miseAjoursCase(this.positionX, this.positionY);
 		
-		//System.out.println("fin de la pile "+chemin.size());
-		
-		this.positionX=arriver.x+converteur.x;
-		this.positionY=arriver.x+converteur.y;
+		//this.positionX=arriver.x+converteur.x;
+		//this.positionY=arriver.x+converteur.y;
 		
 		//recupere l'Animal hypotethiquement present		
 		Etre animalPresent=map[arriver.x+converteur.x][arriver.y+converteur.y].getAnimalPresent();
@@ -283,20 +282,19 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 		
 			case FAIM:
 				
+				//System.out.println(animalPresent);
+				
 				if (animalPresent != null && this!=animalPresent){
 					// il y a un autre annimal sur la case d'arriver
 					
 					if (this instanceof Carnivore && animalPresent instanceof Herbivore ){
 						
-						EtreVivant seFaitManger=map[(arriver.x+converteur.x)][(arriver.y+converteur.y)].getAnimalPresent();
+						//System.out.println(animalPresent);
 						
-						this.manger(seFaitManger,envieTemporaire,map);
+						this.manger(animalPresent,envieTemporaire,map);
 						
-						this.positionX=arriver.x+converteur.x;
-						this.positionY=arriver.y+converteur.y;
-						map[this.positionX][this.positionY].setAnimalPresent(this);
-	
-						Fenetre.minimap.repaint();
+						appliquerDeplacementFinal(arriver,converteur,map);
+						
 						return null;					
 					}
 					else if( this instanceof Carnivore && animalPresent instanceof Carnivore){
@@ -307,9 +305,7 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 						if(this.force>=((Animal)animalPresent).force){
 							//this a gagner
 							this.manger(seFaitAttaquer,envieTemporaire,map);
-							this.positionX=arriver.x+converteur.x;
-							this.positionY=arriver.y+converteur.y;
-							map[this.positionX][this.positionY].setAnimalPresent(this);
+							appliquerDeplacementFinal(arriver,converteur,map);
 	
 	
 							return null;
@@ -336,11 +332,7 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 						this.manger(plantePresente,envieTemporaire,map);
 					}
 					
-					
-					this.positionX=arriver.x+converteur.x;
-					this.positionY=arriver.y+converteur.y;
-					map[this.positionX][this.positionY].setAnimalPresent(this);
-					Fenetre.minimap.repaint();
+					appliquerDeplacementFinal(arriver,converteur,map);
 					
 					return null;
 					
@@ -350,19 +342,13 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 					
 				}
 			case PEUR:
-				map[arriver.x+converteur.x][arriver.y+converteur.y].setAnimalPresent(this);
-				
-	
-				this.positionX=arriver.x+converteur.x;
-				this.positionY=arriver.y+converteur.y;
+				appliquerDeplacementFinal(arriver,converteur,map);
 				
 				return null;
 				
 			case DEPLACEMENT:
-				map[arriver.x+converteur.x][arriver.y+converteur.y].setAnimalPresent(this);
 				
-				this.positionX=arriver.x+converteur.x;
-				this.positionY=arriver.y+converteur.y;
+				appliquerDeplacementFinal(arriver,converteur,map);
 				
 				return null;
 				
@@ -370,9 +356,8 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 				
 				
 				// l'animal est arriver sur sa case et va essayer de se reproduire
-				this.positionX=arriver.x+converteur.x;
-				this.positionY=arriver.y+converteur.y;
-				map[this.positionX][this.positionY].setAnimalPresent(this);
+				
+				appliquerDeplacementFinal(arriver,converteur,map);
 				
 				//trouver les partenaires
 				//trouver les cases Vides autour de la femelle ou peuvent apparaitre le bebe
@@ -385,7 +370,7 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 				
 				Terrain a =new Terrain(10,10,10);
 				a.map=visionThis;
-				a.afficheVisionShell();
+				//a.afficheVisionShell();
 				
 				List<Etre> partenairesPossible = this.partenairePossible(visionThis);
 				
@@ -460,34 +445,38 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 						coordonnesBebe.y=coordonnesBebe.y+converteurBEBE.y;
 					}
 					
-					System.out.println("coordonnes");
-					System.out.println(coordonnesBebe);
+					//System.out.println("coordonnes");
+					//System.out.println(coordonnesBebe);
 					
 					
 					Etre bebe=this.bebe(partenaireChoisi,coordonnesBebe);
 					
 					//placement du bebe sur la map
 					map[bebe.positionX][bebe.positionY].setAnimalPresent((Animal)bebe);
+					Moteur.laFenetre.miseAjoursCase(bebe.positionX, bebe.positionY);
 					
 					// les variables des parents sont incrementer
-					((EtreVivant)partenaireChoisi).nombreDeReproduction++;
-					((EtreVivant)this).nombreDeReproduction++;
+					((EtreVivant)partenaireChoisi).setNombreDeReproduction();
+					((EtreVivant)this).setNombreDeReproduction();
 					
 					return bebe;
 				}
 		}//fermeture du switch
 		
-		this.positionX=arriver.x+converteur.x;
-		this.positionY=arriver.y+converteur.y;
 		
-		map[this.positionX][this.positionY].setAnimalPresent(this);
-		
-		Fenetre.affichegeTerrain.repaint();
+		appliquerDeplacementFinal(arriver,converteur,map);
 		
 		return null;
 		
 	}
 
+	public void appliquerDeplacementFinal(Point arriver , Point converteur , Case[][] map) throws Exception{
+		this.positionX=arriver.x+converteur.x;
+		this.positionY=arriver.y+converteur.y;
+		map[this.positionX][this.positionY].setAnimalPresent(this);
+		Moteur.laFenetre.miseAjoursCase(this.positionX, this.positionY);
+		
+	}
 	public void visionAutourDeThisIsGoodSize(Case[][] visionAutourDeThis,int champDeVision) throws Exception{
 		
 		int tailleVision=1+champDeVision*2;

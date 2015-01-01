@@ -14,9 +14,9 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 
 import Controleur.ComtroleurMinimap;
-import Moteur.Loup;
-import Moteur.Mouton;
 import Moteur.Terrain.Case;
+import Moteur.animauxCarnivores.Loup;
+import Moteur.animauxHerbivores.Mouton;
 
 public class Minimap extends JPanel {
 	protected static int vueAbscisse = 30;// La vue par default de la minimap en

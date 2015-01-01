@@ -1,5 +1,10 @@
 package Moteur;
 
+import Moteur.animauxCarnivores.Loup;
+import Moteur.animauxHerbivores.Mouton;
+
+
+
 public class EtreMort extends Etre {
 	int valeurEnSel;
 	int decompostion;
