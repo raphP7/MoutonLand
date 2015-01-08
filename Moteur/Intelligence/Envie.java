@@ -1,5 +1,13 @@
 package Moteur.Intelligence;
 
+/**
+ * Une envie stock le nom d'une emotion et sa valeur d'importance en pourcentage
+ * 
+ * exemple si Faim et valeur=100 , l'animal a 100% envie de manger
+ * et cette envie guidera son choix d'action et de deplacement
+ * @author Raph
+ *
+ */
 public class Envie implements Comparable<Envie>{
 	
 	private Emotion emotion;

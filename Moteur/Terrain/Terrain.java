@@ -13,6 +13,14 @@ import Moteur.Plante;
 import Moteur.animauxCarnivores.Loup;
 import Moteur.animauxHerbivores.Mouton;
 
+/**
+ * Pour la construction du terrain 
+ * l'ajout aleatoire des etres sur le terrain
+ * un affichage dans le shell du terrain
+ * 
+ * @author Raph
+ *
+ */
 public class Terrain {
 	
 	int x;
@@ -152,6 +160,13 @@ public class Terrain {
 		
 	}
 	
+	/**
+	 * ajoute aleatoirement les etres sur le terrain 
+	 * 
+	 * @param listAjout la liste des etres a ajouter
+	 * @return la liste des etres reelement ajouter sur le terrain ,
+	 * @throws Exception
+	 */
 	public List<Etre> ajouterEtreALeatoire(List<Etre> listAjout) throws Exception{
 		
 		if(! ListSansDefauts(listAjout)){
@@ -209,7 +224,12 @@ public class Terrain {
 		}
 		return lesEtrePlacer;
 	}
-	
+	/**
+	 * Permet de supprimer du terrain les etres supprimer aleatoirement avec les boutons
+	 * 
+	 * @param listAsupprimer la liste des etres a supprimer du terrain
+	 * @throws Exception
+	 */
 	public void supprimer(List<Etre> listAsupprimer) throws Exception{
 		
 		boolean trouver;
@@ -261,6 +281,10 @@ public class Terrain {
 		this.caseVide = caseVide;
 	}
 	
+	
+	/**
+	 * affiche la vision d'un animal
+	 */
 	public void afficheVisionShell(){
 		
 		System.out.println("\n");
@@ -293,6 +317,9 @@ public class Terrain {
 		System.out.println("\n");
 	}
 	
+	/**
+	 * affiche le terrain dans le shell
+	 */
 	public void afficheShell(){
 		System.out.println("\n");
 		System.out.print("/");

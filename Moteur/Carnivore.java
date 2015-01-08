@@ -1,7 +1,11 @@
 package Moteur;
 
 import java.awt.Point;
-
+/**
+ * La class des Carnivores , ils peuvent manger d'autre carnivore que de leur Race et les herbivore
+ * @author Raph
+ *
+ */
 public abstract class Carnivore extends Animal{
 
 	public Carnivore(int x, int y, boolean femelle, int esperenceDeVie,

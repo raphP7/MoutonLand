@@ -2,6 +2,11 @@ package Moteur.Terrain;
 import Moteur.Animal;
 import Moteur.Plante;
 
+/**
+ * Une case stock l'animal , la plante , le sel ou l'obstacle se trouvant dessus
+ * @author Raph
+ *
+ */
 public class Case {
 
 	private boolean modif;

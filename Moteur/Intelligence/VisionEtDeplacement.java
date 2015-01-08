@@ -561,6 +561,7 @@ public class VisionEtDeplacement {
 		alea=random.nextInt(casesAccessible.size());
 		Point arriver=casesAccessible.get(alea);
 		
+		
 		switch(emotion){
 			
 			case DEPLACEMENT:
@@ -570,10 +571,17 @@ public class VisionEtDeplacement {
 			case PEUR:
 				break;
 			case FAIM:
+				
+				// un herbivore qui a faim et qui se trouve sur une plante reste dessus pour manger
+				if(animal instanceof Herbivore){
+					if(map[animal.positionX][animal.positionY].getPlante()!=null){
+						arriver=new Point(champDeVision,champDeVision);
+					}
+				}
+				
 				break;
 		
 		}
-		
 		
 		backtrakCheminAnimal(champDeVision, champDeVision, arriver, tableauVision, chemin, champDeVision,animal,0);
 		return chemin;

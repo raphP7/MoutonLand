@@ -72,16 +72,16 @@ public class AffichageTerrain extends JPanel {
 		} catch (IOException e) {
 			System.out.println("Une image na pas etait trouver.");
 		}
-		this.setPreferredSize(new Dimension((int) (w * 0.72), (int) (h * 0.90)));
+		this.setPreferredSize(new Dimension((int) (w * 0.72), (int) (h * 0.80)));
 		repaint();
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public void paintComponent(Graphics g) {
 		Case[][] map = Fenetre.terrain.map;
-		
 		this.w = this.getWidth() / AffichageTerrain.vueAbscisse;
 		this.h = this.getHeight() / AffichageTerrain.vueOrdonnee;
+		g.clearRect(0, 0,this.getWidth(),this.getHeight());
 		for (int i =0; i < AffichageTerrain.vueAbscisse; i++) {
 			for (int j =0; j < AffichageTerrain.vueOrdonnee; j++) {
 				

@@ -7,6 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Moteur.Moteur;
 import Moteur.Terrain.Terrain;
 public class Fenetre extends JFrame{
 	
@@ -15,9 +16,8 @@ public class Fenetre extends JFrame{
 	public static AffichageTerrain affichegeTerrain;
 	
 	
-	
-	public Fenetre(Terrain terrain) throws Exception{
-		Fenetre.terrain=terrain;
+	public Fenetre(Moteur moteur) throws Exception{
+		Fenetre.terrain=moteur.leTerrain;
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//pour que la croix ferme le Jframe
 		this.setTitle("MoutonLand");//nom de la fenetre
@@ -30,20 +30,19 @@ public class Fenetre extends JFrame{
 		comteneurGlobal.setLayout(new BoxLayout(comteneurGlobal,BoxLayout.LINE_AXIS));//J'ajoute un layout(Vertical) a mon comteneurGlobal.
 		
 		JPanel comteneurGauche=new JPanel();
-		comteneurGauche.setBackground(Color.WHITE);
+		
 		comteneurGauche.setLayout(new BoxLayout(comteneurGauche,BoxLayout.PAGE_AXIS));//J'ajoute un layout(Horizontal) a mon comteneurGlobal.
 		
 		JPanel comteneurDroit=new JPanel();
-		comteneurDroit.setBackground(new Color(115,67,29));
 		comteneurDroit.setLayout(new BoxLayout(comteneurDroit,BoxLayout.PAGE_AXIS));//J'ajoute un layout(Horizontal) a mon comteneurGlobal.
 		
 		//Ajout des JPanel.
 		comteneurGlobal.add(comteneurGauche);
-		comteneurGlobal.setBackground(Color.WHITE);
+		
 		comteneurGlobal.add(comteneurDroit);
-		comteneurGauche.add(new Bouton(width,height));
+		comteneurGauche.add(new Bouton(width,height,moteur));
 		comteneurGauche.add((Fenetre.minimap= new Minimap(width,height)));
-		comteneurGauche.setBackground(Color.WHITE);
+		
 		comteneurDroit.add(new InfoHaut(width,height));
 		comteneurDroit.add((this.affichegeTerrain=new AffichageTerrain(width,height)));
 		comteneurDroit.add(new InfoBas(width,height));

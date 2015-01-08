@@ -107,7 +107,7 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 	public Envie[] getLesEnvies() {
 		return lesEnvies;
 	}
-
+	
 	public void actualiserVariables(){
 		this.incrementeToursEnVie();
 

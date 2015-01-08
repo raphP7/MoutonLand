@@ -5,6 +5,11 @@ import java.util.NoSuchElementException;
 
 import Moteur.Terrain.Case;
 
+/**
+ * Class pour stocker une postion et un vision de cette position dans la memoire de l'animal
+ * @author Raph
+ *
+ */
 public class Emplacement{
 
 	public int x;

@@ -11,8 +11,15 @@ import Moteur.animauxCarnivores.Loup;
 import Moteur.animauxCarnivores.LoupNoir;
 import Moteur.animauxHerbivores.Mouton;
 import Moteur.animauxHerbivores.MoutonNoir;
-
+/**La class Moteur permet la gestion de la simulation , des varaibles de simulations , ajout suppression d'etres 
+ * 
+ * @author Raph
+ *
+ */
 public class Moteur {
+	public int nbdeTour;
+	public boolean play;
+	public static boolean simulationEnCour;
 	private int esperenceDeVieMoyenne=100; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
 	private int pubert=5; // pourcentage entre 0 et 30 de la duree de vie pour devenir puber
 	private int maxReproduction=3;
@@ -20,10 +27,11 @@ public class Moteur {
 	private List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
 	private List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
 	private List<Etre> lesEtres;
-	private int valeurParDefautPlante=10;
+	private int valeurParDefautPlante=20;
 	private Random random = new Random();
 	public Fenetre laFenetre;
-	public int vistesseSimulation=0;
+	public static int vistesseSimulation=10;
+	public static int valeurAleatoireReproductionPlante=50;
 	
 	//public static Fenetre lafenetre;
 	
@@ -62,7 +70,18 @@ public class Moteur {
 		}
 	}
 
+	/**
+	 * Constructeur du terrain
+	 * 
+	 * @param x hauteur du terrain
+	 * @param y largeur du terrain
+	 * @param obstacles nombre d'obstacles environ voulut
+	 * @throws Exception
+	 */
 	public Moteur(int x,int y,int obstacles) throws Exception{
+		this.nbdeTour=0;
+		this.play=false;
+		this.simulationEnCour=true;
 		this.leTerrain =new Terrain(x,y,obstacles);
 		this.lesEtres=new ArrayList<Etre>();
 		this.lesnouveauxVivans= new ArrayList<Etre>();
@@ -85,6 +104,9 @@ public class Moteur {
 	}
 	
 	public void supprimerAle(String type,int quantite) throws Exception{
+		if(play){
+			throw new Exception("Attention imposible d'ajouter quand la simulation est en play");
+		}
 		
 		if(!VerifierArgument(type,quantite)){
 			throw new Exception("Attention type d'ETRE inconnu ou quantité nul");
@@ -106,6 +128,9 @@ public class Moteur {
 	}
 	
 	public void creerAlea(String type,int quantite) throws Exception{
+		if(play){
+			throw new Exception("Attention imposible d'ajouter quand la simulation est en play");
+		}
 		
 		if(!	VerifierArgument(type,quantite)){
 			throw new Exception("Attention type d'ETRE inconnu ou quantite nul");
@@ -122,7 +147,7 @@ public class Moteur {
 					
 					if(type.equals("Plante")){
 						
-						definirEsperanceVie=this.esperenceDeVieMoyenne*20/100;
+						definirEsperanceVie=this.esperenceDeVieMoyenne;
 						definirPuberter=(definirEsperanceVie*this.pubert/100);
 						definirEsperanceVie=100;// POUR TEST
 						
@@ -176,15 +201,53 @@ public class Moteur {
 					else{
 						//impossible grace a la methode VerifierArgument();
 					}
-					
 				}
 		temp=leTerrain.ajouterEtreALeatoire(temp);
 		this.ajouter(temp);
 	}
 
+	
+	public void start() throws Exception{
+		while(simulationEnCour){
+			play();
+		}
+		// la simulation a été quitter 
+		this.lesEtres.clear();
+		this.etreMortDecomposer.clear();
+		this.lesnouveauxVivans.clear();
+	}
+	public void play() throws Exception{
+		if(this.play){
+			if(this.lesEtres.isEmpty()){
+				System.out.println("ici");
+				try{// petite pause pour pas que le programme boucle trop vite dans la liste vide
+					Thread.sleep(300);
+				}
+			catch(Exception ex) {
+				}
+			}
+			this.simulation();// demande un depalcement/action pour chaque Etre de la simulation
+			this.nbdeTour++;
+			this.laFenetre.repaint();
+		}else{
+			try { // petite pause pour que quand la simulation est en pause , le program ne boucle pas trop vite avec le if(false)
+					Thread.sleep(300);
+				}
+			catch(InterruptedException ex) {
+				}
+			
+		}
+	}
+	/**
+	 * Permet de jouer 1 tour a chaque Etre , un deplacement ainsi qu'une action pour les Animaux
+	 * les 3 actions possible suite a un deplacement ou non sont :
+	 * ne rien faire , esayer de se reproduire , essayer de manger
+	 * ou  l'essais d'une reproduction , ou de manger des sels mineraux pour une plante 
+	 * 
+	 * @throws Exception
+	 */
 	public void simulation() throws Exception {
-		
-		
+
 		for (Etre a : lesEtres){
 			
 			//Etre a =lesEtres.get(i);				
@@ -233,8 +296,13 @@ public class Moteur {
 		lesnouveauxVivans.clear();
 		
 		Fenetre.affichegeTerrain.repaint();
+		
 	}
 
+	/**Permet d'ajouter des etres a la liste principal des etres de la simulation	 * 
+	 * @param aAjouter la list des etres a ajouter a la list des etres
+	 * @throws Exception
+	 */
 	private void ajouter(List<Etre> aAjouter) throws Exception{
 		
 		if (aAjouter==null || aAjouter.isEmpty()){
@@ -245,7 +313,11 @@ public class Moteur {
 			lesEtres.add(c);
 		}
 	}
-	
+	/**Permet de supprimer des etres de la liste principal des etres
+	 * 
+	 * @param aSupprimer la liste des etres a supprimer 
+	 * @throws Exception
+	 */
 	private void suprimer(List<Etre> aSupprimer) throws Exception{
 		
 		if (aSupprimer==null || aSupprimer.isEmpty()){
@@ -258,6 +330,14 @@ public class Moteur {
 		this.leTerrain.supprimer(aSupprimer);
 	}
 	
+	/**
+	 * 
+	 * @param a
+	 * @return
+	 * @throws Exception
+	 * 
+	 */
+	@Deprecated
 	public EtreMort mourir(EtreVivant a) throws Exception{
 		
 		if (a==null){
@@ -272,7 +352,6 @@ public class Moteur {
 		return valeurParDefautPlante;
 	}
 	
-
 	public  void setValeurParDefautPlante(int valeurParDefautPlante) {
 		if(valeurParDefautPlante<0){
 			this.valeurParDefautPlante = 10;
@@ -287,7 +366,5 @@ public class Moteur {
 			}
 		}
 	}
-	
-	
 	
 }

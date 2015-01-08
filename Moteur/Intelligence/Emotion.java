@@ -1,5 +1,11 @@
 package Moteur.Intelligence;
-
+/**
+ * Enumeration avec les emotions
+ * 
+ * @author Raph
+ *
+ *
+ */
 public enum Emotion {
 
 	FAIM ("faim"),

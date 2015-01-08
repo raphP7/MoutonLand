@@ -1,5 +1,6 @@
 package Moteur;
 import java.awt.Point;
+import java.util.Random;
 
 import Affichage.Fenetre;
 import Moteur.Terrain.Case;
@@ -54,10 +55,9 @@ public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 	public Etre action(Case[][] map,int vistesseSimulation,Fenetre laFenetre) throws Exception {
 		
 		if(this.isMort(map)){
-			map[positionX][positionY].setPlante(null);
+			//la plante est deja morte , aucune action a effectue
 			laFenetre.miseAjoursCase(this.positionX, this.positionY);
 			return null;}
-		//la plante est deja morte , aucune action a effectue
 		
 		// la plante veilli d'une annee
 		incrementeToursEnVie();
@@ -69,9 +69,10 @@ public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 		// la plante mange le sel present sur la case et augmente sa propre Valeur
 		manger(map[this.positionX][this.positionY].getValeurSel());
 		
-		this.actionReproduction(map, laFenetre);
+		return this.actionReproduction(map, laFenetre);
 		
-		return null;
+		
+		
 	}
 	
 	public boolean isMort(Case [][] map) throws Exception {
@@ -84,7 +85,6 @@ public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 		}
 		return false;// en vie
 	}
-
 
 	public int getValmax() {
 		return valmax;

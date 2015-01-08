@@ -110,6 +110,15 @@ public abstract class EtreVivant extends Etre implements FonctionsDeBaseVivant {
 		//si un bebe peut etre creer mettre a jour variable des parents
 		//placer le bebe sur la map
 		//return le bebe pour le rajouter a la liste des etres dans le moteur
+		
+		if(this instanceof Plante){
+			int ale=random.nextInt(Moteur.valeurAleatoireReproductionPlante);
+			if(ale!=0){
+				return null;
+			}
+		}
+		
+		
 		Case[][] visionThis = null;
 		
 		int champDeReproductionPlante=4;
