@@ -1,11 +1,13 @@
 package Moteur;
 import java.awt.Point;
 
+import Affichage.Fenetre;
 import Moteur.Terrain.Case;
 
 public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 
 	private int valeur;
+	private int valmax;
 	
 	public Plante(int x, int y, boolean femelle, int esperenceDeVie,
 			int nbToursPourDevenirPuber, int maxReproduction,
@@ -15,8 +17,21 @@ public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 		
 		//champ de vision a 0 pour les plantes
 		this.setValeur(valeur);
+		this.setValmax(valeur);
 	}
 	
+	public Plante(Etre a, Etre b, Point position){
+		super(a,b,position);
+		
+		if(((Plante)a).getValmax()>=((Plante)b).getValmax()){
+			
+			this.valmax=((Plante)a).getValmax();
+		}
+		else{
+			this.valmax=((Plante)b).getValmax();
+		}
+		this.valeur=this.valmax;
+	}
 	public void manger(int valeurEnSel){
 		//VARIABLE
 		this.valeur=this.valeur+valeurEnSel;
@@ -36,9 +51,12 @@ public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 	}
 
 	@Override
-	public Etre action(Case[][] map) throws Exception {
+	public Etre action(Case[][] map,int vistesseSimulation,Fenetre laFenetre) throws Exception {
 		
-		if(this.isMort(map)){return null;}
+		if(this.isMort(map)){
+			map[positionX][positionY].setPlante(null);
+			laFenetre.miseAjoursCase(this.positionX, this.positionY);
+			return null;}
 		//la plante est deja morte , aucune action a effectue
 		
 		// la plante veilli d'une annee
@@ -48,33 +66,31 @@ public class Plante extends EtreVivant  implements FonctionsDeBasePlante{
 			//VARIABLE
 			this.valeur++;
 		}
-		
 		// la plante mange le sel present sur la case et augmente sa propre Valeur
 		manger(map[this.positionX][this.positionY].getValeurSel());
 		
+		this.actionReproduction(map, laFenetre);
+		
 		return null;
 	}
-
-	@Override
+	
 	public boolean isMort(Case [][] map) throws Exception {
 		if (valeur<1 || !toujourEnVie()){
 			
 			if(map[positionX][positionY].getPlante()==this){
 				map[positionX][positionY].setPlante(null);
-			}
-			
+			}			
 			return true;// Mort
 		}
 		return false;// en vie
 	}
 
-	public void setMaxValeur() {
-		this.valeur=Moteur.getValeurParDefautPlante();
+
+	public int getValmax() {
+		return valmax;
 	}
 
-	@Override
-	public Etre bebe(Point positionBebe) {
-		
-		return null;
+	public void setValmax(int valmax) {
+		this.valmax = valmax;
 	}
 }

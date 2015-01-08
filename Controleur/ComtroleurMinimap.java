@@ -48,11 +48,25 @@ public class ComtroleurMinimap implements MouseListener,KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-		//System.out.println(e.getKeyCode());
+		if(e.getKeyCode()==38){
+			//haut
+			this.minimap.monterMinimap();
+		}
+		if(e.getKeyCode()==40){
+			//bas
+			this.minimap.decendreMinimap();
+		}
+		if(e.getKeyCode()==39){
+			//Droite
+			this.minimap.droiteMinimap();
+		}
+		if(e.getKeyCode()==37){
+			//Gauche
+			this.minimap.gaucheMinimap();
+		}
 		
 	}
 }

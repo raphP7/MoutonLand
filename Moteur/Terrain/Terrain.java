@@ -328,7 +328,7 @@ public class Terrain {
 							}
 						}
 						else {
-							if (!(map[i][j].getPlante()==null)){ 
+							if ((map[i][j].getPlante()!=null)){ 
 								System.out.print(" §");
 							}
 							else{System.out.print(" .");} // accessible et visible
@@ -362,7 +362,9 @@ public class Terrain {
 		if(this.map[bebe.positionX][bebe.positionY].getPlante()!=null){
 			//il y a deja une plante
 			Etre anciennePlante=this.map[bebe.positionX][bebe.positionY].getPlante();
-			((Plante)anciennePlante).setMaxValeur();
+			
+			// la plante recupere sa valeur d'origine / sa maximum
+			((Plante)anciennePlante).setValeur(((Plante)anciennePlante).getValmax());
 		}
 		
 	}

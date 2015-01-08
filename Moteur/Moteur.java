@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
 import Affichage.Fenetre;
 import Moteur.Terrain.Terrain;
 import Moteur.animauxCarnivores.Loup;
+import Moteur.animauxCarnivores.LoupNoir;
 import Moteur.animauxHerbivores.Mouton;
+import Moteur.animauxHerbivores.MoutonNoir;
 
 public class Moteur {
-	private int esperenceDeVieMoyenne=10; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
-	private int pubert=1; // pourcentage entre 0 et 30 de la duree avant puberter
+	private int esperenceDeVieMoyenne=100; // les loup on 20% de plus et les mouton 20% de moins ,les plantes on 20%
+	private int pubert=5; // pourcentage entre 0 et 30 de la duree de vie pour devenir puber
 	private int maxReproduction=3;
 	public Terrain leTerrain;
 	private List<Etre> etreMortDecomposer; // ceux a supprimer de la liste lesEtres
 	private List<Etre> lesnouveauxVivans; // ceux a ajouter a la liste lesEtres
 	private List<Etre> lesEtres;
-	private static int valeurParDefautPlante;
+	private int valeurParDefautPlante=10;
 	private Random random = new Random();
-	public static Fenetre laFenetre;
+	public Fenetre laFenetre;
+	public int vistesseSimulation=0;
 	
 	//public static Fenetre lafenetre;
 	
@@ -87,7 +91,7 @@ public class Moteur {
 		}
 		
 		List<Etre> temp = new ArrayList<Etre>();// la list qui va contenir les Etre a supprimer
-		
+		Collections.shuffle(lesEtres);
 		int i=0;
 		for (Etre a : lesEtres){ // parcourir la list Melanger
 			
@@ -120,9 +124,9 @@ public class Moteur {
 						
 						definirEsperanceVie=this.esperenceDeVieMoyenne*20/100;
 						definirPuberter=(definirEsperanceVie*this.pubert/100);
-						definirEsperanceVie=10;// POUR TEST
+						definirEsperanceVie=100;// POUR TEST
 						
-						Etre a =new Plante(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,getValeurParDefautPlante());
+						Etre a =new Plante(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction*10,100,getValeurParDefautPlante());
 						temp.add(a);
 						
 					/*	Etre.class.asSubclass(Mouton.class).getConstructor(Integer.class,Integer.class,Boolean.class,
@@ -139,7 +143,16 @@ public class Moteur {
 						definirEsperanceVie=(this.esperenceDeVieMoyenne*20/100)+this.esperenceDeVieMoyenne;
 						definirPuberter=(definirEsperanceVie*this.pubert/100);
 						
-						Etre a =new Loup(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,5000,3,3,2);
+						Etre a =new Loup(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,50,3,3,2);
+						
+						temp.add(a);
+					}
+					else if(type.equals("LoupNoir")){
+						
+						definirEsperanceVie=(this.esperenceDeVieMoyenne*20/100)+this.esperenceDeVieMoyenne;
+						definirPuberter=(definirEsperanceVie*this.pubert/100);
+						
+						Etre a =new LoupNoir(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,50,3,3,2);
 						
 						temp.add(a);
 					}
@@ -148,9 +161,18 @@ public class Moteur {
 						definirEsperanceVie=this.esperenceDeVieMoyenne-(this.esperenceDeVieMoyenne*20/100);
 						definirPuberter=(definirEsperanceVie*this.pubert/100);
 						
-						Etre a =new Mouton(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,1000,3,3,2);
+						Etre a =new Mouton(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,10,3,3,2);
 						temp.add(a);
 					}
+					else if (type.equals("MoutonNoir")){
+
+						definirEsperanceVie=this.esperenceDeVieMoyenne-(this.esperenceDeVieMoyenne*20/100);
+						definirPuberter=(definirEsperanceVie*this.pubert/100);
+						
+						Etre a =new MoutonNoir(0,0,femelle,definirEsperanceVie,definirPuberter,this.maxReproduction,10,3,3,2);
+						temp.add(a);
+					}
+					
 					else{
 						//impossible grace a la methode VerifierArgument();
 					}
@@ -163,9 +185,9 @@ public class Moteur {
 	public void simulation() throws Exception {
 		
 		
-		for (int i=0; i<lesEtres.size(); i++) {
+		for (Etre a : lesEtres){
 			
-			Etre a =lesEtres.get(i);				
+			//Etre a =lesEtres.get(i);				
 			
 			if (a instanceof EtreMort) {
 				if (((EtreMort) a).decompositionFini()) {
@@ -181,10 +203,10 @@ public class Moteur {
 					//decomposition fini
 					//System.out.println("decomposition fini");
 					a=new EtreMort((EtreVivant) a);
-					lesEtres.set(i, a);
+					//lesEtres.set(i, a);
 				}
 				else{
-					Etre bebe =((EtreVivant) a).action(this.leTerrain.map);
+					Etre bebe =((EtreVivant) a).action(this.leTerrain.map,vistesseSimulation,laFenetre);
 					if (bebe != null){
 						
 						if(bebe instanceof Plante){
@@ -229,7 +251,7 @@ public class Moteur {
 		if (aSupprimer==null || aSupprimer.isEmpty()){
 			throw new Exception("liste vide");
 		}
-		Collections.shuffle(lesEtres);
+		
 		for (Etre d : aSupprimer){
 			lesEtres.remove(d);
 		}
@@ -244,30 +266,28 @@ public class Moteur {
 		
 		return new EtreMort(a);
 	}
-	
-	/**
-	 * 
-	 * @param taille nombre de souvenir des anciennes position de l'animal
-	 */
-	public void changerTailleSouvenir(int taille){
-		
-		for (Etre a : lesEtres){
-			((Animal)a).getMouvements().setTaille(taille);
-		}
-	}
 
 	
-	public static int getValeurParDefautPlante() {
+	public  int getValeurParDefautPlante() {
 		return valeurParDefautPlante;
 	}
 	
 
-	public static void setValeurParDefautPlante(int valeurParDefautPlante) {
+	public  void setValeurParDefautPlante(int valeurParDefautPlante) {
 		if(valeurParDefautPlante<0){
-			Moteur.valeurParDefautPlante = 10;
+			this.valeurParDefautPlante = 10;
 		}
 		else{
-			Moteur.valeurParDefautPlante = valeurParDefautPlante;
+			this.valeurParDefautPlante = valeurParDefautPlante;
+			
+			for (Etre d : lesEtres){
+				if(d instanceof Plante){
+					((Plante) d).setValmax(valeurParDefautPlante);
+				}
+			}
 		}
 	}
+	
+	
+	
 }

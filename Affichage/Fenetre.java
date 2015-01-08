@@ -9,11 +9,16 @@ import javax.swing.JPanel;
 
 import Moteur.Terrain.Terrain;
 public class Fenetre extends JFrame{
+	
 	public static Terrain terrain;
 	public static Minimap minimap;
 	public static AffichageTerrain affichegeTerrain;
+	
+	
+	
 	public Fenetre(Terrain terrain) throws Exception{
 		Fenetre.terrain=terrain;
+		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//pour que la croix ferme le Jframe
 		this.setTitle("MoutonLand");//nom de la fenetre
 		this.setMinimumSize(new Dimension(500,500));
@@ -34,16 +39,16 @@ public class Fenetre extends JFrame{
 		
 		//Ajout des JPanel.
 		comteneurGlobal.add(comteneurGauche);
+		comteneurGlobal.setBackground(Color.WHITE);
 		comteneurGlobal.add(comteneurDroit);
 		comteneurGauche.add(new Bouton(width,height));
 		comteneurGauche.add((Fenetre.minimap= new Minimap(width,height)));
+		comteneurGauche.setBackground(Color.WHITE);
 		comteneurDroit.add(new InfoHaut(width,height));
 		comteneurDroit.add((this.affichegeTerrain=new AffichageTerrain(width,height)));
 		comteneurDroit.add(new InfoBas(width,height));
-		
 	    this.setContentPane(comteneurGlobal);
 		this.setVisible(true); // la fenetre est visible
-		
 		
 	}
 	public void miseAjoursCase(int x , int y ){

@@ -14,9 +14,9 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 
 import Controleur.ComtroleurMinimap;
-import Moteur.Terrain.Case;
 import Moteur.animauxCarnivores.Loup;
 import Moteur.animauxHerbivores.Mouton;
+import Moteur.Terrain.Case;
 
 public class Minimap extends JPanel {
 	protected static int vueAbscisse = 30;// La vue par default de la minimap en
@@ -52,6 +52,7 @@ public class Minimap extends JPanel {
 
 	@Override
 	public void paint(Graphics g) {
+		setBackground(Color.white);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.clearRect(0, 0, w, h);
 		Object cren = RenderingHints.VALUE_ANTIALIAS_ON;
@@ -91,28 +92,24 @@ public class Minimap extends JPanel {
 				BasicStroke.JOIN_ROUND, 1.0f);
 		g2.setStroke(stroke);
 		g2.setColor(Color.RED);
-		g2.drawRect(AffichageTerrain.x * w, AffichageTerrain.y * h, w
-				* AffichageTerrain.vueAbscisse, h
-				* AffichageTerrain.vueOrdonnee);
+		g2.drawRect((AffichageTerrain.x-Minimap.x) * this.w, (AffichageTerrain.y-Minimap.y) * this.h, 
+				this.w* AffichageTerrain.vueAbscisse, this.h* AffichageTerrain.vueOrdonnee);
 		if (Minimap.x == 0) {
 			g2.drawLine(0, 0, Minimap.vueAbscisse * w, 0);
-			;
 		}
 		if (Minimap.y == 0) {
 			g2.drawLine(0, 0, 0, Minimap.vueOrdonnee * h);
 		}
 		int length, length1;
 		if (Minimap.x + Minimap.vueAbscisse == (length = Fenetre.terrain.map.length)) {
-			g2.drawLine(length = (length * w), 0, length,
+			System.out.println("Tout en bas!");
+			g2.drawLine(0,length = (length * w), length,
 					Fenetre.terrain.map.length * h);
-
 		}
-		if (Minimap.y + Minimap.vueOrdonnee == (length1 = Fenetre.terrain.map[0].length)) {
+		if (Minimap.y + Minimap.vueOrdonnee== (length1 = Fenetre.terrain.map[0].length)) {
+			System.out.println("Tout a gauche");
 			g2.drawLine(0, (length1 = length1 * h), length, length1);
 		}
-		g2.drawRect(AffichageTerrain.x * w, AffichageTerrain.y * h, w
-				* AffichageTerrain.vueAbscisse, h
-				* AffichageTerrain.vueOrdonnee);
 	}
 
 	public void monterMinimap() {
@@ -123,22 +120,49 @@ public class Minimap extends JPanel {
 			Minimap.x -= up;
 		}
 		this.repaint();
+		rePositionnementTerrain(Minimap.x, Minimap.y);
 	}
 
 	public void decendreMinimap() {
-		int up;
+		int up=(int) (AffichageTerrain.vueAbscisse * 0.75);
 		int length = Fenetre.terrain.map.length;
-		System.out.println(length);
-		if (Minimap.x + ((up = (int) (AffichageTerrain.vueAbscisse * 0.75))) > length) {
-			Minimap.x = length - 1;
-		} else {
+		if (Minimap.y + up > length-Minimap.vueAbscisse) {
+			//System.out.println(Minimap.x+up+"(1)");
+			Minimap.y =length-Minimap.vueAbscisse;
+			System.out.println(length-Minimap.vueAbscisse+"(2)");
+		} 
+		else {
+			Minimap.y += up;
+			//System.out.println(Minimap.x+up+"(normal)");
+		}
+		this.repaint();
+		rePositionnementTerrain(Minimap.x, Minimap.y);
+	}
+	public void droiteMinimap(){
+		int up=(int) (AffichageTerrain.vueOrdonnee * 0.75);
+		int length = Fenetre.terrain.map[0].length;
+		if (Minimap.x + up >length-Minimap.vueAbscisse) {
+			Minimap.x = length-Minimap.vueOrdonnee;
+		} 
+		else {
 			Minimap.x += up;
 		}
-		System.out.println(Minimap.x);
 		this.repaint();
+		rePositionnementTerrain(Minimap.x, Minimap.y);
+	}
+	public void gaucheMinimap(){
+		int up;
+		if (Minimap.y - ((up = (int) (AffichageTerrain.vueOrdonnee * 0.75))) < 0) {
+			Minimap.y = 0;
+		} else {
+			Minimap.y -= up;
+		}
+		this.repaint();
+		rePositionnementTerrain(Minimap.x, Minimap.y);
 	}
 
 	public void miseAjoursCase(int x, int y) {
+		setBackground(Color.white);
 		if (x >= 0 && y >= 0 && x < Fenetre.terrain.map.length
 				&& y < Fenetre.terrain.map[0].length) {
 			repaint(x * this.w, y * this.h, this.w, this.h);
@@ -149,22 +173,25 @@ public class Minimap extends JPanel {
 	}
 
 	public void rePositionnementTerrain(int positionX, int positionY) {
+		setBackground(Color.white);
 		int abscisse, ordonnee;
 		abscisse = positionX / this.w + Minimap.x;
 		ordonnee = positionY / this.h + Minimap.y;
 		if (Minimap.vueAbscisse - abscisse < AffichageTerrain.vueAbscisse) {
 			AffichageTerrain.x = Minimap.vueAbscisse
-					- AffichageTerrain.vueAbscisse;
+					- AffichageTerrain.vueAbscisse+ Minimap.x;
 		} else {
 			AffichageTerrain.x = abscisse;
 		}
 		if (Minimap.vueOrdonnee - ordonnee < AffichageTerrain.vueOrdonnee) {
 			AffichageTerrain.y = Minimap.vueOrdonnee
-					- AffichageTerrain.vueOrdonnee;
+					- AffichageTerrain.vueOrdonnee+ Minimap.y;
 		} else {
 			AffichageTerrain.y = ordonnee;
 		}
 		this.repaint();
 		Fenetre.affichegeTerrain.repaint();
+		setBackground(Color.white);
+		System.out.println("=>"+AffichageTerrain.x+":"+AffichageTerrain.y);
 	}
 }

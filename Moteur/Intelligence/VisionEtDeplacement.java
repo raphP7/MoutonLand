@@ -394,22 +394,10 @@ public class VisionEtDeplacement {
 			}
 		parcour++;
 		}
-		Terrain a = new Terrain(10,10,10);
-		a.map=tableauVision;
-		
-		//System.out.println("AVANT CHAMP OBSTACLES");
-		
-		//a.afficheVisionShell();
 		
 		champObstacle(tableauVision,champDeVision);
-
-		//System.out.println("APRES CHAMP OBSTACLES");
-		
-		//a.afficheVisionShell();
-		
 	return tableauVision;
 	
-
 	}	
 	
 	private static void animalPresent(int x , int y,Case [][] tableauVision) throws Exception{
@@ -492,9 +480,9 @@ public class VisionEtDeplacement {
 							temp[i].setValeur(0);
 						}
 						else{// un carnivor est apeurer seulement a partir de 5 herbivor
-							//le ratio de carnivore/herbivore multiplier par un ratio 200 de courage pour le carnivore
+							//le ratio de carnivore/herbivore multiplier par un ratio 500 de courage pour le carnivore
 							// le resultat est un pourcentage 
-							temp[i].setValeur(100 - ((nbCarnivore/nbHerbivore)*200 ) );
+							temp[i].setValeur(100 - ((nbCarnivore/nbHerbivore)*500 ) );
 						}
 					}
 					else{
@@ -512,13 +500,13 @@ public class VisionEtDeplacement {
 					if (animal instanceof Carnivore){
 						if(nbHerbivore>1){
 							// voir un herbivore donne l'apetit a un carnivore
-							temp[i].setValeur(temp[i].getValeur()+5);
+							//temp[i].setValeur(temp[i].getValeur()+5);
 						}
 					}
 					else{
 						if(nbPlante>1){
 							// voir une plante donne l'apetit a un mouton
-							temp[i].setValeur(temp[i].getValeur()+5);
+							//temp[i].setValeur(temp[i].getValeur()+5);
 						}
 					}
 				}
@@ -528,7 +516,10 @@ public class VisionEtDeplacement {
 				// si au moin 50% des cases autour de l'animal sont libre sa augmente de 5% sont envie de se deplacer pour le plaisir
 				
 					if(ratioCaseVide<50){
-						temp[i].setValeur(temp[i].getValeur() +1);
+						temp[i].setValeur(temp[i].getValeur() +5);
+					}
+					else{
+						temp[i].setValeur(temp[i].getValeur() -1);
 					}
 			}
 		}
@@ -559,26 +550,17 @@ public class VisionEtDeplacement {
 		
 		Stack<Point> chemin = new Stack<Point>();
 		
-		FileDeSouvenirs souvenirs=((Animal)animal).getMouvements();
+		LinkedList<Emplacement> souvenirs=((Animal)animal).getSouvenirs();
 		
 		int champDeVision=((Animal)animal).getChampDeVision();
 		
 		LinkedList<Point> casesAccessible =listePointAccessible(tableauVision, animal , emotion);
-		//System.out.println("nb de case accessible " +casesAccessible.size());
+		
 		Random random = new Random();
 		int alea;
 		alea=random.nextInt(casesAccessible.size());
 		Point arriver=casesAccessible.get(alea);
-		souvenirs.ajouter(arriver.x, arriver.y, tableauVision);
-		//System.out.println("aleaoitre choisi"+alea);
-		try{
-			Thread.sleep(0);
-
-		}catch(Exception e){
-			
-		}
 		
-		backtrakCheminAnimal(champDeVision, champDeVision, arriver, tableauVision, chemin, champDeVision,animal,0);	
 		switch(emotion){
 			
 			case DEPLACEMENT:
@@ -589,16 +571,11 @@ public class VisionEtDeplacement {
 				break;
 			case FAIM:
 				break;
-			/*	chemin.clear();
-				if(tableauVision[champDeVision][champDeVision].getPlante()!=null){
-					casesAccessible.add(new Point(champDeVision, champDeVision));
-					break;
-				}
-				else{
-				}
-				*/
+		
 		}
 		
+		
+		backtrakCheminAnimal(champDeVision, champDeVision, arriver, tableauVision, chemin, champDeVision,animal,0);
 		return chemin;
 		
 	}
