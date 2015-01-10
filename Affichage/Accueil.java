@@ -36,6 +36,9 @@ public class Accueil extends JFrame implements ActionListener{
 		int largeur=150,longeur=800;
 		Font font = new Font("Arial",Font.BOLD,13);
 		loupBlancB.setFont(font);
+		loupNoirB.setFont(font);
+		moutonNoirB.setFont(font);
+		moutonBlancB.setFont(font);
 		tailleTerrainJlabel.setFont(font);
 		plantesJlabel.setFont(font);
 		obstaclesJlabel.setFont(font);
@@ -43,6 +46,7 @@ public class Accueil extends JFrame implements ActionListener{
 		this.setSize(longeur, largeur);
 		this.setMinimumSize(new Dimension(100,100));
 		this.setLocationRelativeTo(null);
+		
 		JPanel content0= new JPanel(); // conteneur de tous les boutons
 		content0.setLayout(new BoxLayout(content0,BoxLayout.PAGE_AXIS));
 		
@@ -101,7 +105,7 @@ public class Accueil extends JFrame implements ActionListener{
 				nbplantes=Integer.parseInt(plantes.getText());
 				nombreObstacle=Integer.parseInt(obstacles.getText());
 				
-				if(loupBlancVal>=0 && terrain>=8 && terrain<500 && nombreObstacle<terrain*terrain){ // on test si les champs remplis correspond à un terrain valide
+				if(loupBlancVal>=0 && terrain>=8 && terrain<201 && nombreObstacle<terrain*terrain){ // on test si les champs remplis correspond à un terrain valide
 					this.dispose();
 					t = new Thread(new Play()); //permet de générer la simulation 
 					t.start();	     
@@ -110,7 +114,7 @@ public class Accueil extends JFrame implements ActionListener{
 					String newLine = System.getProperty("line.separator");
 					JOptionPane.showMessageDialog(this,
 							"Le nombre d'etre doit etre inferieur a 10000."+newLine
-							+ "Le terrain doit etre de mimimum 8 case et maximum 500."+newLine
+							+ "Le terrain doit etre de mimimum 8 case et maximum 200."+newLine
 							+"Le nombre d'obstacle dois etre strictement inferieur au nombre de case du terrain:"+newLine
 							+"ATTENTION"+newLine
 							+"Avec un terrain de " +terrain +" cases , vous ne pouvez pas mettre plus de "+(terrain*terrain-1) +" obstacle total",
@@ -146,7 +150,9 @@ public class Accueil extends JFrame implements ActionListener{
 			
 			
 			try {
+				
 				moteur = new Moteur(taille,taille,obstaclesVal);
+				//Fenetre.minimap.reboot();
 				moteur.vistesseSimulation=100;
 				
 				if(nbLoupBlanc>0){
@@ -164,9 +170,12 @@ public class Accueil extends JFrame implements ActionListener{
 				if(nbplante>0){
 					moteur.creerAlea("Plante", nbplante);
 				}
+				
 				Fenetre fenetre=new Fenetre(moteur);
+				
 				moteur.laFenetre=fenetre;
 				moteur.play=true;
+				
 				moteur.start();
 				
 			} catch (Exception e) {
@@ -184,19 +193,23 @@ public class Accueil extends JFrame implements ActionListener{
 		public synchronized void run(){
 			Moteur moteur;
 			try {
+				
 				Random random = new Random();
-				int taille =random.nextInt(181)+20;
+				int taille =random.nextInt(50)+20;
 				int obstacles =40*taille/100;
 				moteur = new Moteur(taille,taille,obstacles);
+				
 				moteur.vistesseSimulation=100;
-				moteur.creerAlea("Plante", 8);
-				moteur.creerAlea("MoutonNoir",40);
-				moteur.creerAlea("Mouton", 20);
-				moteur.creerAlea("Loup",1);
-				moteur.creerAlea("LoupNoir",3 );
-				Fenetre fenetre=new Fenetre(moteur);
+				moteur.creerAlea("Plante", (taille*taille)/3);
+				moteur.creerAlea("MoutonNoir",taille);
+				moteur.creerAlea("Mouton", taille);
+				moteur.creerAlea("Loup",taille/4);
+				moteur.creerAlea("LoupNoir",taille/4 );
+				Fenetre fenetre=new Fenetre(moteur);				
 				moteur.laFenetre=fenetre;
+				
 				moteur.play=true;
+				
 				moteur.start();
 				
 				

@@ -12,7 +12,7 @@ import Moteur.Carnivore;
 import Moteur.Etre;
 import Moteur.Herbivore;
 import Moteur.Terrain.Case;
-import Moteur.Terrain.Terrain;
+
 
 /**Class qui permet de : 
  * mettre a jour la vision d'un Animal.

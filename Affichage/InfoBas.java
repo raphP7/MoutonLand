@@ -16,22 +16,23 @@ import Controleur.ControleurAleaPlante;
 import Controleur.ControleurVitesse;
 
 public class InfoBas extends JPanel{
+	
+	public JSlider speed;
+	
 	InfoBas(int w,int h){
 		this.setPreferredSize(new Dimension((int)(w*0.72),(int)(h*0.10)));
 		
-		JSlider speed;
+		
 		JLabel speedaffiche = new JLabel("vitesse");
-		speed = new JSlider(0,1000,Moteur.vistesseSimulation); // cr�e un slider avec (min, max, o� commence le slider)
+		speed = new JSlider(0,200,Moteur.vistesseSimulation); // cr�e un slider avec (min, max, o� commence le slider)
 		speed.setFocusable(false);
 		ControleurVitesse listenerVitesse=new ControleurVitesse(speed,speedaffiche);
 		speed.addChangeListener(listenerVitesse);
-		speed.setMajorTickSpacing(400); 
-		speed.setMinorTickSpacing(1); 
-		speed.setPaintTicks(false); 
+		speed.setMajorTickSpacing(700); 
+		speed.setMinorTickSpacing(100); 
+		speed.setPaintTicks(true); 
 		speed.setPaintLabels(false);
-		speedaffiche.setText("Vitesse : 0,"+speed.getValue());
-		
-		
+		speedaffiche.setText("Vitesse : "+speed.getValue()+"m/s");
 		
 		JSlider AleaPlante;
 		JLabel AleaPlanteAffiche = new JLabel("vitesse");
@@ -48,6 +49,8 @@ public class InfoBas extends JPanel{
 		JSlider zoomMinimap;
 		JLabel zoomMinimapAffiche= new JLabel("Zoom Minimap:");
 		int length=(Fenetre.terrain.map.length>100)?100:Fenetre.terrain.map.length;
+		
+		
 		zoomMinimap = new JSlider(Minimap.vueAbscisse,length,Minimap.vueAbscisse); // cr�e un slider avec (min, max, o� commence le slider)
 		zoomMinimap.setFocusable(false);
 		//comtroleur minimap
@@ -118,4 +121,5 @@ public class InfoBas extends JPanel{
 	public int getVueTerrain(){
 		return AffichageTerrain.vueAbscisse;
 	}
+	
 }

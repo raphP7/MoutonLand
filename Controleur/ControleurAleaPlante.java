@@ -27,10 +27,9 @@ public class ControleurAleaPlante implements ChangeListener {
 		
 		int s = aleaPlante.getValue();
 		Moteur.valeurAleatoireReproductionPlante=s;
-		String alea = String.valueOf("0,"+s+"/S");
-		if(s==0){alea = "MAXIMUM";}
-		if(s==1000){alea = "MINIMUM";}
-		aleaPlanteAffiche.setText("Reproduction Plante : "+alea);
+		String alea = String.valueOf(s);
+		
+		aleaPlanteAffiche.setText("Reproduction Plante :1 chance sur "+alea);
 		
 		
 	}

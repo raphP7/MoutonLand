@@ -25,10 +25,15 @@ public class ControleurVitesse implements ChangeListener {
 		int s = speed.getValue();
 		Moteur.vistesseSimulation=s;
 		
-		String speed = String.valueOf("0,"+s+"/S");
-		if(s==0){speed = "MAXIMUM";}
-		if(s==1000){speed = "MINIMUM";}
-		affichage.setText("Vitesse : "+speed);
+		String speed = String.valueOf(""+s+"m/s");
+		if(s==0){speed = "Vitesse MAXIMUM";
+		affichage.setText(speed);}
+		else if(s==100){speed = " Vitesse MINIMUM";
+		affichage.setText(speed);}
+		else{
+			affichage.setText("Ralenti : "+speed);
+		}
+		
 		
 	}
 }

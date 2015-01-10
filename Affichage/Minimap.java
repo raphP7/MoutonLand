@@ -30,6 +30,9 @@ public class Minimap extends JPanel {
 	public int h;
 
 	public Minimap(int w, int h) {
+		this.reboot();
+		Minimap.x=0;
+		Minimap.y=0;
 		int length;
 		// Si le terrain est plus petit que vue(Abscisse)
 		if ((length = Fenetre.terrain.map.length) <= Minimap.vueAbscisse) {
@@ -210,4 +213,19 @@ public class Minimap extends JPanel {
 		this.repaint();
 		Fenetre.affichegeTerrain.repaint();
 	}
+	
+	public void reboot(){
+		int length=Fenetre.terrain.map.length;
+		AffichageTerrain.vueAbscisse=7;
+		AffichageTerrain.vueOrdonnee=7;
+		if(length>30){
+			Minimap.vueAbscisse=30;
+			Minimap.vueOrdonnee=30;
+		}
+		else{
+			Minimap.vueAbscisse=length;
+			Minimap.vueOrdonnee=length;
+		}
+	}
+	
 }

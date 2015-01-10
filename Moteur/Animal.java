@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 
 import Affichage.Fenetre;
@@ -113,6 +114,8 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 
 		for (int i=0; i<this.lesEnvies.length ; i++){
 			
+			
+			
 				if (this.lesEnvies[i].getEmotion().equals(Emotion.PEUR)){
 					// l'animal se calme 
 					this.lesEnvies[i].setValeur(lesEnvies[i].getValeur() -5);
@@ -124,13 +127,31 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 						this.lesEnvies[i].setValeur(lesEnvies[i].getValeur() +1);
 					}
 					else{
-						this.lesEnvies[i].setValeur(lesEnvies[i].getValeur() +5);
+						this.lesEnvies[i].setValeur(lesEnvies[i].getValeur() +3);
 					}
 					
 				}
 				else if (lesEnvies[i].getEmotion().equals(Emotion.DEPLACEMENT)){
 					
 				}
+				else if (lesEnvies[i].getEmotion().equals(Emotion.REPRODUCTION)){
+					if(this instanceof Carnivore){
+						this.lesEnvies[i].setValeur(lesEnvies[i].getValeur() +1);
+					}
+					else{
+						Random rando =new  Random();
+						int a =rando.nextInt(3);
+						if(a==0){
+							this.lesEnvies[i].setValeur(lesEnvies[i].getValeur() +2);	
+						}
+						else{
+							this.lesEnvies[i].setValeur(lesEnvies[i].getValeur() +1);
+						}
+						
+					}
+					
+				}
+				
 		}
 	}
 	
@@ -175,9 +196,30 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 		
 	}
 	
+	public void NetoyerListSouvenir(){
+		LinkedList<Emplacement> tmp =new LinkedList<Emplacement>();
+		int nb=10;
+		for(Emplacement a :this.souvenirs){
+			if(nb>0){
+				tmp.add(a);
+				nb--;
+			}
+			else{
+				break;
+			}
+		}
+		this.souvenirs=tmp;
+	}
 	public Etre action(Case [][] map,int vistesseSimulation, Fenetre laFenetre) throws Exception{
 		
-		if(this.isMort(map)){return null;}
+		int nbtour=((EtreVivant)this).getToursEnVie();
+		if(nbtour%20==0){
+			this.NetoyerListSouvenir();
+		}
+		
+		if(this.isMort(map)){
+			this.souvenirs.clear();
+			return null;}
 		
 		//System.out.println("ACTUALISER VARIABLES");
 		
@@ -262,8 +304,8 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 		
 			case FAIM:
 				
-				return actionFaim(animalPresent,map,converteur,envieTemporaire,arriver,plantePresente,laFenetre);
-				
+				actionFaim(animalPresent,map,converteur,envieTemporaire,arriver,plantePresente,laFenetre);
+				return null;
 			case PEUR:
 				
 				appliquerDeplacementFinal(arriver,converteur,map,laFenetre);
@@ -289,7 +331,7 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 		
 	}
 
-	public Etre actionFaim(Etre animalPresent,Case [][] map ,Point converteur,Envie envieTemporaire,Point arriver ,Etre plantePresente,Fenetre laFenetre) throws Exception{
+	public void actionFaim(Etre animalPresent,Case [][] map ,Point converteur,Envie envieTemporaire,Point arriver ,Etre plantePresente,Fenetre laFenetre) throws Exception{
 		
 		if (animalPresent != null && this!=animalPresent){
 			// il y a un autre annimal sur la case d'arriver
@@ -302,7 +344,7 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 				
 				appliquerDeplacementFinal(arriver,converteur,map,laFenetre);
 				
-				return null;					
+				return;					
 			}
 			else if( this instanceof Carnivore && animalPresent instanceof Carnivore){
 				
@@ -315,12 +357,12 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 					appliquerDeplacementFinal(arriver,converteur,map,laFenetre);
 
 
-					return null;
+					return ;
 				}
 				else{
 					//seFaitAttaquer a gagner
 					((Animal) seFaitAttaquer).manger(this,envieTemporaire,map);
-					return null;
+					return ;
 				}
 				
 			}
@@ -339,13 +381,13 @@ public abstract class Animal extends EtreVivant  implements FonctionsDeBaseAnima
 				this.manger(plantePresente,envieTemporaire,map);
 			}
 			appliquerDeplacementFinal(arriver,converteur,map,laFenetre);
-			return null;
+			return ;
 			
 		}
 		else{
 			throw new Exception("PROBLEM ANNIMAL AVEC FAIM");
 		}
-		return null;
+		return ;
 		
 	}
 	

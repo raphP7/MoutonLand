@@ -15,7 +15,6 @@ public class Fenetre extends JFrame{
 	public static Minimap minimap;
 	public static AffichageTerrain affichegeTerrain;
 	
-	
 	public Fenetre(Moteur moteur) throws Exception{
 		Fenetre.terrain=moteur.leTerrain;
 		
@@ -39,16 +38,17 @@ public class Fenetre extends JFrame{
 		//Ajout des JPanel.
 		comteneurGlobal.add(comteneurGauche);
 		
+		Fenetre.minimap= new Minimap(width,height);
+		InfoBas infobas=new InfoBas(width,height);
+		Bouton bouton =new Bouton(width,height,moteur,infobas);
 		comteneurGlobal.add(comteneurDroit);
-		comteneurGauche.add(new Bouton(width,height,moteur));
-		comteneurGauche.add((Fenetre.minimap= new Minimap(width,height)));
-		
-		comteneurDroit.add(new InfoHaut(width,height));
+		comteneurGauche.add(bouton);
+		comteneurGauche.add(Fenetre.minimap);
+		comteneurDroit.add(new InfoHaut(width,height,moteur));
 		comteneurDroit.add((this.affichegeTerrain=new AffichageTerrain(width,height)));
-		comteneurDroit.add(new InfoBas(width,height));
+		comteneurDroit.add(infobas);
 	    this.setContentPane(comteneurGlobal);
-		this.setVisible(true); // la fenetre est visible
-		
+		this.setVisible(true); // la fenetre est visible	
 	}
 	public void miseAjoursCase(int x , int y ){
 		Fenetre.minimap.miseAjoursCase(x, y);
